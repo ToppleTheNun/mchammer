@@ -1,0 +1,12 @@
+node_modules
+
+/.cache
+/build
+/public/build
+.env
+
+.idea
+
+app/env/generated.ts
+
+sqlite.db

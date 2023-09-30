@@ -1,0 +1,105 @@
+query getFights($reportID: String!) {
+  reportData {
+    report(code: $reportID) {
+      title
+      startTime
+      endTime
+
+      region {
+        slug
+      }
+
+      fights(translate: true) {
+        id
+        startTime
+        endTime
+
+        difficulty
+        encounterID
+        friendlyPlayers
+      }
+    }
+  }
+}
+
+query getFightsById($reportID: String!, $fightIDs: [Int]!) {
+  reportData {
+    report(code: $reportID) {
+      title
+      startTime
+      endTime
+
+      region {
+        slug
+      }
+
+      fights(translate: true, fightIDs: $fightIDs) {
+        id
+        startTime
+        endTime
+
+        difficulty
+        encounterID
+        friendlyPlayers
+      }
+    }
+  }
+}
+
+query getCombatantInfoEvents($reportID: String!, $fightIDs: [Int]!) {
+  reportData {
+    report(code: $reportID) {
+      title
+      startTime
+      endTime
+
+      region {
+        slug
+      }
+
+      events(dataType: CombatantInfo, fightIDs: $fightIDs) {
+        data
+        nextPageTimestamp
+      }
+    }
+  }
+}
+
+query getPlayerDetails($reportID: String!, $fightIDs: [Int]!) {
+  reportData {
+    report(code: $reportID) {
+      title
+      startTime
+      endTime
+
+      region {
+        slug
+      }
+
+      playerDetails(fightIDs: $fightIDs)
+    }
+  }
+}
+
+query getPhysicalDamageTakenEvents($reportID: String!, $fightIDs: [Int]!) {
+  reportData {
+    report(code: $reportID) {
+      title
+      startTime
+      endTime
+
+      region {
+        slug
+      }
+
+      events(
+        dataType: DamageTaken
+        fightIDs: $fightIDs
+        filterExpression: "ability.type = 1"
+      ) {
+        data
+        nextPageTimestamp
+      }
+    }
+  }
+}
