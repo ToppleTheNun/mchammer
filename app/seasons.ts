@@ -14,6 +14,26 @@ export type Season = {
 
 export const seasons: readonly Season[] = [
   {
+    name: "DF S3 (PTR)",
+    slug: "df-season-3-ptr",
+    startDates: {
+      us: 1_694_123_400_000,
+      eu: 1_694_123_400_000,
+      kr: 1_694_123_400_000,
+      tw: 1_694_123_400_000,
+    },
+    endDates: {
+      us: UNKNOWN_SEASON_START_OR_ENDING,
+      eu: UNKNOWN_SEASON_START_OR_ENDING,
+      kr: UNKNOWN_SEASON_START_OR_ENDING,
+      tw: UNKNOWN_SEASON_START_OR_ENDING,
+    },
+    seasonIcon:
+      "https://wow.zamimg.com/images/wow/icons/small/inv_misc_head_dragon_black_nightmare.jpg",
+    encounterIds: [],
+    ptr: true,
+  },
+  {
     name: "DF S2",
     slug: "df-season-2",
     startDates: {
