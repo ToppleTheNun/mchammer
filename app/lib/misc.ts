@@ -85,18 +85,18 @@ export function invariant(
  *
  * @throws {Response} if condition is falsey
  */
-export const invariantResponse = (
+export function invariantResponse(
   condition: any,
   message: string | (() => string),
   responseInit?: ResponseInit,
-): asserts condition => {
+): asserts condition {
   if (!condition) {
     throw new Response(typeof message === "function" ? message() : message, {
       status: 400,
       ...responseInit,
     });
   }
-};
+}
 
 export const getDomainUrl = (request: Request) => {
   const host =

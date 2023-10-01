@@ -1,33 +1,29 @@
-import {
-  PageHeader,
-  PageHeaderDescription,
-  PageHeaderHeading,
-} from "#app/components/PageHeader.tsx";
-import { PageLayout } from "#app/components/PageLayout.tsx";
-import { Lead } from "#app/components/typography.tsx";
+import { redirect } from "@remix-run/node";
+import { Outlet } from "@remix-run/react";
 
-const Header = () => (
-  <PageHeader className="pb-8">
-    <PageHeaderHeading>Can&apos;t touch this.</PageHeaderHeading>
-    <PageHeaderDescription>
-      Consecutive parry, dodge, and miss leaderboard for instanced World of
-      Warcraft content.
-    </PageHeaderDescription>
-  </PageHeader>
-);
+import { serverTiming } from "#app/constants.ts";
+import { combineHeaders, invariantResponse } from "#app/lib/misc.ts";
+import { makeTimings, time } from "#app/lib/timing.server.ts";
+import { findSeasonByName } from "#app/seasons.ts";
 
-const IndexRoute = () => (
-  <PageLayout pageHeader={<Header />}>
-    <section className="hidden md:block">
-      <div className="overflow-hidden rounded-lg border bg-background px-4 shadow">
-        <div className="flex h-[50vh] flex-col items-center justify-center gap-2">
-          <Lead>
-            Hey, we&apos;re building here. Mind looking somewhere else?
-          </Lead>
-        </div>
-      </div>
-    </section>
-  </PageLayout>
-);
+export const loader = async () => {
+  const timings = makeTimings("index loader");
+
+  const latest = await time(() => findSeasonByName("latest"), {
+    type: "findSeasonByName-latest",
+    timings,
+  });
+
+  invariantResponse(latest, "Could not determine latest season.", {
+    status: 500,
+  });
+
+  return redirect(`/season/${latest.slug}`, {
+    status: 307,
+    headers: combineHeaders({ [serverTiming]: timings.toString() }),
+  });
+};
+
+const IndexRoute = () => <Outlet />;
 
 export default IndexRoute;
