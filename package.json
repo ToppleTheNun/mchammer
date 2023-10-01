@@ -11,6 +11,9 @@
   "scripts": {
     "build": "tsx scripts/generate-env.ts && remix build --sourcemap",
     "dev": "tsx scripts/generate-env.ts && remix dev",
+    "drizzle:generate": "drizzle-kit generate:pg",
+    "drizzle:migrate": "tsx app/lib/db/migrate.ts",
+    "drizzle:seed": "tsx app/lib/db/migrate.ts",
     "gql": "nr gql:introspection && nr gql:generate",
     "gql:generate": "graphql-codegen --config codegen.yml && prettier --write app/wcl/types.ts && prettier --write schema.json && prettier --write app/wcl/gql/schema.graphql",
     "gql:introspection": "tsx -r dotenv/config app/wcl/queries/introspection.ts",
@@ -18,7 +21,7 @@
     "lint:fix": "eslint --fix app && prettier --write app",
     "start": "tsx scripts/generate-env.ts && remix-serve build",
     "typecheck": "tsc",
-    "vercel-build": "nr build && sentry-upload-sourcemaps && rimraf build/*.map && rimraf public/build/*.map && rimraf public/build/**/*.map"
+    "vercel-build": "nr drizzle:migrate && nr build && sentry-upload-sourcemaps && rimraf build/*.map && rimraf public/build/*.map && rimraf public/build/**/*.map"
   },
   "dependencies": {
     "@hookform/resolvers": "3.3.1",
@@ -30,12 +33,14 @@
     "@remix-run/router": "1.9.0",
     "@remix-run/serve": "2.0.1",
     "@sentry/remix": "7.72.0",
-    "@upstash/redis": "1.22.1",
     "@vercel/analytics": "1.0.2",
+    "@vercel/kv": "0.2.3",
+    "@vercel/postgres": "0.5.0",
     "@vercel/remix": "2.0.1",
     "class-variance-authority": "0.7.0",
     "clsx": "2.0.0",
     "date-fns": "2.30.0",
+    "drizzle-orm": "0.28.6",
     "graphql": "16.8.1",
     "graphql-request": "6.1.0",
     "graphql-tag": "2.12.6",
@@ -65,6 +70,8 @@
     "@types/react-dom": "18.2.8",
     "@vitejs/plugin-react": "4.1.0",
     "autoprefixer": "10.4.16",
+    "dotenv": "16.3.1",
+    "drizzle-kit": "0.19.13",
     "eslint": "8.50.0",
     "eslint-plugin-simple-import-sort": "10.0.0",
     "fontpie": "0.3.0",

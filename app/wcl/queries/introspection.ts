@@ -1,9 +1,11 @@
+import "dotenv/config";
+
 import { writeFileSync } from "fs";
 import type { IntrospectionQuery } from "graphql";
 import { buildClientSchema, getIntrospectionQuery, printSchema } from "graphql";
 import { resolve } from "path";
 
-import { info } from "~/lib/log.server";
+import { error, info } from "~/lib/log.server";
 
 import { getGqlClient } from "../client.server";
 
@@ -23,6 +25,6 @@ async function loadSchema() {
   process.exit(0);
 }
 
-loadSchema()
-  // eslint-disable-next-line no-console
-  .catch(console.error);
+(async () => {})().catch(error);
+
+loadSchema().catch(error);

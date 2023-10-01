@@ -1,4 +1,4 @@
-import { upstash } from "~/lib/redis.server";
+import { kv } from "~/lib/kv.server";
 
 export type WCLOAuthResponse = {
   access_token: string;
@@ -20,7 +20,7 @@ export const setWCLAuthentication = async ({
     expiresAt: Math.round(Date.now() / 1000) + expires_in,
   };
 
-  await upstash.set<WCLAuth>("wcl-auth-token", payload, {
+  await kv.set<WCLAuth>("wcl-auth-token", payload, {
     ex: expires_in,
   });
 };
@@ -33,5 +33,5 @@ export const getWCLAuthentication = (): Promise<WCLAuth | null> => {
     });
   }
 
-  return upstash.get<WCLAuth>("wcl-auth-token");
+  return kv.get<WCLAuth>("wcl-auth-token");
 };

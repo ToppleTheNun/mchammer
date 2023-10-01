@@ -10,3 +10,5 @@ node_modules
 app/env/generated.ts
 
 sqlite.db
+
+.vercel
