@@ -64,8 +64,12 @@ export const dodgeParryMissStreak = pgTable("dodge_parry_miss_streak", {
   miss: integer("miss").notNull(),
   timestamp: timestamp("timestamp").notNull(),
 
-  sourceId: integer("source_id").notNull().references(() => character.id),
-  fightId: integer("fight_id").notNull().references(() => fight.id),
+  sourceId: integer("source_id")
+    .notNull()
+    .references(() => character.id),
+  fightId: integer("fight_id")
+    .notNull()
+    .references(() => fight.id),
 
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),

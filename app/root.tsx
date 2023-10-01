@@ -11,7 +11,6 @@ import {
   Links,
   LiveReload,
   Meta,
-  NavLink,
   Outlet,
   Scripts,
   ScrollRestoration,
@@ -23,13 +22,10 @@ import { Analytics } from "@vercel/analytics/react";
 import type { ReactNode } from "react";
 
 import { GeneralErrorBoundary } from "#app/components/GeneralErrorBoundary.tsx";
-import { MainNav } from "#app/components/MainNav.tsx";
-import { MobileNav } from "#app/components/MobileNav.tsx";
-import { ModeToggle } from "#app/components/ModeToggle.tsx";
 import { SiteFooter } from "#app/components/SiteFooter.tsx";
+import { SiteHeader } from "#app/components/SiteHeader.tsx";
 import { TailwindIndicator } from "#app/components/TailwindIndicator.tsx";
-import { buttonVariants } from "#app/components/ui/button.tsx";
-import { href as iconsHref, Icon } from "#app/components/ui/icon.tsx";
+import { href as iconsHref } from "#app/components/ui/icon.tsx";
 import { siteConfig } from "#app/config/site.ts";
 import { serverTiming } from "#app/constants.ts";
 import fontStylesheetUrl from "#app/font.css";
@@ -40,7 +36,6 @@ import { combineHeaders, getDomainUrl } from "#app/lib/misc.ts";
 import { useNonce } from "#app/lib/nonce-provider.ts";
 import { getTheme, setTheme, type Theme } from "#app/lib/theme.server.ts";
 import { makeTimings } from "#app/lib/timing.server.ts";
-import { cn } from "#app/lib/utils.ts";
 import tailwindStylesheetUrl from "#app/tailwind.css";
 import { isPresent } from "#app/typeGuards.ts";
 
@@ -220,33 +215,7 @@ const App = () => {
   return (
     <Document nonce={nonce} theme={theme} env={data.ENV}>
       <div className="relative flex min-h-screen flex-col">
-        <header className="supports-backdrop-blur:bg-background/60 sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
-          <div className="container flex h-14 items-center">
-            <MainNav />
-            <MobileNav />
-            <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
-              <nav className="flex items-center">
-                <NavLink
-                  to={siteConfig.links.github}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <div
-                    className={cn(
-                      buttonVariants({ variant: "ghost" }),
-                      "w-9 px-0",
-                    )}
-                  >
-                    <Icon name="github-logo" className="h-4 w-4">
-                      <span className="sr-only">GitHub</span>
-                    </Icon>
-                  </div>
-                </NavLink>
-                <ModeToggle userPreference={data.requestInfo.userPrefs.theme} />
-              </nav>
-            </div>
-          </div>
-        </header>
+        <SiteHeader theme={data.requestInfo.userPrefs.theme} />
         <div className="flex-1">
           <Outlet />
         </div>

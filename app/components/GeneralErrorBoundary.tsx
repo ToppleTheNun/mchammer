@@ -1,17 +1,29 @@
 import { isRouteErrorResponse } from "@remix-run/react";
 
-import { ErrorPageHeader } from "#app/components/PageHeader.tsx";
+import {
+  PageHeader,
+  PageHeaderDescription,
+  PageHeaderHeading,
+} from "#app/components/PageHeader.tsx";
 import { PageLayout } from "#app/components/PageLayout.tsx";
 import { SiteFooter } from "#app/components/SiteFooter.tsx";
 import { H2, Lead } from "#app/components/typography.tsx";
+
+const Header = () => (
+  <PageHeader className="pb-8">
+    <PageHeaderHeading>Apparently you could touch this.</PageHeaderHeading>
+    <PageHeaderDescription>
+      We were only able to dodge, parry, or make you miss for so long.
+    </PageHeaderDescription>
+  </PageHeader>
+);
 
 export const GeneralErrorBoundary = ({ error }: { error: unknown }) => {
   if (isRouteErrorResponse(error)) {
     return (
       <div className="relative flex min-h-screen flex-col">
         <div className="flex-1">
-          <PageLayout>
-            <ErrorPageHeader />
+          <PageLayout pageHeader={<Header />}>
             <div className="pb-12 pt-8">
               <H2>
                 {error.status} {error.statusText}
@@ -29,8 +41,7 @@ export const GeneralErrorBoundary = ({ error }: { error: unknown }) => {
     return (
       <div className="relative flex min-h-screen flex-col">
         <div className="flex-1">
-          <PageLayout>
-            <ErrorPageHeader />
+          <PageLayout pageHeader={<Header />}>
             <div className="pb-12 pt-8">
               <H2>Error</H2>
               <Lead>{error.message}</Lead>
@@ -49,8 +60,7 @@ export const GeneralErrorBoundary = ({ error }: { error: unknown }) => {
   return (
     <div className="relative flex min-h-screen flex-col">
       <div className="flex-1">
-        <PageLayout>
-          <ErrorPageHeader />
+        <PageLayout pageHeader={<Header />}>
           <div className="pb-12 pt-8">
             <H2>Unknown Error</H2>
             <Lead>
