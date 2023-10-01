@@ -1,4 +1,4 @@
-import { Region } from "~/constants";
+import type { Region } from "#app/constants.tsx";
 
 const UNKNOWN_SEASON_START_OR_ENDING = null;
 

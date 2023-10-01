@@ -1,0 +1,21 @@
+diff --git a/dist/index.js b/dist/index.js
+index c61144326dd7e30634f747fa55fc509c38a415c6..280181ae6e68417b0a2c061a1292fbcd8ccf77d1 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -232,6 +232,7 @@ import * as z5 from "zod";
+ import path2 from "path";
+ import { existsSync } from "fs";
+ import chalk2 from "chalk";
++import { pathToFileURL } from "url";
+ async function resolveTransformers(transformers) {
+   const modules = await Promise.all(
+     transformers.map(async (transformer) => {
+@@ -243,7 +244,7 @@ async function resolveTransformers(transformers) {
+         );
+         process.exit(1);
+       }
+-      return import(transformerPath).catch((error) => {
++      return import(pathToFileURL(transformerPath).href).catch((error) => {
+         logger.error(`Failed to load transformer ${transformer}.`);
+         if (error.code === "ERR_UNKNOWN_FILE_EXTENSION") {
+           logger.warn(

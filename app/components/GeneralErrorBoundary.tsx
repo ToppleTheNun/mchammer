@@ -1,0 +1,66 @@
+import { isRouteErrorResponse } from "@remix-run/react";
+
+import { ErrorPageHeader } from "#app/components/PageHeader.tsx";
+import { PageLayout } from "#app/components/PageLayout.tsx";
+import { SiteFooter } from "#app/components/SiteFooter.tsx";
+import { H2, Lead } from "#app/components/typography.tsx";
+
+export const GeneralErrorBoundary = ({ error }: { error: unknown }) => {
+  if (isRouteErrorResponse(error)) {
+    return (
+      <div className="relative flex min-h-screen flex-col">
+        <div className="flex-1">
+          <PageLayout>
+            <ErrorPageHeader />
+            <div className="pb-12 pt-8">
+              <H2>
+                {error.status} {error.statusText}
+              </H2>
+              <Lead>{error.data}</Lead>
+            </div>
+          </PageLayout>
+        </div>
+        <SiteFooter />
+      </div>
+    );
+  }
+
+  if (error instanceof Error) {
+    return (
+      <div className="relative flex min-h-screen flex-col">
+        <div className="flex-1">
+          <PageLayout>
+            <ErrorPageHeader />
+            <div className="pb-12 pt-8">
+              <H2>Error</H2>
+              <Lead>{error.message}</Lead>
+              <Lead>Stack Trace</Lead>
+              <code className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">
+                {error.stack}
+              </code>
+            </div>
+          </PageLayout>
+        </div>
+        <SiteFooter />
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative flex min-h-screen flex-col">
+      <div className="flex-1">
+        <PageLayout>
+          <ErrorPageHeader />
+          <div className="pb-12 pt-8">
+            <H2>Unknown Error</H2>
+            <Lead>
+              If you&apos;re seeing this, bug Topple relentlessly until he fixes
+              this.
+            </Lead>
+          </div>
+        </PageLayout>
+      </div>
+      <SiteFooter />
+    </div>
+  );
+};

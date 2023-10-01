@@ -12,3 +12,5 @@ app/env/generated.ts
 sqlite.db
 
 .vercel
+
+app/components/ui/icons

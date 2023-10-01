@@ -1,6 +1,6 @@
 import { NavLink } from "@remix-run/react";
 
-import { H1, Lead } from "~/components/typography";
+import { H1, Lead } from "#app/components/typography.tsx";
 
 export const IndexPageHeader = () => (
   <div className="space-y-2">

@@ -1,6 +1,6 @@
 import { createClient } from "@vercel/kv";
 
-import { singleton } from "~/lib/singleton.server";
+import { singleton } from "#app/lib/singleton.server.ts";
 
 export const kv = singleton("kv", () =>
   createClient({

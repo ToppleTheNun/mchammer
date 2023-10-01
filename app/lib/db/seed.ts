@@ -1,6 +1,6 @@
 import "dotenv/config";
 
-import { error, info } from "~/lib/log.server";
+import { error, info } from "#app/lib/log.server.ts";
 
 (async () => {
   info("Starting drizzle seeding...");

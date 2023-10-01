@@ -1,5 +1,5 @@
-import { IndexPageHeader } from "~/components/PageHeader";
-import { PageLayout } from "~/components/PageLayout";
+import { IndexPageHeader } from "#app/components/PageHeader.tsx";
+import { PageLayout } from "#app/components/PageLayout.tsx";
 
 const IndexRoute = () => (
   <PageLayout>

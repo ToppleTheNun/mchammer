@@ -1,4 +1,4 @@
-import { kv } from "~/lib/kv.server";
+import { kv } from "#app/lib/kv.server.ts";
 
 export type WCLOAuthResponse = {
   access_token: string;

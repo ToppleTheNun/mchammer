@@ -5,9 +5,9 @@ import type { IntrospectionQuery } from "graphql";
 import { buildClientSchema, getIntrospectionQuery, printSchema } from "graphql";
 import { resolve } from "path";
 
-import { error, info } from "~/lib/log.server";
+import { error, info } from "#app/lib/log.server.ts";
 
-import { getGqlClient } from "../client.server";
+import { getGqlClient } from "../client.server.ts";
 
 async function loadSchema() {
   const client = await getGqlClient();

@@ -1,6 +1,6 @@
 import type { HTMLAttributes } from "react";
 
-import { cn } from "~/lib/utils";
+import { cn } from "#app/lib/utils.ts";
 
 interface HeadingProps extends HTMLAttributes<HTMLHeadingElement> {}
 export const H1 = ({ className, ...props }: HeadingProps) => (

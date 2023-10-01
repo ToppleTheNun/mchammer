@@ -1,11 +1,17 @@
+import { parse } from "@conform-to/zod";
 import { cssBundleHref } from "@remix-run/css-bundle";
-import type { LinksFunction, MetaFunction } from "@remix-run/node";
+import type {
+  DataFunctionArgs,
+  HeadersFunction,
+  LinksFunction,
+  MetaFunction,
+} from "@remix-run/node";
 import { json } from "@remix-run/node";
 import {
-  isRouteErrorResponse,
   Links,
   LiveReload,
   Meta,
+  NavLink,
   Outlet,
   Scripts,
   ScrollRestoration,
@@ -16,19 +22,32 @@ import { captureRemixErrorBoundaryError, withSentry } from "@sentry/remix";
 import { Analytics } from "@vercel/analytics/react";
 import type { ReactNode } from "react";
 
-import { ErrorPageHeader } from "~/components/PageHeader";
-import { PageLayout } from "~/components/PageLayout";
-import { SiteFooter } from "~/components/SiteFooter";
-import { TailwindIndicator } from "~/components/TailwindIndicator";
-import { H2, Lead } from "~/components/typography";
-import { siteConfig } from "~/config/site";
-import fontStylesheetUrl from "~/font.css";
-import { getEnv } from "~/lib/env.server";
-import tailwindStylesheetUrl from "~/tailwind.css";
-import { isPresent } from "~/typeGuards";
+import { GeneralErrorBoundary } from "#app/components/GeneralErrorBoundary.tsx";
+import { MainNav } from "#app/components/MainNav.tsx";
+import { MobileNav } from "#app/components/MobileNav.tsx";
+import { ModeToggle } from "#app/components/ModeToggle.tsx";
+import { SiteFooter } from "#app/components/SiteFooter.tsx";
+import { TailwindIndicator } from "#app/components/TailwindIndicator.tsx";
+import { buttonVariants } from "#app/components/ui/button.tsx";
+import { href as iconsHref, Icon } from "#app/components/ui/icon.tsx";
+import { siteConfig } from "#app/config/site.ts";
+import { serverTiming } from "#app/constants.ts";
+import fontStylesheetUrl from "#app/font.css";
+import { themeFormSchema, useTheme } from "#app/hooks/useTheme.ts";
+import { ClientHintCheck, getHints } from "#app/lib/client-hints.tsx";
+import { getEnv } from "#app/lib/env.server.ts";
+import { combineHeaders, getDomainUrl } from "#app/lib/misc.ts";
+import { useNonce } from "#app/lib/nonce-provider.ts";
+import { getTheme, setTheme, type Theme } from "#app/lib/theme.server.ts";
+import { makeTimings } from "#app/lib/timing.server.ts";
+import { cn } from "#app/lib/utils.ts";
+import tailwindStylesheetUrl from "#app/tailwind.css";
+import { isPresent } from "#app/typeGuards.ts";
 
 export const links: LinksFunction = () => {
   return [
+    // Preload svg sprite as a resource to avoid render blocking
+    { rel: "preload", href: iconsHref, as: "image" },
     // Preload CSS as a resource to avoid render blocking
     { rel: "preload", href: fontStylesheetUrl, as: "style" },
     { rel: "preload", href: tailwindStylesheetUrl, as: "style" },
@@ -64,6 +83,7 @@ export const links: LinksFunction = () => {
     },
 
     // These should match the css preloads above to avoid css as render blocking resource
+    { rel: "stylesheet", href: fontStylesheetUrl },
     { rel: "stylesheet", href: tailwindStylesheetUrl },
     cssBundleHref ? { rel: "stylesheet", href: cssBundleHref } : null,
   ].filter(isPresent);
@@ -98,29 +118,82 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export const loader = () => {
-  return json({
-    ENV: getEnv(),
-  });
+export const loader = ({ request }: DataFunctionArgs) => {
+  const timings = makeTimings("root loader");
+
+  return json(
+    {
+      ENV: getEnv(),
+      requestInfo: {
+        hints: getHints(request),
+        origin: getDomainUrl(request),
+        path: new URL(request.url).pathname,
+        userPrefs: {
+          theme: getTheme(request),
+        },
+      },
+    },
+    { headers: combineHeaders({ [serverTiming]: timings.toString() }) },
+  );
 };
 
-const Document = ({ children }: { children: ReactNode }) => {
+export const headers: HeadersFunction = ({ loaderHeaders }) => {
+  return {
+    "Server-Timing": loaderHeaders.get("Server-Timing") ?? "",
+  };
+};
+
+export async function action({ request }: DataFunctionArgs) {
+  const formData = await request.formData();
+  const submission = parse(formData, {
+    schema: themeFormSchema,
+  });
+  if (submission.intent !== "submit") {
+    return json({ status: "idle", submission } as const);
+  }
+  if (!submission.value) {
+    return json({ status: "error", submission } as const, { status: 400 });
+  }
+  const { theme } = submission.value;
+
+  const responseInit = {
+    headers: { "set-cookie": setTheme(theme) },
+  };
+  return json({ success: true, submission }, responseInit);
+}
+
+const Document = ({
+  children,
+  nonce,
+  theme,
+  env,
+}: {
+  children: ReactNode;
+  nonce: string;
+  theme?: Theme;
+  env?: Record<string, string>;
+}) => {
   return (
-    <html className="dark" lang="en" dir="auto">
+    <html className={`${theme} h-full overflow-x-hidden`} lang="en" dir="auto">
       <head>
+        <ClientHintCheck nonce={nonce} />
+        <Meta />
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
-        <Meta />
         <Links />
       </head>
-      <body
-        className="min-h-screen bg-background font-sans antialiased"
-        suppressHydrationWarning
-      >
+      <body className="bg-background font-sans text-foreground">
         {children}
+        <script
+          nonce={nonce}
+          dangerouslySetInnerHTML={{
+            __html: `window.ENV = ${JSON.stringify(env)}`,
+          }}
+        />
+        <ScrollRestoration nonce={nonce} />
         <TailwindIndicator />
-        <Scripts />
-        <LiveReload />
+        <Scripts nonce={nonce} />
+        <LiveReload nonce={nonce} />
       </body>
     </html>
   );
@@ -128,94 +201,60 @@ const Document = ({ children }: { children: ReactNode }) => {
 
 export const ErrorBoundary = () => {
   const error = useRouteError();
+  const nonce = useNonce();
 
   captureRemixErrorBoundaryError(error);
 
-  if (isRouteErrorResponse(error)) {
-    return (
-      <Document>
-        <div className="relative flex min-h-screen flex-col">
-          <div className="flex-1">
-            <PageLayout>
-              <ErrorPageHeader />
-              <div className="pb-12 pt-8">
-                <H2>
-                  {error.status} {error.statusText}
-                </H2>
-                <Lead>{error.data}</Lead>
-              </div>
-            </PageLayout>
-          </div>
-          <SiteFooter />
-        </div>
-      </Document>
-    );
-  }
-
-  if (error instanceof Error) {
-    return (
-      <Document>
-        <div className="relative flex min-h-screen flex-col">
-          <div className="flex-1">
-            <PageLayout>
-              <ErrorPageHeader />
-              <div className="pb-12 pt-8">
-                <H2>Error</H2>
-                <Lead>{error.message}</Lead>
-                <Lead>Stack Trace</Lead>
-                <code className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">
-                  {error.stack}
-                </code>
-              </div>
-            </PageLayout>
-          </div>
-          <SiteFooter />
-        </div>
-      </Document>
-    );
-  }
-
   return (
-    <Document>
-      <div className="relative flex min-h-screen flex-col">
-        <div className="flex-1">
-          <PageLayout>
-            <ErrorPageHeader />
-            <div className="pb-12 pt-8">
-              <H2>Unknown Error</H2>
-              <Lead>
-                If you&apos;re seeing this, bug Topple relentlessly until he
-                fixes this.
-              </Lead>
-            </div>
-          </PageLayout>
-        </div>
-        <SiteFooter />
-      </div>
+    <Document nonce={nonce}>
+      <GeneralErrorBoundary error={error} />
     </Document>
   );
 };
 
-function App() {
+const App = () => {
   const data = useLoaderData<typeof loader>();
+  const nonce = useNonce();
+  const theme = useTheme();
 
   return (
-    <Document>
+    <Document nonce={nonce} theme={theme} env={data.ENV}>
       <div className="relative flex min-h-screen flex-col">
+        <header className="supports-backdrop-blur:bg-background/60 sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
+          <div className="container flex h-14 items-center">
+            <MainNav />
+            <MobileNav />
+            <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
+              <nav className="flex items-center">
+                <NavLink
+                  to={siteConfig.links.github}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <div
+                    className={cn(
+                      buttonVariants({ variant: "ghost" }),
+                      "w-9 px-0",
+                    )}
+                  >
+                    <Icon name="github-logo" className="h-4 w-4">
+                      <span className="sr-only">GitHub</span>
+                    </Icon>
+                  </div>
+                </NavLink>
+                <ModeToggle userPreference={data.requestInfo.userPrefs.theme} />
+              </nav>
+            </div>
+          </div>
+        </header>
         <div className="flex-1">
           <Outlet />
         </div>
         <SiteFooter />
       </div>
-      <ScrollRestoration />
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `window.ENV = ${JSON.stringify(data.ENV)}`,
-        }}
-      />
       <Analytics />
     </Document>
   );
-}
+};
 
 export default withSentry(App);

@@ -8,7 +8,7 @@ import { handleRequest as handleVercelRemixRequest } from "@vercel/remix";
 import isbot from "isbot";
 import { renderToPipeableStream } from "react-dom/server";
 
-import { getEnv, init } from "./lib/env.server";
+import { getEnv, init } from "./lib/env.server.ts";
 
 const ABORT_DELAY = 5_000;
 
@@ -16,7 +16,7 @@ init();
 global.ENV = getEnv();
 
 if (ENV.MODE === "production" && ENV.SENTRY_DSN) {
-  import("./lib/monitoring.server").then(({ init }) => init());
+  import("./lib/monitoring.server.ts").then(({ init }) => init());
 }
 
 export function handleError(
@@ -24,7 +24,7 @@ export function handleError(
   { request }: DataFunctionArgs,
 ): void {
   if (error instanceof Error) {
-    captureRemixServerException(error, "remix.server", request);
+    captureRemixServerException(error, "remix.server.ts", request);
   } else {
     // Optionally capture non-Error objects
     captureException(error);

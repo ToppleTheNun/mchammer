@@ -1,7 +1,7 @@
 import { GraphQLClient } from "graphql-request";
 
-import type { WCLAuth, WCLOAuthResponse } from "./auth.server";
-import { getWCLAuthentication, setWCLAuthentication } from "./auth.server";
+import type { WCLAuth, WCLOAuthResponse } from "./auth.server.ts";
+import { getWCLAuthentication, setWCLAuthentication } from "./auth.server.ts";
 import type { Sdk } from "./types";
 import { getSdk } from "./types";
 
