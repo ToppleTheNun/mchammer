@@ -20,7 +20,7 @@ const IndexRoute = () => (
   <PageLayout pageHeader={<Header />}>
     <section className="hidden md:block">
       <div className="overflow-hidden rounded-lg border bg-background px-4 shadow">
-        <div className="flex h-[50vh] items-center justify-center">
+        <div className="flex h-[50vh] flex-col items-center justify-center gap-2">
           <Lead>
             Hey, we&apos;re building here. Mind looking somewhere else?
           </Lead>
