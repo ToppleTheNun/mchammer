@@ -9,6 +9,7 @@ export type Season = {
   endDates: Record<Region, number | null>;
   seasonIcon: string;
   encounterIds: ReadonlyArray<number>;
+  ptr: boolean;
 };
 
 export const seasons: readonly Season[] = [
@@ -48,6 +49,7 @@ export const seasons: readonly Season[] = [
       61841, // The Underrot
       10657, // The Vortex Pinnacle
     ],
+    ptr: false,
   },
   {
     name: "DF S1",
@@ -84,6 +86,7 @@ export const seasons: readonly Season[] = [
       61176, // Shadowmoon Burial Grounds
       10960, // Temple of the Jade Serpent
     ],
+    ptr: false,
   },
 ] as const;
 

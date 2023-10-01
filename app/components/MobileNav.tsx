@@ -59,11 +59,9 @@ export const MobileNav = () => {
             alt="Logo"
             height="128"
             width="128"
-            className="h-4 w-4"
+            className="mr-2 h-4 w-4"
           />
-          <span className="hidden font-bold sm:inline-block">
-            {siteConfig.name}
-          </span>
+          <span className="font-bold">{siteConfig.name}</span>
         </MobileLink>
         <ScrollArea className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6" />
       </SheetContent>
