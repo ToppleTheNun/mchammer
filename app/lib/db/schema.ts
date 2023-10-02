@@ -20,6 +20,8 @@ export const character = pgTable("character", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
+export type Character = typeof character.$inferSelect;
+export type NewCharacter = typeof character.$inferInsert;
 
 export const fight = pgTable(
   "fight",
@@ -47,6 +49,8 @@ export const fight = pgTable(
     ),
   }),
 );
+export type Fight = typeof fight.$inferSelect;
+export type NewFight = typeof fight.$inferInsert;
 
 export const dodgeParryMissStreak = pgTable("dodge_parry_miss_streak", {
   id: serial("id").primaryKey(),
@@ -62,7 +66,8 @@ export const dodgeParryMissStreak = pgTable("dodge_parry_miss_streak", {
   dodge: integer("dodge").notNull(),
   parry: integer("parry").notNull(),
   miss: integer("miss").notNull(),
-  timestamp: timestamp("timestamp").notNull(),
+  timestampStart: timestamp("timestamp_start").notNull(),
+  timestampEnd: timestamp("timestamp_end").notNull(),
 
   sourceId: integer("source_id")
     .notNull()
@@ -74,3 +79,5 @@ export const dodgeParryMissStreak = pgTable("dodge_parry_miss_streak", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
+export type DodgeParryMissStreak = typeof dodgeParryMissStreak.$inferSelect;
+export type NewDodgeParryMissStreak = typeof dodgeParryMissStreak.$inferInsert;

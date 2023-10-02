@@ -21,3 +21,8 @@ export const formatDuration = (millis: number): string => {
 
   return `${hours}:${minutes}:${seconds}`;
 };
+
+export const pipe =
+  <T>(...fns: Array<(arg: T) => T>) =>
+    (value: T) =>
+      fns.reduce((acc, fn) => fn(acc), value);

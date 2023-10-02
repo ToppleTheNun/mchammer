@@ -10,7 +10,7 @@ import type {
   GetPhysicalDamageTakenEventsQueryVariables,
   GetPlayerDetailsQuery,
   GetPlayerDetailsQueryVariables,
-} from "#app/wcl/types";
+} from "#app/wcl/types.ts";
 
 export const getFights = async (
   params: GetFightsQueryVariables,

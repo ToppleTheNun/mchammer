@@ -7,3 +7,5 @@ export const expires = "Expires";
 export const serverTiming = "Server-Timing";
 export const regions = ["eu", "us", "kr", "tw"] as const;
 export type Region = (typeof regions)[number];
+
+export const isRegion = (x: string): x is Region => regions.includes(x);

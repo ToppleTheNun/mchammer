@@ -144,6 +144,18 @@ export const findSeasonByTimestamp = (
   return season ?? null;
 };
 
+export const findSeasonsByTimestamp = (timestamp = Date.now()): Season[] => {
+  return seasons.filter(
+    (season) =>
+      Object.values(season.startDates).some(
+        (start) => start && timestamp >= start,
+      ) &&
+      Object.values(season.endDates).some(
+        (end) => end === UNKNOWN_SEASON_START_OR_ENDING || end > timestamp,
+      ),
+  );
+};
+
 export const findSeasonByName = (slug: string): Season | null => {
   if (slug === "latest") {
     const ongoingSeason = findSeasonByTimestamp();

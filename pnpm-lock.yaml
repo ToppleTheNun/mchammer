@@ -103,6 +103,9 @@ dependencies:
   kleur:
     specifier: 4.1.5
     version: 4.1.5
+  lodash:
+    specifier: 4.17.21
+    version: 4.17.21
   lucide-react:
     specifier: 0.279.0
     version: 0.279.0(react@18.2.0)
@@ -171,6 +174,9 @@ devDependencies:
   '@types/glob':
     specifier: 8.1.0
     version: 8.1.0
+  '@types/lodash':
+    specifier: 4.14.199
+    version: 4.14.199
   '@types/node':
     specifier: ^18.18.1
     version: 18.18.1
@@ -3767,6 +3773,10 @@ packages:
     resolution: {integrity: sha512-8t92P+oeW4d/CRQfJaSqEwXujrhH4OEeHRjGU3v1Q8mUS8GPF3yiX26sw4svv6faL2HfBtGTe2xWIoVgN3dy9w==}
     dependencies:
       '@types/node': 18.18.1
+    dev: true
+
+  /@types/lodash@4.14.199:
+    resolution: {integrity: sha512-Vrjz5N5Ia4SEzWWgIVwnHNEnb1UE1XMkvY5DGXrAeOGE9imk0hgTHh5GyDjLDJi9OTCn9oo9dXH1uToK1VRfrg==}
     dev: true
 
   /@types/mdast@3.0.13:
@@ -7782,7 +7792,6 @@ packages:
 
   /lodash@4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
-    dev: true
 
   /log-symbols@4.1.0:
     resolution: {integrity: sha512-8XPvpAA8uyhfteu8pIvQxpJZ7SYYdpUivZpGy6sFsBuKRY/7rQGavedeB8aK+Zkyq6upMFVL/9AW6vOYzfRyLg==}
