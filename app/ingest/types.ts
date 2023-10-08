@@ -44,6 +44,8 @@ export type IngestibleReportDamageTakenEvent = ReportDamageTakenEvent & {
 export type IngestedReportDamageTakenEvent = IngestibleReportDamageTakenEvent;
 
 export type ReportDodgeParryMissStreak = {
+  target: PlayerDetail;
+  fight: number;
   parry: number;
   dodge: number;
   miss: number;
@@ -55,8 +57,9 @@ export type ReportDodgeParryMissStreak = {
 export type IngestibleReportDodgeParryMissStreak =
   ReportDodgeParryMissStreak & {
     region: Region;
-    ingestedFightId: string;
-    target: PlayerDetail;
+    ingestedFightId: number;
+    timestampStart: number;
+    timestampEnd: number;
   };
 
 export type IngestedReportDodgeParryMissStreak =

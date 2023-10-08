@@ -162,8 +162,16 @@ export const filterReportFightsToOnlyThoseInSeason = (
   fights: enhanceReport.fights.filter(isFightInSeason),
 });
 
+const filterToOnlyOne = (
+  enhanceReport: ReportWithIngestibleFights,
+): ReportWithIngestibleFights => ({
+  ...enhanceReport,
+  fights: enhanceReport.fights.filter((_, idx) => idx === 0),
+});
+
 export const filterIngestibleReportFights = pipe(
   filterReportFightsToOnlyThoseInSeason,
+  filterToOnlyOne,
 );
 
 export const ingestFight = async (

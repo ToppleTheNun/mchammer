@@ -72,7 +72,7 @@ const getReportDamageTakenEventsForFight = async (
   let fightDamageTakenEvents: ReportDamageTakenEvent[] = [];
 
   info(
-    `Retrieving physical damage taken events taken from ${startTimestamp} (${fight.startTime}) for ${fight.report}`,
+    `Retrieving physical damage taken events taken from ${startTimestamp} (${fight.startTime}) to ${endTimestamp} (${fight.endTime}) for ${fight.report}`,
   );
 
   do {
