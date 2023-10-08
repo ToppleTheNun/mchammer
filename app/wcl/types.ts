@@ -1,6 +1,4 @@
-import type { GraphQLClient } from "graphql-request";
-import type { GraphQLClientRequestHeaders } from "graphql-request/build/cjs/types";
-import gql from "graphql-tag";
+import { gql } from "@urql/core";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -21,6 +19,7 @@ export type Incremental<T> =
   | {
       [P in keyof T]?: P extends " $fragmentName" | "__typename" ? T[P] : never;
     };
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: { input: string; output: string };
@@ -2160,9 +2159,8 @@ export type GetPlayerDetailsQuery = {
 
 export type GetPhysicalDamageTakenEventsQueryVariables = Exact<{
   reportID: Scalars["String"]["input"];
-  fightIDs:
-    | Array<InputMaybe<Scalars["Int"]["input"]>>
-    | InputMaybe<Scalars["Int"]["input"]>;
+  startTime: Scalars["Float"]["input"];
+  endTime: Scalars["Float"]["input"];
 }>;
 
 export type GetPhysicalDamageTakenEventsQuery = {
@@ -2171,10 +2169,6 @@ export type GetPhysicalDamageTakenEventsQuery = {
     __typename?: "ReportData";
     report?: {
       __typename?: "Report";
-      title: string;
-      startTime: number;
-      endTime: number;
-      region?: { __typename?: "Region"; slug: string } | null;
       events?: {
         __typename?: "ReportEventPaginator";
         data?: any | null;
@@ -2262,19 +2256,18 @@ export const GetPlayerDetailsDocument = gql`
   }
 `;
 export const GetPhysicalDamageTakenEventsDocument = gql`
-  query getPhysicalDamageTakenEvents($reportID: String!, $fightIDs: [Int]!) {
+  query getPhysicalDamageTakenEvents(
+    $reportID: String!
+    $startTime: Float!
+    $endTime: Float!
+  ) {
     reportData {
       report(code: $reportID) {
-        title
-        startTime
-        endTime
-        region {
-          slug
-        }
         events(
           dataType: DamageTaken
-          fightIDs: $fightIDs
+          endTime: $endTime
           filterExpression: "ability.type = 1"
+          startTime: $startTime
         ) {
           data
           nextPageTimestamp
@@ -2283,97 +2276,3 @@ export const GetPhysicalDamageTakenEventsDocument = gql`
     }
   }
 `;
-
-export type SdkFunctionWrapper = <T>(
-  action: (requestHeaders?: Record<string, string>) => Promise<T>,
-  operationName: string,
-  operationType?: string,
-) => Promise<T>;
-
-const defaultWrapper: SdkFunctionWrapper = (
-  action,
-  _operationName,
-  _operationType,
-) => action();
-
-export function getSdk(
-  client: GraphQLClient,
-  withWrapper: SdkFunctionWrapper = defaultWrapper,
-) {
-  return {
-    getFights(
-      variables: GetFightsQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<GetFightsQuery> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<GetFightsQuery>(GetFightsDocument, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        "getFights",
-        "query",
-      );
-    },
-    getFightsById(
-      variables: GetFightsByIdQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<GetFightsByIdQuery> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<GetFightsByIdQuery>(GetFightsByIdDocument, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        "getFightsById",
-        "query",
-      );
-    },
-    getCombatantInfoEvents(
-      variables: GetCombatantInfoEventsQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<GetCombatantInfoEventsQuery> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<GetCombatantInfoEventsQuery>(
-            GetCombatantInfoEventsDocument,
-            variables,
-            { ...requestHeaders, ...wrappedRequestHeaders },
-          ),
-        "getCombatantInfoEvents",
-        "query",
-      );
-    },
-    getPlayerDetails(
-      variables: GetPlayerDetailsQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<GetPlayerDetailsQuery> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<GetPlayerDetailsQuery>(
-            GetPlayerDetailsDocument,
-            variables,
-            { ...requestHeaders, ...wrappedRequestHeaders },
-          ),
-        "getPlayerDetails",
-        "query",
-      );
-    },
-    getPhysicalDamageTakenEvents(
-      variables: GetPhysicalDamageTakenEventsQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<GetPhysicalDamageTakenEventsQuery> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<GetPhysicalDamageTakenEventsQuery>(
-            GetPhysicalDamageTakenEventsDocument,
-            variables,
-            { ...requestHeaders, ...wrappedRequestHeaders },
-          ),
-        "getPhysicalDamageTakenEvents",
-        "query",
-      );
-    },
-  };
-}
-export type Sdk = ReturnType<typeof getSdk>;

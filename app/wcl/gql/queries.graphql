@@ -81,21 +81,18 @@ query getPlayerDetails($reportID: String!, $fightIDs: [Int]!) {
   }
 }
 
-query getPhysicalDamageTakenEvents($reportID: String!, $fightIDs: [Int]!) {
+query getPhysicalDamageTakenEvents(
+  $reportID: String!
+  $startTime: Float!
+  $endTime: Float!
+) {
   reportData {
     report(code: $reportID) {
-      title
-      startTime
-      endTime
-
-      region {
-        slug
-      }
-
       events(
         dataType: DamageTaken
-        fightIDs: $fightIDs
+        endTime: $endTime
         filterExpression: "ability.type = 1"
+        startTime: $startTime
       ) {
         data
         nextPageTimestamp

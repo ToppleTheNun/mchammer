@@ -1,33 +1,22 @@
-import { GraphQLClient } from "graphql-request";
+import { Client, fetchExchange } from "@urql/core";
 
-import type { WCLAuth, WCLOAuthResponse } from "./auth.server.ts";
-import { getWCLAuthentication, setWCLAuthentication } from "./auth.server.ts";
-import type { Sdk } from "./types";
-import { getSdk } from "./types";
+import type { WCLAuth } from "./auth.server.ts";
+import {
+  getWCLAuthentication,
+  setWCLAuthentication,
+  wclOAuthResponseSchema,
+} from "./auth.server.ts";
 
 type Cache = {
-  sdk: Sdk | null;
-  client: GraphQLClient | null;
+  client: Client | null;
   expiresAt: number | null;
   pending: boolean;
 };
 
 const cache: Cache = {
-  sdk: null,
   client: null,
   expiresAt: null,
   pending: false,
-};
-
-export const getCachedSdk = async (): Promise<Sdk> => {
-  if (cache.sdk) {
-    return cache.sdk;
-  }
-
-  const client = await getGqlClient();
-  cache.sdk = cache.sdk ?? getSdk(client);
-
-  return cache.sdk;
 };
 
 const FIVE_DAYS_IN_SECONDS = 5 * 24 * 60 * 60;
@@ -38,7 +27,7 @@ const mustRefreshToken = (expiresAt: NonNullable<WCLAuth["expiresAt"]>) => {
   return expiresAt <= now || expiresAt - now <= FIVE_DAYS_IN_SECONDS;
 };
 
-export const getGqlClient = async (): Promise<GraphQLClient> => {
+export const getGqlClient = async (): Promise<Client> => {
   if (
     // in test, `getWLAuthentication` returns mock data
     process.env.NODE_ENV !== "test" &&
@@ -70,15 +59,15 @@ export const getGqlClient = async (): Promise<GraphQLClient> => {
     !cache.client &&
     !cache.expiresAt
   ) {
-    cache.client = new GraphQLClient(
-      "https://www.warcraftlogs.com/api/v2/client",
-      {
+    cache.client = new Client({
+      url: "https://www.warcraftlogs.com/api/v2/client",
+      exchanges: [fetchExchange],
+      fetchOptions: () => ({
         headers: {
           authorization: `Bearer ${persisted.token}`,
         },
-        fetch: global.fetch,
-      },
-    );
+      }),
+    });
 
     cache.expiresAt = persisted.expiresAt * 1000;
     cache.pending = false;
@@ -102,17 +91,20 @@ export const getGqlClient = async (): Promise<GraphQLClient> => {
     });
 
     if (response.ok) {
-      const json: WCLOAuthResponse = await response.json();
+      const json = wclOAuthResponseSchema.parse(await response.json());
 
       await setWCLAuthentication(json);
 
       cache.client =
         cache.client ??
-        new GraphQLClient("https://www.warcraftlogs.com/api/v2/client", {
-          headers: {
-            authorization: `Bearer ${json.access_token}`,
-          },
-          fetch: global.fetch,
+        new Client({
+          url: "https://www.warcraftlogs.com/api/v2/client",
+          exchanges: [fetchExchange],
+          fetchOptions: () => ({
+            headers: {
+              authorization: `Bearer ${json.access_token}`,
+            },
+          }),
         });
 
       cache.expiresAt = cache.expiresAt ?? Date.now() + json.expires_in;

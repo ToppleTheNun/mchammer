@@ -24,5 +24,5 @@ export const formatDuration = (millis: number): string => {
 
 export const pipe =
   <T>(...fns: Array<(arg: T) => T>) =>
-    (value: T) =>
-      fns.reduce((acc, fn) => fn(acc), value);
+  (value: T) =>
+    fns.reduce((acc, fn) => fn(acc), value);

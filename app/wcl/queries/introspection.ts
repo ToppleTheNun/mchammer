@@ -9,22 +9,23 @@ import { error, info } from "#app/lib/log.server.ts";
 
 import { getGqlClient } from "../client.server.ts";
 
-async function loadSchema() {
+const loadSchema = async () => {
   const client = await getGqlClient();
 
-  const response = await client.request<IntrospectionQuery>(
+  const response = await client.query<IntrospectionQuery>(
     getIntrospectionQuery(),
+    {},
   );
+  if (!response.data) {
+    throw new Error("Unable to load introspection data!");
+  }
 
-  const schema = printSchema(buildClientSchema(response));
+  const schema = printSchema(buildClientSchema(response.data));
 
   const targetPath = resolve("app/wcl/gql/schema.graphql");
   writeFileSync(targetPath, schema);
 
   info("gql schema loaded");
-  process.exit(0);
-}
-
-(async () => {})().catch(error);
+};
 
 loadSchema().catch(error);

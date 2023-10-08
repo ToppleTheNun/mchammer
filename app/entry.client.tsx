@@ -2,10 +2,10 @@ import { RemixBrowser } from "@remix-run/react";
 import { startTransition, StrictMode } from "react";
 import { hydrateRoot } from "react-dom/client";
 
-import { reportWebVitalsToVercelAnalytics } from "#app/lib/vitals.client";
+import { reportWebVitalsToVercelAnalytics } from "#app/lib/vitals.client.ts";
 
 if (ENV.MODE === "production" && ENV.SENTRY_DSN) {
-  import("./lib/monitoring.client").then(({ init }) => init());
+  import("./lib/monitoring.client.ts").then(({ init }) => init());
 }
 
 const hydrate = () =>

@@ -1,5 +1,5 @@
 import { and, eq, gte, lte } from "drizzle-orm";
-import sortBy from "lodash/sortBy";
+import { sortBy } from "lodash-es";
 
 import { isRegion } from "#app/constants.ts";
 import { DIFFERENT_REPORT_TOLERANCE } from "#app/ingest/constants.server.ts";
@@ -12,7 +12,7 @@ import type {
   ReportWithIngestibleFights,
 } from "#app/ingest/types.ts";
 import { drizzle } from "#app/lib/db.server.ts";
-import { fight } from "#app/lib/db/schema.js";
+import { fight } from "#app/lib/db/schema.ts";
 import { debug, error, info } from "#app/lib/log.server.ts";
 import { time, type Timings } from "#app/lib/timing.server.ts";
 import { findSeasonsByTimestamp } from "#app/seasons.ts";
@@ -59,6 +59,8 @@ const getReport = async (
     .map<ReportFight>((fight) => ({
       report: reportID,
       fightID: fight.id,
+      relativeStartTime: fight.startTime,
+      relativeEndTime: fight.endTime,
       startTime: reportStartTime + fight.startTime,
       endTime: reportStartTime + fight.endTime,
       encounterID: fight.encounterID,

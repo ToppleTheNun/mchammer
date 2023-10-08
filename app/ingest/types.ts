@@ -11,6 +11,8 @@ export type ReportFight = {
   difficulty: number;
   region: Region;
   friendlyPlayerIds: number[];
+  relativeStartTime: number;
+  relativeEndTime: number;
 };
 
 export type IngestibleReportFight = ReportFight & {
@@ -35,7 +37,7 @@ export type ReportDamageTakenEvent = DamageTakenEvent & {
 
 export type IngestibleReportDamageTakenEvent = ReportDamageTakenEvent & {
   region: Region;
-  ingestedFightId: string;
+  ingestedFightId: number;
   target: PlayerDetail;
 };
 

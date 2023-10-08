@@ -1,13 +1,13 @@
-import { ingestFightsFromReport } from "#app/ingest/fights.server.js";
+import { ingestDamageTakenEvents } from "#app/ingest/events.server.ts";
+import { ingestFightsFromReport } from "#app/ingest/fights.server.ts";
+import { ingestDodgeParryMissStreaks } from "#app/ingest/streaks.server.ts";
 import type {
   ReportWithIngestedDamageTakenEvents,
   ReportWithIngestedDodgeParryMissStreaks,
   ReportWithIngestedFights,
-} from "#app/ingest/types.js";
-import { debug, error, info } from "#app/lib/log.server.js";
-import type { Timings } from "#app/lib/timing.server.js";
-import { ingestDamageTakenEvents } from "#app/ingest/events.server.js";
-import { ingestDodgeParryMissStreaks } from "#app/ingest/streaks.server.js";
+} from "#app/ingest/types.ts";
+import { debug, error, info } from "#app/lib/log.server.ts";
+import type { Timings } from "#app/lib/timing.server.ts";
 
 export const ingestWarcraftLogsReport = async (
   reportCode: string,

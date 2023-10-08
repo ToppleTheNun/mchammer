@@ -37,7 +37,7 @@ export const damageTakenEventSchema = z.object({
   targetInstance: z.number().optional(),
   abilityGameID: z.number(),
   fight: z.number(),
-  buffs: z.string(),
+  buffs: z.string().optional(),
   hitType: z.number(),
   amount: z.number().default(0),
   mitigated: z.number().default(0),

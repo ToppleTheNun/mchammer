@@ -1,10 +1,13 @@
+import { z } from "zod";
+
 import { kv } from "#app/lib/kv.server.ts";
 
-export type WCLOAuthResponse = {
-  access_token: string;
-  expires_in: number;
-  token_type: "Bearer";
-};
+export const wclOAuthResponseSchema = z.object({
+  access_token: z.string(),
+  expires_in: z.number().int(),
+  token_type: z.literal("Bearer"),
+});
+export type WCLOAuthResponse = z.infer<typeof wclOAuthResponseSchema>;
 
 export type WCLAuth = {
   token: string;
