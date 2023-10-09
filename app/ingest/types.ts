@@ -1,18 +1,28 @@
 import type { Region } from "#app/constants.ts";
-import type { DodgeParryMissStreak, Fight } from "#app/lib/db/schema.ts";
+import type {
+  Character,
+  DodgeParryMissStreak,
+  Fight,
+} from "#app/lib/db/schema.ts";
 import type { DamageTakenEvent, PlayerDetail } from "#app/wcl/schema.server.ts";
 
 export type ReportFight = {
-  report: string;
-  fightID: number;
+  reportID: string;
+  reportStartTime: number;
+  reportEndTime: number;
+  reportRegion: Region;
+  id: number;
+  /** Relative timestamp from WCL */
   startTime: number;
+  /** Relative timestamp from WCL */
   endTime: number;
-  encounterID: number;
   difficulty: number;
-  region: Region;
-  friendlyPlayerIds: number[];
-  relativeStartTime: number;
-  relativeEndTime: number;
+  encounterID: number;
+  friendlyPlayerIDs: number[];
+  /** Combined value of {@link ReportFight#reportStartTime} and {@link ReportFight#startTime} */
+  absoluteStartTime: number;
+  /** Combined value of {@link ReportFight#reportStartTime} and {@link ReportFight#endTime} */
+  absoluteEndTime: number;
 };
 
 export type IngestibleReportFight = ReportFight & {
@@ -21,7 +31,7 @@ export type IngestibleReportFight = ReportFight & {
 };
 
 export type IngestedReportFight = IngestibleReportFight & {
-  fight: Fight;
+  ingestedFight: Fight;
 };
 
 export type RequiredParryDodgeMiss = {
@@ -31,40 +41,49 @@ export type RequiredParryDodgeMiss = {
 };
 
 export type ReportDamageTakenEvent = DamageTakenEvent & {
-  report: string;
-  relativeTimestamp: number;
+  reportID: string;
+  reportRegion: Region;
+  fightID: number;
+  absoluteTimestamp: number;
 };
 
 export type IngestibleReportDamageTakenEvent = ReportDamageTakenEvent & {
-  region: Region;
-  ingestedFightId: number;
-  target: PlayerDetail;
+  ingestedFight: Fight;
+  character: PlayerDetail;
 };
 
-export type IngestedReportDamageTakenEvent = IngestibleReportDamageTakenEvent;
+export type IngestedReportDamageTakenEvent =
+  IngestibleReportDamageTakenEvent & {
+    ingestedCharacter: Character;
+  };
 
 export type ReportDodgeParryMissStreak = {
+  reportID: string;
+  fightID: number;
   target: PlayerDetail;
-  fight: number;
   parry: number;
   dodge: number;
   miss: number;
-  report: string;
-  relativeTimestampStart: number;
-  relativeTimestampEnd: number;
+  /** Relative timestamp from WCL */
+  startTime: number;
+  /** Relative timestamp from WCL */
+  endTime: number;
 };
 
 export type IngestibleReportDodgeParryMissStreak =
   ReportDodgeParryMissStreak & {
     region: Region;
-    ingestedFightId: number;
-    timestampStart: number;
-    timestampEnd: number;
+    ingestedFight: Fight;
+    ingestedCharacter: Character;
+    /** Combined value of {@link ReportFight#reportStartTime} and {@link ReportDodgeParryMissStreak#startTime} */
+    absoluteStartTime: number;
+    /** Combined value of {@link ReportFight#reportStartTime} and {@link ReportDodgeParryMissStreak#endTime} */
+    absoluteEndTime: number;
   };
 
 export type IngestedReportDodgeParryMissStreak =
   IngestibleReportDodgeParryMissStreak & {
-    dodgeParryMissStreak: DodgeParryMissStreak;
+    ingestedStreak: DodgeParryMissStreak;
   };
 
 export type Report = {
