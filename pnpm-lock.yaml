@@ -184,7 +184,7 @@ devDependencies:
     specifier: 8.1.0
     version: 8.1.0
   '@types/node':
-    specifier: ^18.18.1
+    specifier: 18.18.1
     version: 18.18.1
   '@types/react':
     specifier: 18.2.27
