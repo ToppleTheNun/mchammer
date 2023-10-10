@@ -9,6 +9,9 @@ const schema = z.object({
   COMMIT_SHA: z.string(),
   SENTRY_DSN: z.string().optional(),
   VERCEL_ANALYTICS_ID: z.string().optional(),
+  VERCEL_ENV: z
+    .enum(["development", "preview", "production"])
+    .default("development"),
   // Server
   NODE_ENV: z
     .enum(["development", "test", "production"])
@@ -63,6 +66,7 @@ export function getEnv() {
     BUILD_TIMESTAMP: generated.BUILD_TIMESTAMP,
     COMMIT_SHA: generated.COMMIT_SHA,
     SENTRY_DSN: process.env.SENTRY_DSN,
+    VERCEL_ENV: process.env.VERCEL_ENV,
     VERCEL_ANALYTICS_ID: process.env.VERCEL_ANALYTICS_ID,
   };
 }
