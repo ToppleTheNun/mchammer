@@ -166,6 +166,15 @@ const makeReportStreakIngestible = async (
   };
 };
 
+// const getMinimumAmountToIngest = async (timings: Timings) =>
+// SELECT min(streak)
+// FROM dodge_parry_miss_streak
+// WHERE id IN (SELECT id
+// FROM dodge_parry_miss_streak
+// ORDER BY streak DESC
+// LIMIT 10)
+
+
 const ingestStreak = async (
   ingestibleStreak: IngestibleReportDodgeParryMissStreak,
   timings: Timings,
@@ -230,6 +239,10 @@ const ingestStreak = async (
           dodge: ingestibleStreak.dodge,
           parry: ingestibleStreak.parry,
           miss: ingestibleStreak.miss,
+          streak:
+            ingestibleStreak.dodge +
+            ingestibleStreak.parry +
+            ingestibleStreak.miss,
           timestampStart: new Date(ingestibleStreak.absoluteStartTime),
           timestampEnd: new Date(ingestibleStreak.absoluteEndTime),
           sourceId: ingestibleStreak.ingestedCharacter.id,

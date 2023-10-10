@@ -86,6 +86,7 @@ const getReport = async (
 const makeReportFightIngestible = (
   basicReportFight: ReportFight,
   playerDetails: PlayerDetail[],
+  tankDetails: PlayerDetail[],
 ): IngestibleReportFight => {
   const friendlyPlayerDetails = basicReportFight.friendlyPlayerIDs
     .map<PlayerDetail | undefined>((playerId) =>
@@ -96,9 +97,13 @@ const makeReportFightIngestible = (
     friendlyPlayerDetails.map((player) => player.guid),
   ).join(":");
 
+  const tanksInFight = tankDetails.filter((tank) =>
+    basicReportFight.friendlyPlayerIDs.includes(tank.id),
+  );
+
   return {
     ...basicReportFight,
-    friendlyPlayerDetails,
+    friendlyPlayerDetails: tanksInFight,
     friendlyPlayers,
   };
 };
@@ -134,11 +139,15 @@ const addIngestibleFightsToReport = async (
     ...playerDetailsResult.data.tanks,
   ];
   debug(
-    `Retrieving player details for report ${basicReport.reportID}: ${playerDetails.length} players`,
+    `Retrieving player details for report ${basicReport.reportID}: ${playerDetails.length} players, ${playerDetailsResult.data.tanks.length} tanks`,
   );
   const reportFightsWithDetails =
     basicReport.reportFights.map<IngestibleReportFight>((fight) =>
-      makeReportFightIngestible(fight, playerDetails),
+      makeReportFightIngestible(
+        fight,
+        playerDetails,
+        playerDetailsResult.data.tanks,
+      ),
     );
 
   return { ...basicReport, fights: reportFightsWithDetails };

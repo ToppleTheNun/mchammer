@@ -1,5 +1,7 @@
 import { uniqBy } from "lodash-es";
+
 import { type Region } from "#app/constants.ts";
+import { findOrCreateCharacter } from "#app/ingest/characters.server.js";
 import type {
   IngestedReportDamageTakenEvent,
   IngestedReportFight,
@@ -19,7 +21,6 @@ import {
   type PlayerDetail,
 } from "#app/wcl/schema.server.ts";
 import { type GetPhysicalDamageTakenEventsQueryVariables } from "#app/wcl/types.ts";
-import { findOrCreateCharacter } from "#app/ingest/characters.server.js";
 
 type GetDamageTakenEventsDuringTimestampResult = {
   nextPageTimestamp: number | null;
@@ -118,10 +119,10 @@ const getReportDamageTakenEvents = async (
     ),
   );
 
-const makeReportDamageTakenEventIngestible = (
+const makeReportDamageTakenEventIngestible = async (
   damageEvent: ReportDamageTakenEvent,
   report: ReportWithIngestedFights,
-): IngestibleReportDamageTakenEvent => {
+): Promise<IngestibleReportDamageTakenEvent> => {
   const reportFight = report.fights.find(
     (fight) =>
       fight.reportID === damageEvent.reportID && fight.id === damageEvent.fight,
@@ -158,8 +159,7 @@ const addIngestibleDamageTakenEventsToReport = async (
   reportDamageTakenEventResults
     .filter((it): it is PromiseRejectedResult => it.status === "rejected")
     .forEach((it) => error(it.reason));
-
-  const ingestibleEvents = reportDamageTakenEventResults
+  const reportDamageTakenEvents = reportDamageTakenEventResults
     .filter(
       (it): it is PromiseFulfilledResult<ReportDamageTakenEvent[]> =>
         it.status === "fulfilled",
@@ -167,8 +167,22 @@ const addIngestibleDamageTakenEventsToReport = async (
     .reduce<ReportDamageTakenEvent[]>(
       (acc, current) => acc.concat(current.value),
       [],
+    );
+
+  const ingestibleEventResults = await Promise.allSettled(
+    reportDamageTakenEvents.map((event) =>
+      makeReportDamageTakenEventIngestible(event, report),
+    ),
+  );
+  ingestibleEventResults
+    .filter((it): it is PromiseRejectedResult => it.status === "rejected")
+    .forEach((it) => error(it.reason));
+  const ingestibleEvents = ingestibleEventResults
+    .filter(
+      (it): it is PromiseFulfilledResult<IngestibleReportDamageTakenEvent> =>
+        it.status === "fulfilled",
     )
-    .map((event) => makeReportDamageTakenEventIngestible(event, report));
+    .map((it) => it.value);
 
   return { ...report, damageTakenEvents: ingestibleEvents };
 };

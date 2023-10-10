@@ -1,0 +1,288 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "id": "249cecb9-9c1e-42c6-b9b4-5d395b8e5acc",
+  "prevId": "4ab139c4-f8a5-4b76-8dfb-9f8eea654a37",
+  "tables": {
+    "character": {
+      "name": "character",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "server": {
+          "name": "server",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "region": {
+          "name": "region",
+          "type": "region",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "dodge_parry_miss_streak": {
+      "name": "dodge_parry_miss_streak",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "report": {
+          "name": "report",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "report_fight_id": {
+          "name": "report_fight_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "report_fight_relative_start": {
+          "name": "report_fight_relative_start",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": -1
+        },
+        "report_fight_relative_end": {
+          "name": "report_fight_relative_end",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": -1
+        },
+        "dodge": {
+          "name": "dodge",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "parry": {
+          "name": "parry",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "miss": {
+          "name": "miss",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "streak": {
+          "name": "streak",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "timestamp_start": {
+          "name": "timestamp_start",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "timestamp_end": {
+          "name": "timestamp_end",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "source_id": {
+          "name": "source_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fight_id": {
+          "name": "fight_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "dodge_parry_miss_streak_source_id_character_id_fk": {
+          "name": "dodge_parry_miss_streak_source_id_character_id_fk",
+          "tableFrom": "dodge_parry_miss_streak",
+          "tableTo": "character",
+          "columnsFrom": [
+            "source_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "dodge_parry_miss_streak_fight_id_fight_id_fk": {
+          "name": "dodge_parry_miss_streak_fight_id_fight_id_fk",
+          "tableFrom": "dodge_parry_miss_streak",
+          "tableTo": "fight",
+          "columnsFrom": [
+            "fight_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "fight": {
+      "name": "fight",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "first_seen_report": {
+          "name": "first_seen_report",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "start_time": {
+          "name": "start_time",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "end_time": {
+          "name": "end_time",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "difficulty": {
+          "name": "difficulty",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "encounter_id": {
+          "name": "encounter_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "friendly_players": {
+          "name": "friendly_players",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "region": {
+          "name": "region",
+          "type": "region",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "idx_same_room": {
+          "name": "idx_same_room",
+          "nullsNotDistinct": false,
+          "columns": [
+            "start_time",
+            "end_time",
+            "encounter_id",
+            "friendly_players",
+            "region"
+          ]
+        }
+      }
+    }
+  },
+  "enums": {
+    "region": {
+      "name": "region",
+      "values": {
+        "eu": "eu",
+        "us": "us",
+        "kr": "kr",
+        "tw": "tw"
+      }
+    }
+  },
+  "schemas": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  }
+}

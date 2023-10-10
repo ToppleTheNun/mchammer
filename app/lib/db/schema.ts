@@ -66,6 +66,7 @@ export const dodgeParryMissStreak = pgTable("dodge_parry_miss_streak", {
   dodge: integer("dodge").notNull(),
   parry: integer("parry").notNull(),
   miss: integer("miss").notNull(),
+  streak: integer("streak").notNull(),
   timestampStart: timestamp("timestamp_start").notNull(),
   timestampEnd: timestamp("timestamp_end").notNull(),
 
