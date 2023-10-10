@@ -230,7 +230,7 @@ const ingestDamageTakenEventsForReport = async (
     .forEach((it) => error(it.reason));
   const characters = ingestCharactersResults
     .filter(
-      (it): it is PromiseFulfilledResult<Character[]> =>
+      (it): it is PromiseFulfilledResult<Character> =>
         it.status === "fulfilled",
     )
     .map((it) => it.value)

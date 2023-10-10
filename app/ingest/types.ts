@@ -59,8 +59,10 @@ export type IngestedReportDamageTakenEvent =
 
 export type ReportDodgeParryMissStreak = {
   reportID: string;
+  reportRegion: Region;
   fightID: number;
-  target: PlayerDetail;
+  character: PlayerDetail;
+  ingestedCharacter: Character | null;
   parry: number;
   dodge: number;
   miss: number;
@@ -70,16 +72,17 @@ export type ReportDodgeParryMissStreak = {
   endTime: number;
 };
 
-export type IngestibleReportDodgeParryMissStreak =
-  ReportDodgeParryMissStreak & {
-    region: Region;
-    ingestedFight: Fight;
-    ingestedCharacter: Character;
-    /** Combined value of {@link ReportFight#reportStartTime} and {@link ReportDodgeParryMissStreak#startTime} */
-    absoluteStartTime: number;
-    /** Combined value of {@link ReportFight#reportStartTime} and {@link ReportDodgeParryMissStreak#endTime} */
-    absoluteEndTime: number;
-  };
+export type IngestibleReportDodgeParryMissStreak = Omit<
+  ReportDodgeParryMissStreak,
+  "ingestedCharacter"
+> & {
+  ingestedFight: Fight;
+  ingestedCharacter: Character;
+  /** Combined value of {@link ReportFight#reportStartTime} and {@link ReportDodgeParryMissStreak#startTime} */
+  absoluteStartTime: number;
+  /** Combined value of {@link ReportFight#reportStartTime} and {@link ReportDodgeParryMissStreak#endTime} */
+  absoluteEndTime: number;
+};
 
 export type IngestedReportDodgeParryMissStreak =
   IngestibleReportDodgeParryMissStreak & {

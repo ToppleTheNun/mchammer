@@ -1,7 +1,6 @@
 import { and, eq, gte, lte } from "drizzle-orm";
 import { groupBy } from "lodash-es";
 
-import { findOrCreateCharacter } from "#app/ingest/characters.server.js";
 import { DIFFERENT_REPORT_TOLERANCE } from "#app/ingest/constants.server.ts";
 import type {
   IngestedReportDamageTakenEvent,
@@ -29,7 +28,7 @@ const groupDamageTakenEventsByPlayer = (
 const groupDamageTakenEventsByFight = (
   damageTakenEvents: IngestedReportDamageTakenEvent[],
 ): Record<number, IngestedReportDamageTakenEvent[]> =>
-  groupBy(damageTakenEvents, (event) => event.fight);
+  groupBy(damageTakenEvents, (event) => event.fightID);
 
 const isDodge = (event: IngestedReportDamageTakenEvent) => event.hitType === 7;
 const isParry = (event: IngestedReportDamageTakenEvent) => event.hitType === 8;
@@ -37,16 +36,19 @@ const isMiss = (event: IngestedReportDamageTakenEvent) => event.hitType === 0;
 
 const newStreak = (
   reportFight: IngestedReportFight,
-  target: PlayerDetail,
+  character: PlayerDetail,
+  startTime: number,
 ): ReportDodgeParryMissStreak => ({
+  reportID: reportFight.reportID,
+  reportRegion: reportFight.reportRegion,
+  fightID: reportFight.id,
   dodge: 0,
   miss: 0,
   parry: 0,
-  relativeTimestampStart: reportFight.relativeStartTime,
-  relativeTimestampEnd: reportFight.relativeEndTime,
-  report: reportFight.report,
-  target,
-  fight: reportFight.fight.id,
+  startTime,
+  endTime: reportFight.endTime,
+  character,
+  ingestedCharacter: null,
 });
 
 const getFightStreaks = async (
@@ -58,9 +60,14 @@ const getFightStreaks = async (
   let currentStreak: ReportDodgeParryMissStreak = newStreak(
     reportFight,
     target,
+    reportFight.startTime,
   );
 
   for (const event of damageTakenEvents) {
+    if (!currentStreak.ingestedCharacter) {
+      currentStreak.ingestedCharacter = event.ingestedCharacter;
+    }
+
     if (isDodge(event)) {
       currentStreak.dodge += 1;
     } else if (isMiss(event)) {
@@ -68,14 +75,13 @@ const getFightStreaks = async (
     } else if (isParry(event)) {
       currentStreak.parry += 1;
     } else {
-      currentStreak.relativeTimestampEnd = event.relativeTimestamp;
+      currentStreak.endTime = event.timestamp;
       streaks.push(currentStreak);
-      currentStreak = newStreak(reportFight, target);
-      currentStreak.relativeTimestampStart = event.relativeTimestamp;
+      currentStreak = newStreak(reportFight, target, event.timestamp);
     }
   }
 
-  currentStreak.relativeTimestampEnd = reportFight.relativeEndTime;
+  currentStreak.endTime = reportFight.endTime;
   streaks.push(currentStreak);
 
   return streaks.filter(
@@ -91,7 +97,7 @@ const getReportStreaks = async (
 
   const eventsByFight = groupDamageTakenEventsByFight(report.damageTakenEvents);
   for (const [fightID, fightEvents] of Object.entries(eventsByFight)) {
-    const fight = report.fights.find((it) => it.fightID === Number(fightID));
+    const fight = report.fights.find((it) => it.id === Number(fightID));
     if (!fight) {
       warn(
         `getReportStreaks - Unable to find fight by ID ${fightID} in report ${report.reportID}`,
@@ -125,70 +131,78 @@ const getReportStreaks = async (
   return streaks;
 };
 
-const makeReportStreakIngestible = (
+const makeReportStreakIngestible = async (
   reportDodgeParryMissStreak: ReportDodgeParryMissStreak,
   report: ReportWithIngestedFights,
-): IngestibleReportDodgeParryMissStreak => {
-  const reportFight = report.fights.find(
-    (fight) =>
-      fight.report === reportDodgeParryMissStreak.report &&
-      fight.fightID === reportDodgeParryMissStreak.fight,
-  );
+): Promise<IngestibleReportDodgeParryMissStreak> => {
   debug(
-    `Trying to ingest D${reportDodgeParryMissStreak.dodge}/P${reportDodgeParryMissStreak.parry}/M${reportDodgeParryMissStreak.miss} for player ${reportDodgeParryMissStreak.target.id}, report ${reportDodgeParryMissStreak.report}, and fight ${reportDodgeParryMissStreak.fight}`,
+    `Trying to ingest D${reportDodgeParryMissStreak.dodge}/P${reportDodgeParryMissStreak.parry}/M${reportDodgeParryMissStreak.miss} for player ${reportDodgeParryMissStreak.character.id}, report ${reportDodgeParryMissStreak.reportID}, and fight ${reportDodgeParryMissStreak.fightID}`,
   );
-  if (!reportFight) {
+
+  const ingestedCharacter = reportDodgeParryMissStreak.ingestedCharacter;
+  if (!ingestedCharacter) {
     throw new Error(
-      `Unable to find matching report fight for report ${reportDodgeParryMissStreak.report} and fight ${reportDodgeParryMissStreak.fight}`,
+      `Unable to ingest streak due to matching character not being found`,
+    );
+  }
+
+  const ingestedFight = report.fights.find(
+    (fight) =>
+      fight.reportID === reportDodgeParryMissStreak.reportID &&
+      fight.id === reportDodgeParryMissStreak.fightID,
+  );
+  if (!ingestedFight) {
+    throw new Error(
+      `Unable to find matching report fight for report ${reportDodgeParryMissStreak.reportID} and fight ${reportDodgeParryMissStreak.fightID}`,
     );
   }
 
   return {
     ...reportDodgeParryMissStreak,
-    region: reportFight.region,
-    ingestedFightId: reportFight.fight.id,
-    timestampStart:
-      report.startTime + reportDodgeParryMissStreak.relativeTimestampStart,
-    timestampEnd:
-      report.startTime + reportDodgeParryMissStreak.relativeTimestampEnd,
+    ingestedFight: ingestedFight.ingestedFight,
+    ingestedCharacter,
+    absoluteStartTime: report.startTime + reportDodgeParryMissStreak.startTime,
+    absoluteEndTime: report.startTime + reportDodgeParryMissStreak.endTime,
   };
 };
 
 const ingestStreak = async (
   ingestibleStreak: IngestibleReportDodgeParryMissStreak,
-  characterId: number,
   timings: Timings,
 ): Promise<IngestedReportDodgeParryMissStreak> => {
   const existingStreak = await time(
     () =>
       drizzle.query.dodgeParryMissStreak.findFirst({
         where: and(
-          eq(dodgeParryMissStreak.fightId, ingestibleStreak.ingestedFightId),
+          eq(dodgeParryMissStreak.fightId, ingestibleStreak.ingestedFight.id),
           gte(
             dodgeParryMissStreak.timestampStart,
             new Date(
-              ingestibleStreak.timestampStart - DIFFERENT_REPORT_TOLERANCE,
+              ingestibleStreak.absoluteStartTime - DIFFERENT_REPORT_TOLERANCE,
             ),
           ),
           lte(
             dodgeParryMissStreak.timestampStart,
             new Date(
-              ingestibleStreak.timestampStart + DIFFERENT_REPORT_TOLERANCE,
+              ingestibleStreak.absoluteStartTime + DIFFERENT_REPORT_TOLERANCE,
             ),
           ),
           gte(
             dodgeParryMissStreak.timestampEnd,
             new Date(
-              ingestibleStreak.timestampEnd - DIFFERENT_REPORT_TOLERANCE,
+              ingestibleStreak.absoluteEndTime - DIFFERENT_REPORT_TOLERANCE,
             ),
           ),
           lte(
             dodgeParryMissStreak.timestampEnd,
             new Date(
-              ingestibleStreak.timestampEnd + DIFFERENT_REPORT_TOLERANCE,
+              ingestibleStreak.absoluteEndTime + DIFFERENT_REPORT_TOLERANCE,
             ),
           ),
-          eq(dodgeParryMissStreak.sourceId, ingestibleStreak.target.guid),
+          eq(
+            dodgeParryMissStreak.sourceId,
+            ingestibleStreak.ingestedCharacter.id,
+          ),
         ),
       }),
     {
@@ -198,28 +212,28 @@ const ingestStreak = async (
   );
   if (existingStreak) {
     info("Streak already ingested, returning existing streak");
-    return { ...ingestibleStreak, dodgeParryMissStreak: existingStreak };
+    return { ...ingestibleStreak, ingestedStreak: existingStreak };
   }
 
   debug(
-    `Persisting streak D${ingestibleStreak.dodge}/P${ingestibleStreak.parry}/M${ingestibleStreak.miss} from report ${ingestibleStreak.report}...`,
+    `Persisting streak D${ingestibleStreak.dodge}/P${ingestibleStreak.parry}/M${ingestibleStreak.miss} from report ${ingestibleStreak.reportID}...`,
   );
   const createdStreaks = await time(
     () =>
       drizzle
         .insert(dodgeParryMissStreak)
         .values({
-          report: ingestibleStreak.report,
-          reportFightId: ingestibleStreak.fight,
-          reportFightRelativeStart: ingestibleStreak.relativeTimestampStart,
-          reportFightRelativeEnd: ingestibleStreak.relativeTimestampEnd,
+          report: ingestibleStreak.reportID,
+          reportFightId: ingestibleStreak.fightID,
+          reportFightRelativeStart: ingestibleStreak.startTime,
+          reportFightRelativeEnd: ingestibleStreak.endTime,
           dodge: ingestibleStreak.dodge,
           parry: ingestibleStreak.parry,
           miss: ingestibleStreak.miss,
-          timestampStart: new Date(ingestibleStreak.timestampStart),
-          timestampEnd: new Date(ingestibleStreak.timestampEnd),
-          sourceId: characterId,
-          fightId: ingestibleStreak.ingestedFightId,
+          timestampStart: new Date(ingestibleStreak.absoluteStartTime),
+          timestampEnd: new Date(ingestibleStreak.absoluteEndTime),
+          sourceId: ingestibleStreak.ingestedCharacter.id,
+          fightId: ingestibleStreak.ingestedFight.id,
         })
         .returning(),
     {
@@ -229,47 +243,32 @@ const ingestStreak = async (
   );
   if (createdStreaks.length !== 1) {
     throw new Error(
-      `Failed to ingest streak D${ingestibleStreak.dodge}/P${ingestibleStreak.parry}/M${ingestibleStreak.miss} from report ${ingestibleStreak.report} because createdStreaks.length = ${createdStreaks.length}`,
+      `Failed to ingest streak D${ingestibleStreak.dodge}/P${ingestibleStreak.parry}/M${ingestibleStreak.miss} from report ${ingestibleStreak.reportID} because createdStreaks.length = ${createdStreaks.length}`,
     );
   }
   const createdStreak = createdStreaks.at(0)!;
   debug(
-    `Persisted streak D${ingestibleStreak.dodge}/P${ingestibleStreak.parry}/M${ingestibleStreak.miss} from report ${ingestibleStreak.report} as ${createdStreak.id}`,
+    `Persisted streak D${ingestibleStreak.dodge}/P${ingestibleStreak.parry}/M${ingestibleStreak.miss} from report ${ingestibleStreak.reportID} as ${createdStreak.id}`,
   );
-  return { ...ingestibleStreak, dodgeParryMissStreak: createdStreak };
+  return { ...ingestibleStreak, ingestedStreak: createdStreak };
 };
 
 const ingestStreaksForCharacter = async (
   ingestibleStreaks: IngestibleReportDodgeParryMissStreak[],
   timings: Timings,
-) => {
-  if (ingestibleStreaks.length === 0) {
-    return;
-  }
-  const firstStreak = ingestibleStreaks.at(0);
-  if (!firstStreak) {
-    return;
-  }
-
-  const characters = await findOrCreateCharacter(firstStreak, timings);
-  if (characters.length !== 1) {
-    throw new Error(
-      `Failed to ingest streaks for report ${firstStreak.report} because characters.length = ${characters.length}`,
-    );
-  }
-  const character = characters.at(0)!;
-  return Promise.allSettled(
-    ingestibleStreaks.map((streak) =>
-      ingestStreak(streak, character.id, timings),
-    ),
+) =>
+  Promise.allSettled(
+    ingestibleStreaks.map((streak) => ingestStreak(streak, timings)),
   );
-};
 
 const ingestStreaks = async (
   ingestibleStreaks: IngestibleReportDodgeParryMissStreak[],
   timings: Timings,
 ) => {
-  const grouped = groupBy(ingestibleStreaks, (streak) => streak.target.guid);
+  const grouped = groupBy(
+    ingestibleStreaks,
+    (streak) => streak.ingestedCharacter.id,
+  );
 
   return Promise.allSettled(
     Object.values(grouped).map((streaks) =>
@@ -286,11 +285,28 @@ export const ingestDodgeParryMissStreaks = async (
     type: `getIngestibleStreaks(${report.reportID})`,
   });
 
-  debug("Report streaks:", reportStreaks);
+  debug(`Report ${report.reportID} streaks:`, reportStreaks.length);
 
   // TODO: get required length in order to be ingested
-  const ingestibleStreaks = reportStreaks.map((streak) =>
-    makeReportStreakIngestible(streak, report),
+
+  const ingestibleStreaksResults = await Promise.allSettled(
+    reportStreaks.map((streak) => makeReportStreakIngestible(streak, report)),
+  );
+  ingestibleStreaksResults
+    .filter((it): it is PromiseRejectedResult => it.status === "rejected")
+    .forEach((it) => error(it.reason));
+  const ingestibleStreaks = ingestibleStreaksResults
+    .filter(
+      (
+        it,
+      ): it is PromiseFulfilledResult<IngestibleReportDodgeParryMissStreak> =>
+        it.status === "fulfilled",
+    )
+    .map((it) => it.value);
+
+  debug(
+    `Ingestible report ${report.reportID} streaks:`,
+    ingestibleStreaks.length,
   );
 
   const ingestedStreakResults = await ingestStreaks(ingestibleStreaks, timings);
@@ -302,7 +318,7 @@ export const ingestDodgeParryMissStreaks = async (
       (
         it,
       ): it is PromiseFulfilledResult<
-        PromiseSettledResult<IngestedReportDodgeParryMissStreak>[] | undefined
+        PromiseSettledResult<IngestedReportDodgeParryMissStreak>[]
       > => it.status === "fulfilled",
     )
     .map((it) => it.value)
@@ -317,6 +333,8 @@ export const ingestDodgeParryMissStreaks = async (
         it.status === "fulfilled",
     )
     .map((it) => it.value);
+
+  debug(`Ingested report ${report.reportID} streaks:`, ingestedStreaks.length);
 
   return { ...report, dodgeParryMissStreaks: ingestedStreaks };
 };

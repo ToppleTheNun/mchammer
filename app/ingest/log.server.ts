@@ -41,21 +41,21 @@ export const ingestWarcraftLogsReport = async (
     damageTakenEvents.damageTakenEvents.length,
   );
 
-  // let dodgeParryMissStreaks: ReportWithIngestedDodgeParryMissStreaks;
-  // try {
-  //   dodgeParryMissStreaks = await ingestDodgeParryMissStreaks(
-  //     damageTakenEvents,
-  //     timings,
-  //   );
-  // } catch (e) {
-  //   error(
-  //     `Unable to ingest dodge/parry/miss streaks for report: ${reportCode}`,
-  //     e,
-  //   );
-  //   return;
-  // }
-  // debug(
-  //   `Ingested dodge/parry/miss streaks from ${reportCode}: `,
-  //   dodgeParryMissStreaks.dodgeParryMissStreaks.length,
-  // );
+  let dodgeParryMissStreaks: ReportWithIngestedDodgeParryMissStreaks;
+  try {
+    dodgeParryMissStreaks = await ingestDodgeParryMissStreaks(
+      damageTakenEvents,
+      timings,
+    );
+  } catch (e) {
+    error(
+      `Unable to ingest dodge/parry/miss streaks for report: ${reportCode}`,
+      e,
+    );
+    return;
+  }
+  debug(
+    `Ingested dodge/parry/miss streaks from ${reportCode}: `,
+    dodgeParryMissStreaks.dodgeParryMissStreaks.length,
+  );
 };
