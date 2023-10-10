@@ -27,7 +27,7 @@
     "lint:fix": "eslint --fix app && prettier --write app",
     "start": "tsx other/generate-env.ts && remix-serve build",
     "typecheck": "tsc",
-    "vercel-build": "nr drizzle:migrate && nr build && sentry-upload-sourcemaps && rimraf build/*.map && rimraf public/build/*.map && rimraf public/build/**/*.map"
+    "vercel-build": "nr drizzle:migrate && nr build && sentry-upload-sourcemaps && rimraf build/*.map && rimraf build/**/*.map && rimraf public/build/*.map && rimraf public/build/**/*.map"
   },
   "dependencies": {
     "@conform-to/react": "0.9.0",
