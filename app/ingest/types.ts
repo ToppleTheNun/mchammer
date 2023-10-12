@@ -76,6 +76,7 @@ export type IngestibleReportDodgeParryMissStreak = Omit<
   ReportDodgeParryMissStreak,
   "ingestedCharacter"
 > & {
+  streak: number;
   ingestedFight: Fight;
   ingestedCharacter: Character;
   /** Combined value of {@link ReportFight#reportStartTime} and {@link ReportDodgeParryMissStreak#startTime} */

@@ -1,4 +1,4 @@
-import { and, eq, gte, lte } from "drizzle-orm";
+import { and, desc, eq, gte, lte } from "drizzle-orm";
 import { groupBy } from "lodash-es";
 
 import { DIFFERENT_REPORT_TOLERANCE } from "#app/ingest/constants.server.ts";
@@ -157,8 +157,14 @@ const makeReportStreakIngestible = async (
     );
   }
 
+  const streak =
+    reportDodgeParryMissStreak.dodge +
+    reportDodgeParryMissStreak.parry +
+    reportDodgeParryMissStreak.miss;
+
   return {
     ...reportDodgeParryMissStreak,
+    streak,
     ingestedFight: ingestedFight.ingestedFight,
     ingestedCharacter,
     absoluteStartTime: report.startTime + reportDodgeParryMissStreak.startTime,
@@ -166,13 +172,23 @@ const makeReportStreakIngestible = async (
   };
 };
 
-// const getMinimumAmountToIngest = async (timings: Timings) =>
-// SELECT min(streak)
-// FROM dodge_parry_miss_streak
-// WHERE id IN (SELECT id
-// FROM dodge_parry_miss_streak
-// ORDER BY streak DESC
-// LIMIT 10)
+const getMinimumStreakLengthToIngest = async (timings: Timings) => {
+  const topStreaks = await time(
+    () =>
+      drizzle
+        .select({
+          streak: dodgeParryMissStreak.streak,
+        })
+        .from(dodgeParryMissStreak)
+        .orderBy(desc(dodgeParryMissStreak.streak))
+        .limit(25),
+    { type: "drizzle.query.streak.findTop", timings },
+  );
+  if (topStreaks.length === 0) {
+    return 0;
+  }
+  return Math.max(Math.min(...topStreaks.map((streak) => streak.streak)), 0);
+};
 
 const ingestStreak = async (
   ingestibleStreak: IngestibleReportDodgeParryMissStreak,
@@ -238,10 +254,7 @@ const ingestStreak = async (
           dodge: ingestibleStreak.dodge,
           parry: ingestibleStreak.parry,
           miss: ingestibleStreak.miss,
-          streak:
-            ingestibleStreak.dodge +
-            ingestibleStreak.parry +
-            ingestibleStreak.miss,
+          streak: ingestibleStreak.streak,
           timestampStart: new Date(ingestibleStreak.absoluteStartTime),
           timestampEnd: new Date(ingestibleStreak.absoluteEndTime),
           sourceId: ingestibleStreak.ingestedCharacter.id,
@@ -299,7 +312,9 @@ export const ingestDodgeParryMissStreaks = async (
 
   debug(`Report ${report.reportID} streaks:`, reportStreaks.length);
 
-  // TODO: get required length in order to be ingested
+  debug("Fetching minimum streak to ingest...");
+  const minimumStreakToIngest = await getMinimumStreakLengthToIngest(timings);
+  debug("Retrieved minimum streak to ingest:", minimumStreakToIngest);
 
   const ingestibleStreaksResults = await Promise.allSettled(
     reportStreaks.map((streak) => makeReportStreakIngestible(streak, report)),
@@ -314,7 +329,8 @@ export const ingestDodgeParryMissStreaks = async (
       ): it is PromiseFulfilledResult<IngestibleReportDodgeParryMissStreak> =>
         it.status === "fulfilled",
     )
-    .map((it) => it.value);
+    .map((it) => it.value)
+    .filter((it) => it.streak >= minimumStreakToIngest);
 
   debug(
     `Ingestible report ${report.reportID} streaks:`,
