@@ -23,7 +23,7 @@ const ensureDir = async (path: string) => {
 
 (async () => {
   const formatted = await format(contents, { parser: "typescript" });
-  const pathToEnv = join(process.cwd(), "app", "env");
+  const pathToEnv = join(process.cwd(), "app", "generated");
   await ensureDir(pathToEnv);
-  await writeFile(join(pathToEnv, "generated.ts"), formatted, "utf-8");
+  await writeFile(join(pathToEnv, "env.ts"), formatted, "utf-8");
 })();

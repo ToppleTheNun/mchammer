@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { generated } from "#app/env/generated.ts";
+import { generated } from "#app/generated/env.ts";
 
 const schema = z.object({
   // Client

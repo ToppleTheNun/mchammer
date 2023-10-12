@@ -7,7 +7,7 @@ node_modules
 
 .idea
 
-app/env/generated.ts
+app/generated
 
 sqlite.db
 
