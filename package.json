@@ -26,6 +26,12 @@
     "gql:introspection": "tsx -r dotenv/config app/wcl/queries/introspection.ts",
     "lint": "eslint app && prettier -c app",
     "lint:fix": "eslint --fix app && prettier --write app",
+    "prepare": "prisma generate",
+    "prisma:deploy": "prisma migrate deploy",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:push": "prisma db push",
+    "prisma:seed": "prisma db seed",
     "start": "tsx other/generate-env.ts && remix-serve build",
     "typecheck": "tsc",
     "vercel-build": "nr drizzle:migrate && nr build && sentry-upload-sourcemaps && rimraf build/*.map && rimraf build/**/*.map && rimraf public/build/*.map && rimraf public/build/**/*.map"
@@ -111,6 +117,7 @@
     "prettier": "3.0.3",
     "prettier-plugin-pkg": "0.18.0",
     "prettier-plugin-tailwindcss": "0.5.5",
+    "prisma": "5.4.2",
     "rimraf": "5.0.5",
     "routes-gen": "0.6.1",
     "tailwindcss": "3.3.3",
@@ -132,5 +139,8 @@
       "prettier-plugin-pkg",
       "prettier-plugin-tailwindcss"
     ]
+  },
+  "prisma": {
+    "seed": "tsx --require dotenv/config --require tsconfig-paths/register prisma/seed.ts"
   }
 }
