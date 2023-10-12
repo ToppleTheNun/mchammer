@@ -1,5 +1,6 @@
 import { redirect } from "@remix-run/node";
 import { Outlet } from "@remix-run/react";
+import { route } from "routes-gen";
 
 import { serverTiming } from "#app/constants.ts";
 import { combineHeaders, invariantResponse } from "#app/lib/misc.ts";
@@ -18,7 +19,7 @@ export const loader = async () => {
     status: 500,
   });
 
-  return redirect(`/season/${latest.slug}`, {
+  return redirect(route(`/season/:season`, { season: latest.slug }), {
     status: 307,
     headers: combineHeaders({ [serverTiming]: timings.toString() }),
   });

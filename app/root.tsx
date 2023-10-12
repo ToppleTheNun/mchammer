@@ -1,4 +1,3 @@
-import { parse } from "@conform-to/zod";
 import { cssBundleHref } from "@remix-run/css-bundle";
 import type {
   DataFunctionArgs,
@@ -21,7 +20,7 @@ import { captureRemixErrorBoundaryError, withSentry } from "@sentry/remix";
 import { Analytics } from "@vercel/analytics/react";
 import type { ReactNode } from "react";
 
-import { GeneralErrorBoundary } from "#app/components/GeneralErrorBoundary.tsx";
+import { AppErrorBoundary } from "#app/components/AppErrorBoundary.tsx";
 import { SiteFooter } from "#app/components/SiteFooter.tsx";
 import { SiteHeader } from "#app/components/SiteHeader.tsx";
 import { TailwindIndicator } from "#app/components/TailwindIndicator.tsx";
@@ -29,12 +28,12 @@ import { href as iconsHref } from "#app/components/ui/icon.tsx";
 import { siteConfig } from "#app/config/site.ts";
 import { serverTiming } from "#app/constants.ts";
 import fontStylesheetUrl from "#app/font.css";
-import { themeFormSchema, useTheme } from "#app/hooks/useTheme.ts";
+import { useTheme } from "#app/hooks/useTheme.ts";
 import { ClientHintCheck, getHints } from "#app/lib/client-hints.tsx";
 import { getEnv } from "#app/lib/env.server.ts";
 import { combineHeaders, getDomainUrl } from "#app/lib/misc.ts";
 import { useNonce } from "#app/lib/nonce-provider.ts";
-import { getTheme, setTheme, type Theme } from "#app/lib/theme.server.ts";
+import { getTheme, type Theme } from "#app/lib/theme.server.ts";
 import { makeTimings } from "#app/lib/timing.server.ts";
 import tailwindStylesheetUrl from "#app/tailwind.css";
 import { isPresent } from "#app/typeGuards.ts";
@@ -138,25 +137,6 @@ export const headers: HeadersFunction = ({ loaderHeaders }) => {
   };
 };
 
-export async function action({ request }: DataFunctionArgs) {
-  const formData = await request.formData();
-  const submission = parse(formData, {
-    schema: themeFormSchema,
-  });
-  if (submission.intent !== "submit") {
-    return json({ status: "idle", submission } as const);
-  }
-  if (!submission.value) {
-    return json({ status: "error", submission } as const, { status: 400 });
-  }
-  const { theme } = submission.value;
-
-  const responseInit = {
-    headers: { "set-cookie": setTheme(theme) },
-  };
-  return json({ success: true, submission }, responseInit);
-}
-
 const Document = ({
   children,
   nonce,
@@ -202,7 +182,7 @@ export const ErrorBoundary = () => {
 
   return (
     <Document nonce={nonce}>
-      <GeneralErrorBoundary error={error} />
+      <AppErrorBoundary error={error} />
     </Document>
   );
 };

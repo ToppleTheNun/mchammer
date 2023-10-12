@@ -174,7 +174,6 @@ const makeReportStreakIngestible = async (
 // ORDER BY streak DESC
 // LIMIT 10)
 
-
 const ingestStreak = async (
   ingestibleStreak: IngestibleReportDodgeParryMissStreak,
   timings: Timings,

@@ -1,4 +1,5 @@
 import { useFetcher } from "@remix-run/react";
+import { route } from "routes-gen";
 
 import { Button } from "#app/components/ui/button.tsx";
 import {
@@ -10,7 +11,7 @@ import {
 import { Icon } from "#app/components/ui/icon.tsx";
 import { useOptimisticThemeMode } from "#app/hooks/useTheme.ts";
 import type { Theme } from "#app/lib/theme.server.ts";
-import type { action } from "#app/root.tsx";
+import type { action } from "#app/routes/actions.theme.ts";
 
 export const ModeToggle = ({
   userPreference,
@@ -22,7 +23,10 @@ export const ModeToggle = ({
   const optimisticMode = useOptimisticThemeMode();
   const mode = optimisticMode ?? userPreference ?? "system";
   const changeTheme = (theme: typeof mode) => {
-    fetcher.submit({ theme }, { method: "POST" });
+    fetcher.submit(
+      { theme },
+      { action: route("/actions/theme"), method: "POST" },
+    );
   };
 
   return (
