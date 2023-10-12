@@ -14,7 +14,7 @@
   "scripts": {
     "build": "nr build:generate-env && nr build:generate-routes && nr build:icons && nr build:remix",
     "build:generate-env": "tsx other/generate-env.ts",
-    "build:generate-routes": "routes-gen -d @routes-gen/remix",
+    "build:generate-routes": "routes-gen -d @routes-gen/remix && prettier --write app/routes.d.ts",
     "build:icons": "tsx other/build-icons.ts",
     "build:remix": "remix build --sourcemap",
     "dev": "nr build:generate-env && nr build:generate-routes && nr build:icons && remix dev",
