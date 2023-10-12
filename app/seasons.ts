@@ -28,7 +28,7 @@ export const seasons: readonly Season[] = [
       kr: UNKNOWN_SEASON_START_OR_ENDING,
       tw: UNKNOWN_SEASON_START_OR_ENDING,
     },
-    seasonIcon: "inv_misc_head_dragon_black_nightmare.jpg",
+    seasonIcon: "/inv_misc_head_dragon_black_nightmare.jpg",
     encounterIds: [],
     ptr: true,
   },
@@ -47,7 +47,7 @@ export const seasons: readonly Season[] = [
       kr: UNKNOWN_SEASON_START_OR_ENDING,
       tw: UNKNOWN_SEASON_START_OR_ENDING,
     },
-    seasonIcon: "inv_misc_head_dragon_black_nightmare.jpg",
+    seasonIcon: "/inv_misc_head_dragon_black_nightmare.jpg",
     encounterIds: [
       2687, // Amalgamation Chamber
       2682, // Assault of the Zaqali
@@ -84,7 +84,7 @@ export const seasons: readonly Season[] = [
       kr: 1_683_118_800_000,
       tw: 1_683_118_800_000,
     },
-    seasonIcon: "shaman_pvp_leaderclan.jpg",
+    seasonIcon: "/shaman_pvp_leaderclan.jpg",
     encounterIds: [
       2614, // Broodkeeper Diurna
       2635, // Dathea, Ascended
