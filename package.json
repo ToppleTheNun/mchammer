@@ -123,7 +123,7 @@
     "routes-gen": "0.6.1",
     "tailwindcss": "3.3.3",
     "tsconfig-paths": "4.2.0",
-    "tsx": "3.13.0",
+    "tsx": "3.14.0",
     "typescript": "5.2.2"
   },
   "sideEffects": false,
