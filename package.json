@@ -110,7 +110,7 @@
     "prettier-plugin-tailwindcss": "0.5.6",
     "rimraf": "5.0.5",
     "routes-gen": "0.6.1",
-    "tailwindcss": "3.3.3",
+    "tailwindcss": "3.3.5",
     "tsconfig-paths": "4.2.0",
     "tsx": "3.14.0",
     "typescript": "5.2.2"
