@@ -34,6 +34,10 @@ export type ArchonViewModels = {
   __typename?: "ArchonViewModels";
   aboutPage?: Maybe<Scalars["JSON"]["output"]>;
   announcementPage?: Maybe<Scalars["JSON"]["output"]>;
+  buildsSpecPage?: Maybe<Scalars["JSON"]["output"]>;
+  buildsSpecPageSlugs?: Maybe<Scalars["JSON"]["output"]>;
+  buildsZonePage?: Maybe<Scalars["JSON"]["output"]>;
+  buildsZonePageSlugs?: Maybe<Scalars["JSON"]["output"]>;
   contactPage?: Maybe<Scalars["JSON"]["output"]>;
   footer?: Maybe<Scalars["JSON"]["output"]>;
   game?: Maybe<Scalars["JSON"]["output"]>;
@@ -43,6 +47,26 @@ export type ArchonViewModels = {
   header?: Maybe<Scalars["JSON"]["output"]>;
   indexPage?: Maybe<Scalars["JSON"]["output"]>;
   translations?: Maybe<Scalars["JSON"]["output"]>;
+};
+
+export type ArchonViewModelsBuildsSpecPageArgs = {
+  affixesSlug?: InputMaybe<Scalars["String"]["input"]>;
+  categorySlug?: InputMaybe<Scalars["String"]["input"]>;
+  classSlug?: InputMaybe<Scalars["String"]["input"]>;
+  difficultySlug?: InputMaybe<Scalars["String"]["input"]>;
+  encounterSlug?: InputMaybe<Scalars["String"]["input"]>;
+  gameSlug?: InputMaybe<Scalars["String"]["input"]>;
+  specSlug?: InputMaybe<Scalars["String"]["input"]>;
+  zoneTypeSlug?: InputMaybe<Scalars["String"]["input"]>;
+};
+
+export type ArchonViewModelsBuildsZonePageArgs = {
+  affixesSlug?: InputMaybe<Scalars["String"]["input"]>;
+  difficultySlug?: InputMaybe<Scalars["String"]["input"]>;
+  encounterSlug?: InputMaybe<Scalars["String"]["input"]>;
+  gameSlug?: InputMaybe<Scalars["String"]["input"]>;
+  rankingsSlug?: InputMaybe<Scalars["String"]["input"]>;
+  zoneTypeSlug?: InputMaybe<Scalars["String"]["input"]>;
 };
 
 export type ArchonViewModelsHeaderArgs = {
@@ -1921,6 +1945,7 @@ export type ViewModelsBuildsSpecPageArgs = {
   classSlug?: InputMaybe<Scalars["String"]["input"]>;
   difficultySlug?: InputMaybe<Scalars["String"]["input"]>;
   encounterSlug?: InputMaybe<Scalars["String"]["input"]>;
+  gameSlug?: InputMaybe<Scalars["String"]["input"]>;
   specSlug?: InputMaybe<Scalars["String"]["input"]>;
   zoneTypeSlug?: InputMaybe<Scalars["String"]["input"]>;
 };
@@ -1929,6 +1954,7 @@ export type ViewModelsBuildsZonePageArgs = {
   affixesSlug?: InputMaybe<Scalars["String"]["input"]>;
   difficultySlug?: InputMaybe<Scalars["String"]["input"]>;
   encounterSlug?: InputMaybe<Scalars["String"]["input"]>;
+  gameSlug?: InputMaybe<Scalars["String"]["input"]>;
   rankingsSlug?: InputMaybe<Scalars["String"]["input"]>;
   zoneTypeSlug?: InputMaybe<Scalars["String"]["input"]>;
 };

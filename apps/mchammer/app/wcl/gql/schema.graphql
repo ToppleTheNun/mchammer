@@ -4240,6 +4240,26 @@ type ArchonViewModels {
   aboutPage: JSON
   announcementPage: JSON
   gameSlugs: JSON
+  buildsZonePageSlugs: JSON
+  buildsZonePage(
+    gameSlug: String
+    rankingsSlug: String
+    zoneTypeSlug: String
+    difficultySlug: String
+    encounterSlug: String
+    affixesSlug: String
+  ): JSON
+  buildsSpecPageSlugs: JSON
+  buildsSpecPage(
+    gameSlug: String
+    classSlug: String
+    specSlug: String
+    zoneTypeSlug: String
+    categorySlug: String
+    difficultySlug: String
+    encounterSlug: String
+    affixesSlug: String
+  ): JSON
 }
 
 """
@@ -4310,6 +4330,7 @@ type ViewModels {
   articleIndexPage: JSON
   buildsZonePageSlugs: JSON
   buildsZonePage(
+    gameSlug: String
     rankingsSlug: String
     zoneTypeSlug: String
     difficultySlug: String
@@ -4318,6 +4339,7 @@ type ViewModels {
   ): JSON
   buildsSpecPageSlugs: JSON
   buildsSpecPage(
+    gameSlug: String
     classSlug: String
     specSlug: String
     zoneTypeSlug: String
