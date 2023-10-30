@@ -85,6 +85,7 @@
     "@remix-run/eslint-config": "2.1.0",
     "@routes-gen/remix": "0.3.6",
     "@sly-cli/sly": "1.4.10",
+    "@topplethenun/mchammer-tsconfig": "workspace:*",
     "@total-typescript/ts-reset": "0.5.1",
     "@types/cookie": "0.5.3",
     "@types/fs-extra": "11.0.3",

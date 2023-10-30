@@ -1,16 +1,11 @@
 node_modules
 
-/.cache
-/build
-/public/build
+build
+dist
+
+
 .env
 
 .idea
-
-app/generated
-
-sqlite.db
-
+.turbo
 .vercel
-
-app/components/ui/icons

@@ -1,0 +1,9 @@
+{
+  "name": "@topplethenun/mchammer-tsconfig",
+  "author": "Richard Harrah",
+  "license": "MIT",
+  "private": true,
+  "engines": {
+    "node": ">=18"
+  }
+}

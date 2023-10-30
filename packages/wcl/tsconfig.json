@@ -1,0 +1,13 @@
+{
+  "extends": ["@topplethenun/mchammer-tsconfig/base.json"],
+  "compilerOptions": {
+    "paths": {
+      "@topplethenun/mchammer-env/*": ["../env/src/*"],
+      "@topplethenun/mchammer-env": ["../env/src/index"],
+      "@topplethenun/mchammer-logger/*": ["../logger/src/*"],
+      "@topplethenun/mchammer-logger": ["../logger/src/index"]
+    },
+    "baseUrl": "."
+  },
+  "exclude": ["node_modules", "dist"]
+}
