@@ -43,7 +43,7 @@
     "@remix-run/css-bundle": "2.1.0",
     "@remix-run/node": "2.1.0",
     "@remix-run/react": "2.1.0",
-    "@remix-run/router": "1.10.0",
+    "@remix-run/router": "1.11.0",
     "@remix-run/serve": "2.1.0",
     "@sentry/remix": "7.76.0",
     "@urql/core": "4.1.4",
