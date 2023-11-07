@@ -12,15 +12,29 @@ export type Season = {
   ptr: boolean;
 };
 
+const offsetByRegion = (timestamp: number, region: Region): number => {
+  switch (region) {
+    case "us": {
+      return timestamp;
+    }
+    case "eu": {
+      return timestamp + 46_800_000;
+    }
+    case "kr":
+    case "tw":
+      return timestamp + 111_600_000;
+  }
+};
+
 export const seasons: readonly Season[] = [
   {
-    name: "DF S3 (PTR)",
-    slug: "df-season-3-ptr",
+    name: "DF S3",
+    slug: "df-season-3",
     startDates: {
-      us: 1_694_123_400_000,
-      eu: 1_694_123_400_000,
-      kr: 1_694_123_400_000,
-      tw: 1_694_123_400_000,
+      us: offsetByRegion(1_699_974_000_000, "us"),
+      eu: offsetByRegion(1_699_974_000_000, "eu"),
+      kr: offsetByRegion(1_699_974_000_000, "kr"),
+      tw: offsetByRegion(1_699_974_000_000, "tw"),
     },
     endDates: {
       us: UNKNOWN_SEASON_START_OR_ENDING,
@@ -28,26 +42,28 @@ export const seasons: readonly Season[] = [
       kr: UNKNOWN_SEASON_START_OR_ENDING,
       tw: UNKNOWN_SEASON_START_OR_ENDING,
     },
-    seasonIcon: "/inv_misc_head_dragon_black_nightmare.jpg",
-    encounterIds: [],
-    ptr: true,
+    seasonIcon: "/INV_Misc_Head_Dragon_01.png",
+    encounterIds: [
+
+    ],
+    ptr: false,
   },
   {
     name: "DF S2",
     slug: "df-season-2",
     startDates: {
-      us: 1_683_644_400_000,
-      eu: 1_683_691_200_000,
-      kr: 1_683_759_600_000,
-      tw: 1_683_759_600_000,
+      us: offsetByRegion(1_683_644_400_000, "us"),
+      eu: offsetByRegion(1_683_644_400_000, "eu"),
+      kr: offsetByRegion(1_683_644_400_000, "kr"),
+      tw: offsetByRegion(1_683_644_400_000, "tw"),
     },
     endDates: {
-      us: UNKNOWN_SEASON_START_OR_ENDING,
-      eu: UNKNOWN_SEASON_START_OR_ENDING,
-      kr: UNKNOWN_SEASON_START_OR_ENDING,
-      tw: UNKNOWN_SEASON_START_OR_ENDING,
+      us: offsetByRegion(1_699_336_800_000, "us"),
+      eu: offsetByRegion(1_699_336_800_000, "eu"),
+      kr: offsetByRegion(1_699_336_800_000, "kr"),
+      tw: offsetByRegion(1_699_336_800_000, "tw"),
     },
-    seasonIcon: "/inv_misc_head_dragon_black_nightmare.jpg",
+    seasonIcon: "/INV_Misc_Head_Dragon_Black_Nightmare.png",
     encounterIds: [
       2687, // Amalgamation Chamber
       2682, // Assault of the Zaqali
@@ -73,18 +89,18 @@ export const seasons: readonly Season[] = [
     name: "DF S1",
     slug: "df-season-1",
     startDates: {
-      us: 1_670_943_600_000,
-      eu: 1_670_990_400_000,
-      kr: 1_671_058_800_000,
-      tw: 1_671_058_800_000,
+      us: offsetByRegion(1_670_943_600_000, "us"),
+      eu: offsetByRegion(1_670_943_600_000, "eu"),
+      kr: offsetByRegion(1_670_943_600_000, "kr"),
+      tw: offsetByRegion(1_670_943_600_000, "tw"),
     },
     endDates: {
-      us: 1_683_007_200_000,
-      eu: 1_683_057_600_000,
-      kr: 1_683_118_800_000,
-      tw: 1_683_118_800_000,
+      us: offsetByRegion(1_683_007_200_000, "us"),
+      eu: offsetByRegion(1_683_007_200_000, "eu"),
+      kr: offsetByRegion(1_683_007_200_000, "kr"),
+      tw: offsetByRegion(1_683_007_200_000, "tw"),
     },
-    seasonIcon: "/shaman_pvp_leaderclan.jpg",
+    seasonIcon: "/Shaman_PVP_LeaderClan.png",
     encounterIds: [
       2614, // Broodkeeper Diurna
       2635, // Dathea, Ascended
