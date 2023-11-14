@@ -128,8 +128,8 @@ importers:
         specifier: 2.12.6
         version: 2.12.6(graphql@16.8.1)
       isbot:
-        specifier: 3.7.0
-        version: 3.7.0
+        specifier: 3.7.1
+        version: 3.7.1
       kleur:
         specifier: 4.1.5
         version: 4.1.5
@@ -4475,7 +4475,7 @@ packages:
     dependencies:
       '@remix-run/node': 2.2.0(typescript@5.2.2)
       '@remix-run/server-runtime': 2.2.0(typescript@5.2.2)
-      isbot: 3.7.0
+      isbot: 3.7.1
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
     transitivePeerDependencies:
@@ -8221,8 +8221,8 @@ packages:
     engines: {node: '>= 8.0.0'}
     dev: true
 
-  /isbot@3.7.0:
-    resolution: {integrity: sha512-9BcjlI89966BqWJmYdTnRub85sit931MyCthSIPtgoOsTjoW7A2MVa09HzPpYE2+G4vyAxfDvR0AbUGV0FInQg==}
+  /isbot@3.7.1:
+    resolution: {integrity: sha512-JfqOaY3O1lcWt2nc+D6Mq231CNpwZrBboLa59Go0J8hjGH+gY/Sy0CA/YLUSIScINmAVwTdJZIsOTk4PfBtRuw==}
     engines: {node: '>=12'}
     dev: false
 
