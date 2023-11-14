@@ -95,8 +95,8 @@ importers:
         specifier: 0.2.4
         version: 0.2.4
       '@vercel/postgres':
-        specifier: 0.5.0
-        version: 0.5.0
+        specifier: 0.5.1
+        version: 0.5.1
       '@vercel/remix':
         specifier: 2.1.0
         version: 2.1.0(react-dom@18.2.0)(react@18.2.0)(typescript@5.2.2)
@@ -117,7 +117,7 @@ importers:
         version: 2.30.0
       drizzle-orm:
         specifier: 0.28.6
-        version: 0.28.6(@vercel/postgres@0.5.0)
+        version: 0.28.6(@vercel/postgres@0.5.1)
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -2070,7 +2070,7 @@ packages:
       graphql-ws: 5.14.1(graphql@16.8.1)
       isomorphic-ws: 5.0.0(ws@8.14.2)
       tslib: 2.6.2
-      ws: 8.14.2(bufferutil@4.0.7)(utf-8-validate@6.0.3)
+      ws: 8.14.2(bufferutil@4.0.8)(utf-8-validate@6.0.3)
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
@@ -2356,7 +2356,7 @@ packages:
       isomorphic-ws: 5.0.0(ws@8.14.2)
       tslib: 2.6.2
       value-or-promise: 1.0.12
-      ws: 8.14.2(bufferutil@4.0.7)(utf-8-validate@6.0.3)
+      ws: 8.14.2(bufferutil@4.0.8)(utf-8-validate@6.0.3)
     transitivePeerDependencies:
       - '@types/node'
       - bufferutil
@@ -4495,14 +4495,14 @@ packages:
       '@upstash/redis': 1.24.3
     dev: false
 
-  /@vercel/postgres@0.5.0:
-    resolution: {integrity: sha512-MFWp9SZmADqBe2x2mzEvwmGLiwOd8PVkUxYeBZx/RqdHl0bd8/1BH0zBR+zSimGyi9P/MVtZoJLdf5dkWw9m5Q==}
+  /@vercel/postgres@0.5.1:
+    resolution: {integrity: sha512-JKl8QOBIDnifhkxAhIKtY0A5Tb8oWBf2nzZhm0OH7Ffjsl0hGVnDL2w1/FCfpX8xna3JAWM034NGuhZfTFdmiw==}
     engines: {node: '>=14.6'}
     dependencies:
       '@neondatabase/serverless': 0.6.0
-      bufferutil: 4.0.7
+      bufferutil: 4.0.8
       utf-8-validate: 6.0.3
-      ws: 8.14.2(bufferutil@4.0.7)(utf-8-validate@6.0.3)
+      ws: 8.14.2(bufferutil@4.0.8)(utf-8-validate@6.0.3)
     dev: false
 
   /@vercel/remix@2.1.0(react-dom@18.2.0)(react@18.2.0)(typescript@5.2.2):
@@ -5118,8 +5118,8 @@ packages:
       ieee754: 1.2.1
     dev: true
 
-  /bufferutil@4.0.7:
-    resolution: {integrity: sha512-kukuqc39WOHtdxtw4UScxF/WVnMFVSQVKhtx3AjZJzhd0RGZZldcrfSEbVsWWe6KNH253574cq5F+wpv0G9pJw==}
+  /bufferutil@4.0.8:
+    resolution: {integrity: sha512-4T53u4PdgsXqKaIctwF8ifXlRTTmEPJ8iEPWFdGZvcf7sbwYo6FKFEX9eNNAnzFZ7EzJAQ3CJeOtCRA4rDp7Pw==}
     engines: {node: '>=6.14.2'}
     requiresBuild: true
     dependencies:
@@ -6099,7 +6099,7 @@ packages:
       - supports-color
     dev: true
 
-  /drizzle-orm@0.28.6(@vercel/postgres@0.5.0):
+  /drizzle-orm@0.28.6(@vercel/postgres@0.5.1):
     resolution: {integrity: sha512-yBe+F9htrlYER7uXgDJUQsTHFoIrI5yMm5A0bg0GiZ/kY5jNXTWoEy4KQtg35cE27sw1VbgzoMWHAgCckUUUww==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
@@ -6161,7 +6161,7 @@ packages:
       sqlite3:
         optional: true
     dependencies:
-      '@vercel/postgres': 0.5.0
+      '@vercel/postgres': 0.5.1
     dev: false
 
   /dset@3.1.2:
@@ -8281,7 +8281,7 @@ packages:
     peerDependencies:
       ws: '*'
     dependencies:
-      ws: 8.14.2(bufferutil@4.0.7)(utf-8-validate@6.0.3)
+      ws: 8.14.2(bufferutil@4.0.8)(utf-8-validate@6.0.3)
     dev: true
 
   /iterator.prototype@1.1.2:
@@ -8359,7 +8359,7 @@ packages:
       whatwg-encoding: 2.0.0
       whatwg-mimetype: 3.0.0
       whatwg-url: 12.0.1
-      ws: 8.14.2(bufferutil@4.0.7)(utf-8-validate@6.0.3)
+      ws: 8.14.2(bufferutil@4.0.8)(utf-8-validate@6.0.3)
       xml-name-validator: 4.0.0
     transitivePeerDependencies:
       - bufferutil
@@ -12711,7 +12711,7 @@ packages:
         optional: true
     dev: true
 
-  /ws@8.14.2(bufferutil@4.0.7)(utf-8-validate@6.0.3):
+  /ws@8.14.2(bufferutil@4.0.8)(utf-8-validate@6.0.3):
     resolution: {integrity: sha512-wEBG1ftX4jcglPxgFCMJmZ2PLtSbJ2Peg6TmpJFTbe9GZYOQCDPdMYu/Tm0/bGZkw8paZnJY45J4K2PZrLYq8g==}
     engines: {node: '>=10.0.0'}
     peerDependencies:
@@ -12723,7 +12723,7 @@ packages:
       utf-8-validate:
         optional: true
     dependencies:
-      bufferutil: 4.0.7
+      bufferutil: 4.0.8
       utf-8-validate: 6.0.3
 
   /xml-name-validator@4.0.0:
