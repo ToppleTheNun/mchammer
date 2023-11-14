@@ -90,7 +90,7 @@
     "@types/cookie": "0.5.3",
     "@types/fs-extra": "11.0.3",
     "@types/glob": "8.1.0",
-    "@types/lodash-es": "4.17.10",
+    "@types/lodash-es": "4.17.11",
     "@types/node": "20.8.9",
     "@types/react": "18.2.37",
     "@types/react-dom": "18.2.15",
