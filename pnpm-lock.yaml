@@ -86,8 +86,8 @@ importers:
         specifier: 7.80.1
         version: 7.80.1(@remix-run/node@2.2.0)(@remix-run/react@2.2.0)(react@18.2.0)
       '@urql/core':
-        specifier: 4.1.4
-        version: 4.1.4(graphql@16.8.1)
+        specifier: 4.2.0
+        version: 4.2.0(graphql@16.8.1)
       '@vercel/analytics':
         specifier: 1.1.1
         version: 1.1.1
@@ -346,8 +346,8 @@ importers:
         specifier: workspace:*
         version: link:../logger
       '@urql/core':
-        specifier: 4.1.4
-        version: 4.1.4(graphql@16.8.1)
+        specifier: 4.2.0
+        version: 4.2.0(graphql@16.8.1)
       zod:
         specifier: 3.22.4
         version: 3.22.4
@@ -4371,8 +4371,8 @@ packages:
       crypto-js: 4.2.0
     dev: false
 
-  /@urql/core@4.1.4(graphql@16.8.1):
-    resolution: {integrity: sha512-wFm67yljv4uFAWNtPwcS1NMhF/n+p/68i+kZU6R1dPxhfq2nBW0142p4szeZsBDrtO7pBdOhp7YeSZROFFlXZg==}
+  /@urql/core@4.2.0(graphql@16.8.1):
+    resolution: {integrity: sha512-GRkZ4kECR9UohWAjiSk2UYUetco6/PqSrvyC4AH6g16tyqEShA63M232cfbE1J9XJPaGNjia14Gi+oOqzp144w==}
     dependencies:
       '@0no-co/graphql.web': 1.0.4(graphql@16.8.1)
       wonka: 6.3.4
