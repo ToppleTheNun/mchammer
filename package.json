@@ -18,7 +18,7 @@
     "typecheck": "turbo typecheck"
   },
   "devDependencies": {
-    "@antfu/ni": "0.21.8",
+    "@antfu/ni": "0.21.9",
     "@turbo/gen": "1.10.16",
     "prettier": "3.0.3",
     "prettier-plugin-pkg": "0.18.0",
