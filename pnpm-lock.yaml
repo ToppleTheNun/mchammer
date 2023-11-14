@@ -38,8 +38,8 @@ importers:
   apps/mchammer:
     dependencies:
       '@conform-to/react':
-        specifier: 0.9.0
-        version: 0.9.0(react@18.2.0)
+        specifier: 0.9.1
+        version: 0.9.1(react@18.2.0)
       '@conform-to/zod':
         specifier: 0.9.0
         version: 0.9.0(@conform-to/dom@0.9.0)(zod@3.22.4)
@@ -1161,12 +1161,16 @@ packages:
     resolution: {integrity: sha512-kaYP7jKeWWnBY+M0+Rttj5atWm9Tt9Uyts49lU4hoz9p/X8v5GuGas6YOilovyE5/vJUsnuYzN97upxIvlYg4g==}
     dev: false
 
-  /@conform-to/react@0.9.0(react@18.2.0):
-    resolution: {integrity: sha512-ZxfzK+L4b3Z9SPGCyo8GqLjfSFDp4upiwpjJHxDLPwMDVsF8EvkifSHyzUkjaiIny407qN9zbdtoItQCTaaZeg==}
+  /@conform-to/dom@0.9.1:
+    resolution: {integrity: sha512-+T6QgpLDPZ29j4y5nWW61WMe8qj0cQBymyzbi5sq1f3CcBO3wBbR0VPI7mbm+rLoErHWM3ghhdNlIkw0UPoLLA==}
+    dev: false
+
+  /@conform-to/react@0.9.1(react@18.2.0):
+    resolution: {integrity: sha512-SibYHk86IFh60LRPk4aJHJOgyLTgb3JYphKvG4vcemyuntdOwncd5YM/GDoccVzeCTmJi4Os/fDtOOAaDcSa9w==}
     peerDependencies:
       react: '>=16.8'
     dependencies:
-      '@conform-to/dom': 0.9.0
+      '@conform-to/dom': 0.9.1
       react: 18.2.0
     dev: false
 
