@@ -6,6 +6,10 @@ import { createRequestHandler } from "@remix-run/express";
 import { installGlobals } from "@remix-run/node";
 import express from "express";
 import { wrapExpressCreateRequestHandler } from "@sentry/remix";
+import { pino } from "pino";
+import { pinoHttp } from "pino-http";
+
+const logger = pino({ name: "mchammer:server" });
 
 installGlobals();
 
@@ -15,6 +19,11 @@ let vite =
     : await unstable_createViteServer();
 
 const app = express();
+
+// http logging
+if (process.env.NODE_ENV === "production") {
+  app.use(pinoHttp());
+}
 
 // handle asset requests
 if (vite) {
@@ -42,5 +51,7 @@ app.all(
   }),
 );
 
-const port = 3000;
-app.listen(port, () => console.log("http://localhost:" + port));
+const port = process.env.PORT ?? 3000;
+app.listen(port, () =>
+  logger.info(`App is listening on http://localhost:${port}`),
+);
