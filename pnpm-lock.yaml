@@ -293,6 +293,36 @@ importers:
 
   apps/mchammer-vite:
     dependencies:
+      '@conform-to/react':
+        specifier: 0.9.1
+        version: 0.9.1(react@18.2.0)
+      '@conform-to/zod':
+        specifier: 0.9.0
+        version: 0.9.0(@conform-to/dom@0.9.0)(zod@3.22.4)
+      '@radix-ui/react-avatar':
+        specifier: 1.0.4
+        version: 1.0.4(@types/react-dom@18.2.15)(@types/react@18.2.37)(react-dom@18.2.0)(react@18.2.0)
+      '@radix-ui/react-dialog':
+        specifier: 1.0.5
+        version: 1.0.5(@types/react-dom@18.2.15)(@types/react@18.2.37)(react-dom@18.2.0)(react@18.2.0)
+      '@radix-ui/react-dropdown-menu':
+        specifier: 2.0.6
+        version: 2.0.6(@types/react-dom@18.2.15)(@types/react@18.2.37)(react-dom@18.2.0)(react@18.2.0)
+      '@radix-ui/react-label':
+        specifier: 2.0.2
+        version: 2.0.2(@types/react-dom@18.2.15)(@types/react@18.2.37)(react-dom@18.2.0)(react@18.2.0)
+      '@radix-ui/react-popover':
+        specifier: 1.0.7
+        version: 1.0.7(@types/react-dom@18.2.15)(@types/react@18.2.37)(react-dom@18.2.0)(react@18.2.0)
+      '@radix-ui/react-scroll-area':
+        specifier: 1.0.5
+        version: 1.0.5(@types/react-dom@18.2.15)(@types/react@18.2.37)(react-dom@18.2.0)(react@18.2.0)
+      '@radix-ui/react-select':
+        specifier: 2.0.0
+        version: 2.0.0(@types/react-dom@18.2.15)(@types/react@18.2.37)(react-dom@18.2.0)(react@18.2.0)
+      '@radix-ui/react-slot':
+        specifier: 1.0.2
+        version: 1.0.2(@types/react@18.2.37)(react@18.2.0)
       '@remix-run/express':
         specifier: 2.2.0
         version: 2.2.0(express@4.18.2)(typescript@5.2.2)
@@ -305,12 +335,27 @@ importers:
       '@sentry/remix':
         specifier: 7.80.1
         version: 7.80.1(@remix-run/node@2.2.0)(@remix-run/react@2.2.0)(react@18.2.0)
+      class-variance-authority:
+        specifier: 0.7.0
+        version: 0.7.0
+      clsx:
+        specifier: 2.0.0
+        version: 2.0.0
+      cmdk:
+        specifier: 0.2.0
+        version: 0.2.0(@types/react@18.2.37)(react-dom@18.2.0)(react@18.2.0)
+      cookie:
+        specifier: 0.5.0
+        version: 0.5.0
       express:
         specifier: 4.18.2
         version: 4.18.2
       isbot:
         specifier: 3.7.0
         version: 3.7.0
+      lucide-react:
+        specifier: 0.292.0
+        version: 0.292.0(react@18.2.0)
       pino:
         specifier: 8.16.2
         version: 8.16.2
@@ -323,6 +368,12 @@ importers:
       react-dom:
         specifier: 18.2.0
         version: 18.2.0(react@18.2.0)
+      react-wrap-balancer:
+        specifier: 1.1.0
+        version: 1.1.0(react@18.2.0)
+      tailwind-merge:
+        specifier: 2.0.0
+        version: 2.0.0
       zod:
         specifier: 3.22.4
         version: 3.22.4
@@ -414,6 +465,9 @@ importers:
       tailwindcss:
         specifier: 3.3.5
         version: 3.3.5
+      tailwindcss-animate:
+        specifier: 1.0.7
+        version: 1.0.7(tailwindcss@3.3.5)
       tsx:
         specifier: 3.14.0
         version: 3.14.0
@@ -13235,7 +13289,6 @@ packages:
       tailwindcss: '>=3.0.0 || insiders'
     dependencies:
       tailwindcss: 3.3.5
-    dev: false
 
   /tailwindcss@3.3.5:
     resolution: {integrity: sha512-5SEZU4J7pxZgSkv7FP1zY8i2TIAOooNZ1e/OGtxIEv6GltpoiXUqWvLy89+a10qYTB1N5Ifkuw9lqQkN9sscvA==}
