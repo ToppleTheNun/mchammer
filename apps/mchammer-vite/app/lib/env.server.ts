@@ -1,19 +1,13 @@
 import { z } from "zod";
 
-export const generatedSchema = z.object({
+import { generated } from "~/generated/env.ts";
+
+const schema = z.object({
+  // Client
   BUILD_TIME: z.string(),
   BUILD_TIMESTAMP: z.string(),
   COMMIT_SHA: z.string(),
-});
-export type GeneratedEnv = z.infer<typeof generatedSchema>;
-
-const schema = generatedSchema.extend({
-  // Client
   SENTRY_DSN: z.string().optional(),
-  VERCEL_ANALYTICS_ID: z.string().optional(),
-  VERCEL_ENV: z
-    .enum(["development", "preview", "production"])
-    .default("development"),
   // Server
   NODE_ENV: z
     .enum(["development", "test", "production"])
@@ -39,7 +33,7 @@ declare global {
   }
 }
 
-export const init = (generated: GeneratedEnv) => {
+export function init() {
   const parsed = schema.safeParse({ ...process.env, ...generated });
 
   if (!parsed.success) {
@@ -50,7 +44,7 @@ export const init = (generated: GeneratedEnv) => {
 
     throw new Error("Invalid environment variables");
   }
-};
+}
 
 /**
  * This is used in both `entry.server.ts` and `root.tsx` to ensure that
@@ -61,7 +55,7 @@ export const init = (generated: GeneratedEnv) => {
  * be included in the client.
  * @returns all public ENV variables
  */
-export const getEnv = (generated: GeneratedEnv) => {
+export function getEnv() {
   return {
     MODE: process.env.NODE_ENV,
     BUILD_TIME: generated.BUILD_TIME,
@@ -71,9 +65,9 @@ export const getEnv = (generated: GeneratedEnv) => {
     VERCEL_ENV: process.env.VERCEL_ENV,
     VERCEL_ANALYTICS_ID: process.env.VERCEL_ANALYTICS_ID,
   };
-};
+}
 
-export type ENV = ReturnType<typeof getEnv>;
+type ENV = ReturnType<typeof getEnv>;
 
 declare global {
   var ENV: ENV;

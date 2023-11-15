@@ -36,7 +36,6 @@
     "@graphql-codegen/typescript-graphql-request": "6.0.1",
     "@graphql-codegen/typescript-operations": "4.0.1",
     "@graphql-codegen/typescript-urql": "4.0.0",
-    "@topplethenun/mchammer-env": "workspace:*",
     "@topplethenun/mchammer-tsconfig": "workspace:*",
     "@types/node": "20.9.0",
     "dotenv-cli": "7.3.0",

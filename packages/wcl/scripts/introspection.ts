@@ -1,7 +1,6 @@
 import { writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 
-import { init } from "@topplethenun/mchammer-env";
 import type { IntrospectionQuery } from "graphql";
 import { buildClientSchema, getIntrospectionQuery, printSchema } from "graphql";
 
@@ -15,7 +14,7 @@ const setWCLAuthentication = async (
 
 const loadSchema = async () => {
   const clientId = process.env.WARCRAFT_LOGS_CLIENT_ID;
-  const clientSecret =  process.env.WARCRAFT_LOGS_CLIENT_SECRET;
+  const clientSecret = process.env.WARCRAFT_LOGS_CLIENT_SECRET;
   if (!clientId) {
     throw new Error("WARCRAFT_LOGS_CLIENT_ID not defined");
   }
@@ -46,9 +45,4 @@ const loadSchema = async () => {
   console.log("gql schema loaded");
 };
 
-init({
-  BUILD_TIME: "",
-  BUILD_TIMESTAMP: "",
-  COMMIT_SHA: "",
-});
 loadSchema().catch(console.error);

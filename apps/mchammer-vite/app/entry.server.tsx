@@ -1,12 +1,34 @@
 import { PassThrough } from "node:stream";
 
-import type { AppLoadContext, EntryContext } from "@remix-run/node";
+import type {
+  AppLoadContext,
+  DataFunctionArgs,
+  EntryContext,
+} from "@remix-run/node";
 import { createReadableStreamFromReadable } from "@remix-run/node";
 import { RemixServer } from "@remix-run/react";
+import { captureException, captureRemixServerException } from "@sentry/remix";
 import isbot from "isbot";
 import { renderToPipeableStream } from "react-dom/server";
 
+import { getEnv, init } from "~/lib/env.server.ts";
+
 const ABORT_DELAY = 5_000;
+
+init();
+global.ENV = getEnv();
+
+export function handleError(
+  error: unknown,
+  { request }: DataFunctionArgs,
+): void {
+  if (error instanceof Error) {
+    captureRemixServerException(error, "remix.server.ts", request);
+  } else {
+    // Optionally capture non-Error objects
+    captureException(error);
+  }
+}
 
 export default function handleRequest(
   request: Request,

@@ -1,39 +1,45 @@
 import {
-    unstable_createViteServer,
-    unstable_loadViteServerBuild,
+  unstable_createViteServer,
+  unstable_loadViteServerBuild,
 } from "@remix-run/dev";
 import { createRequestHandler } from "@remix-run/express";
 import { installGlobals } from "@remix-run/node";
 import express from "express";
+import { wrapExpressCreateRequestHandler } from "@sentry/remix";
 
 installGlobals();
 
 let vite =
-    process.env.NODE_ENV === "production"
-        ? undefined
-        : await unstable_createViteServer();
+  process.env.NODE_ENV === "production"
+    ? undefined
+    : await unstable_createViteServer();
 
 const app = express();
 
 // handle asset requests
 if (vite) {
-    app.use(vite.middlewares);
+  app.use(vite.middlewares);
 } else {
-    app.use(
-        "/build",
-        express.static("public/build", { immutable: true, maxAge: "1y" })
-    );
+  app.use(
+    "/build",
+    express.static("public/build", { immutable: true, maxAge: "1y" }),
+  );
 }
 app.use(express.static("public", { maxAge: "1h" }));
 
+const createHandler = vite
+  ? createRequestHandler
+  : wrapExpressCreateRequestHandler(createRequestHandler);
+const handlerBuild = vite
+  ? () => unstable_loadViteServerBuild(vite)
+  : await import("./build/index.js");
+
 // handle SSR requests
 app.all(
-    "*",
-    createRequestHandler({
-        build: vite
-            ? () => unstable_loadViteServerBuild(vite)
-            : await import("./build/index.js"),
-    })
+  "*",
+  createHandler({
+    build: handlerBuild,
+  }),
 );
 
 const port = 3000;
