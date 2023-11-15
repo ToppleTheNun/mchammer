@@ -1,7 +1,0 @@
-{
-  "extends": ["@topplethenun/mchammer-tsconfig/base.json"],
-  "compilerOptions": {
-    "baseUrl": "."
-  },
-  "exclude": ["node_modules", "dist"]
-}

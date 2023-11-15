@@ -1,7 +1,6 @@
 import { writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 
-import { error, info } from "@topplethenun/mchammer-logger";
 import { init } from "@topplethenun/mchammer-env";
 import type { IntrospectionQuery } from "graphql";
 import { buildClientSchema, getIntrospectionQuery, printSchema } from "graphql";
@@ -15,11 +14,20 @@ const setWCLAuthentication = async (
 ): Promise<void> => {};
 
 const loadSchema = async () => {
+  const clientId = process.env.WARCRAFT_LOGS_CLIENT_ID;
+  const clientSecret =  process.env.WARCRAFT_LOGS_CLIENT_SECRET;
+  if (!clientId) {
+    throw new Error("WARCRAFT_LOGS_CLIENT_ID not defined");
+  }
+  if (!clientSecret) {
+    throw new Error("WARCRAFT_LOGS_CLIENT_SECRET not defined");
+  }
+
   const client = await getGqlClient({
     getWCLAuthentication,
     setWCLAuthentication,
-    clientId: process.env.WARCRAFT_LOGS_CLIENT_ID,
-    clientSecret: process.env.WARCRAFT_LOGS_CLIENT_SECRET,
+    clientId,
+    clientSecret,
   });
 
   const response = await client.query<IntrospectionQuery>(
@@ -35,7 +43,7 @@ const loadSchema = async () => {
   const targetPath = resolve("src/gql/schema.graphql");
   writeFileSync(targetPath, schema);
 
-  info("gql schema loaded");
+  console.log("gql schema loaded");
 };
 
 init({
@@ -43,4 +51,4 @@ init({
   BUILD_TIMESTAMP: "",
   COMMIT_SHA: "",
 });
-loadSchema().catch(error);
+loadSchema().catch(console.error);
