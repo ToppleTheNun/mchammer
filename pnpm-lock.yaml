@@ -192,8 +192,8 @@ importers:
         specifier: 2.2.0
         version: 2.2.0(eslint@8.52.0)(react@18.2.0)(typescript@5.2.2)
       '@routes-gen/remix':
-        specifier: 0.3.6
-        version: 0.3.6(@remix-run/dev@2.2.0)
+        specifier: 0.3.7
+        version: 0.3.7(@remix-run/dev@2.2.0)
       '@sly-cli/sly':
         specifier: 1.4.10
         version: 1.4.10(patch_hash=mdxutmozbpzzn3cailueilr3cm)(typescript@5.2.2)
@@ -3758,10 +3758,10 @@ packages:
     resolution: {integrity: sha512-AW8PKd6iX3vAZ0vA43nOUOnbq/X5ihgU+mSXXqunMkeQADGiqw/PY0JNeYtD5sr0PAy51YPgAPbDoeapv9r8WA==}
     dev: true
 
-  /@routes-gen/remix@0.3.6(@remix-run/dev@2.2.0):
-    resolution: {integrity: sha512-JDWOLJP5H8YrEs5+driMJtOKjvya6xDSBuSrh7W5oEZddOX3pf98VXO0lQ3mg06A0L+DvvGX2rMA5HwFL/Vz+g==}
+  /@routes-gen/remix@0.3.7(@remix-run/dev@2.2.0):
+    resolution: {integrity: sha512-3sDFer1qOVcJ4CHx4kk1m3767sM79ptM7f35nccCscecwkHf1U8KNvH1GO60ChgGo/23ASDOZzNqVDOoT8kn8w==}
     peerDependencies:
-      '@remix-run/dev': ^1.0.3
+      '@remix-run/dev': ^1.0.3 || ^2.0.0
     dependencies:
       '@remix-run/dev': 2.2.0(@remix-run/serve@2.2.0)(@types/node@20.8.9)(typescript@5.2.2)(vite@4.5.0)
       routes-gen: 0.6.1
