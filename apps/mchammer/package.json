@@ -100,7 +100,7 @@
     "dotenv": "16.3.1",
     "dotenv-cli": "7.3.0",
     "drizzle-kit": "0.20.2",
-    "eslint": "8.52.0",
+    "eslint": "8.53.0",
     "eslint-plugin-simple-import-sort": "10.0.0",
     "execa": "8.0.1",
     "fontpie": "0.3.0",
