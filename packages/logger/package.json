@@ -26,7 +26,7 @@
   "devDependencies": {
     "@topplethenun/mchammer-tsconfig": "workspace:*",
     "rimraf": "5.0.5",
-    "tsup": "7.2.0",
+    "tsup": "7.3.0",
     "typescript": "5.2.2",
     "vitest": "0.34.6"
   }
