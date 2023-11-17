@@ -92,8 +92,8 @@ importers:
         specifier: 1.1.1
         version: 1.1.1
       '@vercel/kv':
-        specifier: 0.2.4
-        version: 0.2.4
+        specifier: 1.0.0
+        version: 1.0.0
       '@vercel/postgres':
         specifier: 0.5.1
         version: 0.5.1
@@ -4805,8 +4805,8 @@ packages:
       server-only: 0.0.1
     dev: false
 
-  /@vercel/kv@0.2.4:
-    resolution: {integrity: sha512-wbIOOXhg6MzmNMzKFSWbbLAS65hCZcJN33z1coENzI1M0fOX55yE9v9LwVGqkzdItp3eZsv6pYvwcmGtllyLTw==}
+  /@vercel/kv@1.0.0:
+    resolution: {integrity: sha512-StouXunmEqUfKE+1joSYfELWEEnI1MhTnzUdarHtv6H18RAm3cf5u5g9ElvA1DJNHcrMT6g5yVAhZcYRbk6lvg==}
     engines: {node: '>=14.6'}
     dependencies:
       '@upstash/redis': 1.24.3
