@@ -77,8 +77,8 @@ importers:
         specifier: 2.2.0
         version: 2.2.0(react-dom@18.2.0)(react@18.2.0)(typescript@5.2.2)
       '@remix-run/router':
-        specifier: 1.11.0
-        version: 1.11.0
+        specifier: 1.12.0
+        version: 1.12.0
       '@remix-run/serve':
         specifier: 2.2.0
         version: 2.2.0(typescript@5.2.2)
@@ -3685,6 +3685,11 @@ packages:
   /@remix-run/router@1.11.0:
     resolution: {integrity: sha512-BHdhcWgeiudl91HvVa2wxqZjSHbheSgIiDvxrF1VjFzBzpTtuDPkOdOi3Iqvc08kXtFkLjhbS+ML9aM8mJS+wQ==}
     engines: {node: '>=14.0.0'}
+
+  /@remix-run/router@1.12.0:
+    resolution: {integrity: sha512-2hXv036Bux90e1GXTWSMfNzfDDK8LA8JYEWfyHxzvwdp6GyoWEovKc9cotb3KCKmkdwsIBuFGX7ScTWyiHv7Eg==}
+    engines: {node: '>=14.0.0'}
+    dev: false
 
   /@remix-run/serve@2.2.0(typescript@5.2.2):
     resolution: {integrity: sha512-hUdxQeb/KwIiJTaW5w6OFgcF8lEucafxOkZDH66XYKdUAW4Mj300+gG8R0f20xdnf0Ud7PnhdVjkMhVNETyXqw==}
