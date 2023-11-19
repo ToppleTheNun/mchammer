@@ -44,7 +44,23 @@ export const seasons: readonly Season[] = [
     },
     seasonIcon: "/INV_Misc_Head_Dragon_01.png",
     encounterIds: [
-
+      2728, // Council of Dreams
+      2677, // Fyrakk, the Blazing
+      2820, // Gnarlroot
+      2709, // Igira the Cruel
+      2731, // Larodar, Keeper of the Flame
+      2708, // Nymue, Weaver of the Cycle
+      2824, // Smolderon
+      2786, // Tindral Sageswift, Seer of Flame
+      2737, // Volcoross
+      61763, // Atal'Dazar
+      61501, // Black Rook Hold
+      61466, // Darkheart Thicket
+      61279, // Everbloom
+      12579, // Dawn of the Infinites: Galakrond's Fall
+      12580, // Dawn of the Infinites: Murozond's Rise
+      10643, // Throne of the Tides
+      61862, // Waycrest Manor
     ],
     ptr: false,
   },
