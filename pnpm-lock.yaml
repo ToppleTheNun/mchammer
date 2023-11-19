@@ -415,8 +415,8 @@ importers:
         specifier: 4.17.21
         version: 4.17.21
       '@types/fs-extra':
-        specifier: 11.0.3
-        version: 11.0.3
+        specifier: 11.0.4
+        version: 11.0.4
       '@types/glob':
         specifier: 8.1.0
         version: 8.1.0
@@ -5094,13 +5094,6 @@ packages:
       '@types/express-serve-static-core': 4.17.41
       '@types/qs': 6.9.10
       '@types/serve-static': 1.15.5
-    dev: true
-
-  /@types/fs-extra@11.0.3:
-    resolution: {integrity: sha512-sF59BlXtUdzEAL1u0MSvuzWd7PdZvZEtnaVkzX5mjpdWTJ8brG0jUqve3jPCzSzvAKKMHTG8F8o/WMQLtleZdQ==}
-    dependencies:
-      '@types/jsonfile': 6.1.3
-      '@types/node': 20.9.2
     dev: true
 
   /@types/fs-extra@11.0.4:
