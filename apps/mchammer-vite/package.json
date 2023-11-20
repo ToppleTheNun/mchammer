@@ -59,7 +59,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-wrap-balancer": "1.1.0",
-    "redis": "4.6.10",
+    "redis": "4.6.11",
     "tailwind-merge": "2.0.0",
     "tsx": "4.1.4",
     "zod": "3.22.4"
