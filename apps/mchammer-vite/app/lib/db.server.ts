@@ -1,9 +1,11 @@
-import Database from "better-sqlite3";
-import { drizzle } from "drizzle-orm/better-sqlite3";
+import { createPool } from "@vercel/postgres";
+import { drizzle as drizzleVercelPostgresAdapter } from "drizzle-orm/vercel-postgres";
 
+import * as schema from "~/lib/db/schema.ts";
 import { singleton } from "~/lib/singleton.server.ts";
 
-export const db = singleton("db", () => {
-  const sqlite = new Database("sqlite.db");
-  return drizzle(sqlite);
-});
+export const db = singleton("db", () => createPool());
+
+export const drizzle = singleton("drizzle", () =>
+  drizzleVercelPostgresAdapter(db, { schema }),
+);

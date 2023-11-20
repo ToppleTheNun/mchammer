@@ -4,6 +4,7 @@ const UNKNOWN_SEASON_START_OR_ENDING = null;
 
 export type Season = {
   name: string;
+  shortName: string;
   slug: string;
   startDates: Record<Region, number | null>;
   endDates: Record<Region, number | null>;
@@ -29,6 +30,7 @@ const offsetByRegion = (timestamp: number, region: Region): number => {
 export const seasons: readonly Season[] = [
   {
     name: "DF S3",
+    shortName: "S3",
     slug: "df-season-3",
     startDates: {
       us: offsetByRegion(1_699_974_000_000, "us"),
@@ -48,6 +50,7 @@ export const seasons: readonly Season[] = [
   },
   {
     name: "DF S2",
+    shortName: "S2",
     slug: "df-season-2",
     startDates: {
       us: offsetByRegion(1_683_644_400_000, "us"),
@@ -85,6 +88,7 @@ export const seasons: readonly Season[] = [
   },
   {
     name: "DF S1",
+    shortName: "S1",
     slug: "df-season-1",
     startDates: {
       us: offsetByRegion(1_670_943_600_000, "us"),

@@ -1,23 +1,20 @@
 # This file is moved to the root directory before building the image
-
-ARG APP_DIRNAME=mchammer-vite
-ARG APP_PKG_NAME=@topplethenun/mchammer-vite
-
 FROM node:20-alpine AS base
 
 FROM base AS builder
-RUN apk add --no-cache libc6-compat
+RUN apk add --no-cache libc6-compat curl
 RUN apk update
+RUN curl -fsSL "https://github.com/pnpm/pnpm/releases/latest/download/pnpm-linuxstatic-x64" -o /bin/pnpm; chmod +x /bin/pnpm;
 # Set working directory
 WORKDIR /app
-RUN yarn global add turbo
 COPY . .
-RUN turbo prune --scope=$APP_PKG_NAME --docker
+RUN pnpm dlx turbo prune --scope=@topplethenun/mchammer-vite --docker
 
 # Add lockfile and package.json's of isolated subworkspace
 FROM base AS installer
-RUN apk add --no-cache libc6-compat
+RUN apk add --no-cache libc6-compat curl
 RUN apk update
+RUN curl -fsSL "https://github.com/pnpm/pnpm/releases/latest/download/pnpm-linuxstatic-x64" -o /bin/pnpm; chmod +x /bin/pnpm;
 WORKDIR /app
 
 # First install dependencies (as they change less often)
@@ -30,19 +27,28 @@ RUN pnpm install
 COPY --from=builder /app/out/full/ .
 COPY turbo.json turbo.json
 
-RUN pnpm exec turbo run build --filter=$APP_PKG_NAME...
+RUN pnpm exec turbo run build --filter=@topplethenun/mchammer-vite...
 
 FROM base AS runner
 WORKDIR /app
+
+RUN apk add ca-certificates fuse3 sqlite curl
+RUN apk update
+RUN curl -fsSL "https://github.com/pnpm/pnpm/releases/latest/download/pnpm-linuxstatic-x64" -o /bin/pnpm; chmod +x /bin/pnpm;
+
+ENV FLY="true"
+ENV PORT="8081"
+ENV NODE_ENV="production"
 
 # Don't run production as root
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 remix
 USER remix
 
-COPY --from=installer /app/apps/$APP_DIRNAME/package.json .
-COPY --from=installer --chown=nextjs:remix /app/apps/$APP_DIRNAME/server.mjs ./apps/$APP_DIRNAME/server.mjs
-COPY --from=installer --chown=nextjs:remix /app/apps/$APP_DIRNAME/build ./apps/$APP_DIRNAME/build
-COPY --from=installer --chown=nextjs:remix /app/apps/$APP_DIRNAME/public ./apps/$APP_DIRNAME/public
+COPY --from=installer /app/apps/mchammer-vite/package.json .
+COPY --from=installer --chown=nextjs:remix /app/apps/mchammer-vite/server.mjs ./apps/mchammer-vite/server.mjs
+COPY --from=installer --chown=nextjs:remix /app/apps/mchammer-vite/drizzle ./apps/mchammer-vite/drizzle
+COPY --from=installer --chown=nextjs:remix /app/apps/mchammer-vite/build ./apps/mchammer-vite/build
+COPY --from=installer --chown=nextjs:remix /app/apps/mchammer-vite/public ./apps/mchammer-vite/public
 
-CMD node apps/$APP_DIRNAME/server.mjs
+CMD node apps/mchammer-vite/server.mjs

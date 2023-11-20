@@ -106,3 +106,4 @@ export class WclClient {
 }
 
 export * from "./zod.ts";
+export * from "./types.js";

@@ -16,6 +16,9 @@ const schema = z.object({
   KV_REST_API_TOKEN: z.string(),
   KV_REST_API_URL: z.string().url(),
   KV_URL: z.string().url(),
+  PINO_LOG_LEVEL: z
+    .enum(["fatal", "error", "warn", "info", "debug", "trace", "silent"])
+    .default("info"),
   POSTGRES_DATABASE: z.string(),
   POSTGRES_HOST: z.string(),
   POSTGRES_PASSWORD: z.string(),

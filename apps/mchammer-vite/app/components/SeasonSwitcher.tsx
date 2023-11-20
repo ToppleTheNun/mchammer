@@ -26,7 +26,7 @@ import { cn } from "~/lib/utils.ts";
 import { seasons } from "~/seasons.ts";
 import { isPresent } from "~/typeGuards.ts";
 
-type Season = { label: string; value: string; icon: string };
+type Season = { label: string; value: string; icon: string; fallback: string };
 type SeasonGroup = { label: string; seasons: Season[] };
 
 const ptrSeasons: SeasonGroup = {
@@ -37,6 +37,7 @@ const ptrSeasons: SeasonGroup = {
       label: season.name,
       value: season.slug,
       icon: season.seasonIcon,
+      fallback: season.shortName,
     })),
 };
 const liveSeasons: SeasonGroup = {
@@ -47,6 +48,7 @@ const liveSeasons: SeasonGroup = {
       label: season.name,
       value: season.slug,
       icon: season.seasonIcon,
+      fallback: season.shortName,
     })),
 };
 
@@ -98,7 +100,7 @@ export const SeasonSwitcher = ({ className }: SeasonSwitcherProps) => {
               src={selectedSeason?.icon}
               alt={selectedSeason?.label}
             />
-            <AvatarFallback>WoW</AvatarFallback>
+            <AvatarFallback>{selectedSeason?.fallback ?? "WoW"}</AvatarFallback>
           </Avatar>
           {selectedSeason?.label ?? "No Season Selected"}
           <Icon
@@ -130,7 +132,7 @@ export const SeasonSwitcher = ({ className }: SeasonSwitcherProps) => {
                         alt={season.label}
                         className="grayscale"
                       />
-                      <AvatarFallback>WoW</AvatarFallback>
+                      <AvatarFallback>{season.fallback}</AvatarFallback>
                     </Avatar>
                     {season.label}
                     <Icon
