@@ -10,7 +10,7 @@
         {
           "id": "remix-app",
           "name": "MCHammer",
-          "buildType": "nixpacks",
+          "buildType": "docker",
           "cpu": 0.5,
           "memory": 1,
           "containerInsights": false,
