@@ -2,9 +2,9 @@ import { type PlayerDetail } from "@topplethenun/mchammer-wcl";
 import { eq } from "drizzle-orm";
 
 import { type Region } from "~/constants.ts";
-import { drizzle } from "~/lib/db.server.ts";
 import { type Character, character } from "~/lib/db/schema.ts";
 import { getLogger } from "~/lib/logger.server.ts";
+import { pg } from "~/lib/storage.server.ts";
 import { time, type Timings } from "~/lib/timing.server.ts";
 
 const ingestCharactersLogger = getLogger(["ingest", "characters"]);
@@ -15,7 +15,7 @@ const findCharacter = (
 ): Promise<Character | undefined> =>
   time(
     () =>
-      drizzle.query.character.findFirst({
+      pg.query.character.findFirst({
         where: eq(character.id, playerDetail.guid),
       }),
     { type: `findCharacter(${playerDetail.guid})`, timings },
@@ -36,7 +36,7 @@ export const findOrCreateCharacter = async (
 
   const insertResult = await time(
     () =>
-      drizzle
+      pg
         .insert(character)
         .values({
           id: playerDetail.guid,

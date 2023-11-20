@@ -1,24 +1,22 @@
 import type { WCLAuth, WCLOAuthResponse } from "@topplethenun/mchammer-wcl";
-import { WclClient } from "@topplethenun/mchammer-wcl";
+import { wclAuthSchema, WclClient } from "@topplethenun/mchammer-wcl";
 
-import { kv } from "~/lib/kv.server.ts";
 import { singleton } from "~/lib/singleton.server.ts";
+import { redis } from "~/lib/storage.server.ts";
 
 const setWCLAuthentication = async ({
   access_token,
   expires_in,
 }: WCLOAuthResponse): Promise<void> => {
-  const payload: WCLAuth = {
-    token: access_token,
-    expiresAt: Math.round(Date.now() / 1000) + expires_in,
-  };
-
-  await kv.set<WCLAuth>("wcl-auth-token", payload, {
-    ex: expires_in,
-  });
+  await redis.hSet("wcl-auth-token", "token", access_token);
+  await redis.hSet(
+    "wcl-auth-token",
+    "expiresAt",
+    Math.round(Date.now() / 1000) + expires_in,
+  );
 };
 
-const getWCLAuthentication = (): Promise<WCLAuth | null> => {
+const getWCLAuthentication = async (): Promise<WCLAuth | null> => {
   if (process.env.NODE_ENV === "test") {
     return Promise.resolve({
       token: "mock-token",
@@ -26,7 +24,8 @@ const getWCLAuthentication = (): Promise<WCLAuth | null> => {
     });
   }
 
-  return kv.get<WCLAuth>("wcl-auth-token");
+  const result = await redis.hGetAll("wcl-auth-token");
+  return wclAuthSchema.parseAsync(result);
 };
 
 export const wcl = singleton(

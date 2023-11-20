@@ -13,7 +13,7 @@ import type {
   ReportWithIngestedDodgeParryMissStreaks,
   ReportWithIngestedFights,
 } from "~/ingest/types.ts";
-import { drizzle } from "~/lib/db.server.ts";
+import { pg } from "~/lib/storage.server.ts";
 import { dodgeParryMissStreak } from "~/lib/db/schema.ts";
 import { getLogger } from "~/lib/logger.server.ts";
 import type { Timings } from "~/lib/timing.server.ts";
@@ -184,7 +184,7 @@ const makeReportStreakIngestible = async (
 const getMinimumStreakLengthToIngest = async (timings: Timings) => {
   const topStreaks = await time(
     () =>
-      drizzle
+      pg
         .select({
           streak: dodgeParryMissStreak.streak,
         })
@@ -220,7 +220,7 @@ const ingestStreak = async (
 
   const existingStreak = await time(
     () =>
-      drizzle.query.dodgeParryMissStreak.findFirst({
+      pg.query.dodgeParryMissStreak.findFirst({
         where: and(
           eq(dodgeParryMissStreak.fightId, ingestibleStreak.ingestedFight.id),
           gte(
@@ -266,7 +266,7 @@ const ingestStreak = async (
   logger.debug("Persisting streak");
   const createdStreaks = await time(
     () =>
-      drizzle
+      pg
         .insert(dodgeParryMissStreak)
         .values({
           report: ingestibleStreak.reportID,

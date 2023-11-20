@@ -12,20 +12,11 @@ const schema = z.object({
   NODE_ENV: z
     .enum(["development", "test", "production"])
     .default("development"),
-  KV_REST_API_READ_ONLY_TOKEN: z.string(),
-  KV_REST_API_TOKEN: z.string(),
-  KV_REST_API_URL: z.string().url(),
-  KV_URL: z.string().url(),
   PINO_LOG_LEVEL: z
     .enum(["fatal", "error", "warn", "info", "debug", "trace", "silent"])
     .default("info"),
-  POSTGRES_DATABASE: z.string(),
-  POSTGRES_HOST: z.string(),
-  POSTGRES_PASSWORD: z.string(),
-  POSTGRES_PRISMA_URL: z.string(),
-  POSTGRES_URL: z.string(),
-  POSTGRES_URL_NON_POOLING: z.string(),
-  POSTGRES_USER: z.string(),
+  DATABASE_URL: z.string(),
+  REDIS_URL: z.string(),
   WARCRAFT_LOGS_CLIENT_ID: z.string(),
   WARCRAFT_LOGS_CLIENT_SECRET: z.string(),
 });

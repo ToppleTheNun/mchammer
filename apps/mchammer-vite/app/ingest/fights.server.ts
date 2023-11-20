@@ -13,7 +13,7 @@ import type {
   ReportWithIngestedFights,
   ReportWithIngestibleFights,
 } from "~/ingest/types.ts";
-import { drizzle } from "~/lib/db.server.ts";
+import { pg } from "~/lib/storage.server.ts";
 import { fight } from "~/lib/db/schema.ts";
 import { getLogger } from "~/lib/logger.server.ts";
 import { time, type Timings } from "~/lib/timing.server.ts";
@@ -212,7 +212,7 @@ export const ingestFight = async (
   );
   const existingFight = await time(
     () =>
-      drizzle.query.fight.findFirst({
+      pg.query.fight.findFirst({
         where: and(
           gte(
             fight.startTime,
@@ -249,7 +249,7 @@ export const ingestFight = async (
   logger.debug(`Persisting fight`);
   const createdFights = await time(
     () =>
-      drizzle
+      pg
         .insert(fight)
         .values({
           firstSeenReport: reportFight.reportID,
