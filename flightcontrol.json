@@ -8,7 +8,7 @@
       "source": { "branch": "main", "pr": false, "trigger": "push" },
       "services": [
         {
-          "id": "remix-app",
+          "id": "mchammer",
           "name": "MCHammer",
           "buildType": "docker",
           "cpu": 0.5,
