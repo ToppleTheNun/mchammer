@@ -29,7 +29,7 @@ const getReport = async (
   timings: Timings,
 ): Promise<Report> => {
   const rawFightData = await time(() => wcl.getFights({ reportID }), {
-    type: `wcl.query.getFights(${reportID})`,
+    type: `wcl.getFights(${reportID})`,
     timings,
   });
   if (!rawFightData.reportData || !rawFightData.reportData.report) {
@@ -121,7 +121,7 @@ const addIngestibleFightsToReport = async (
         reportID: basicReport.reportID,
         fightIDs,
       }),
-    { type: `wcl.query.getFights(${basicReport.reportID})`, timings },
+    { type: `wcl.getPlayerDetails(${basicReport.reportID})`, timings },
   );
 
   const playerDetailsResult = playerDetailsDpsHealerTankSchema.safeParse(

@@ -4,6 +4,7 @@ const UNKNOWN_SEASON_START_OR_ENDING = null;
 
 export type Season = {
   name: string;
+  shortName: string;
   slug: string;
   startDates: Record<Region, number | null>;
   endDates: Record<Region, number | null>;
@@ -29,6 +30,7 @@ const offsetByRegion = (timestamp: number, region: Region): number => {
 export const seasons: readonly Season[] = [
   {
     name: "DF S3",
+    shortName: "S3",
     slug: "df-season-3",
     startDates: {
       us: offsetByRegion(1_699_974_000_000, "us"),
@@ -61,79 +63,6 @@ export const seasons: readonly Season[] = [
       12580, // Dawn of the Infinites: Murozond's Rise
       10643, // Throne of the Tides
       61862, // Waycrest Manor
-    ],
-    ptr: false,
-  },
-  {
-    name: "DF S2",
-    slug: "df-season-2",
-    startDates: {
-      us: offsetByRegion(1_683_644_400_000, "us"),
-      eu: offsetByRegion(1_683_644_400_000, "eu"),
-      kr: offsetByRegion(1_683_644_400_000, "kr"),
-      tw: offsetByRegion(1_683_644_400_000, "tw"),
-    },
-    endDates: {
-      us: offsetByRegion(1_699_336_800_000, "us"),
-      eu: offsetByRegion(1_699_336_800_000, "eu"),
-      kr: offsetByRegion(1_699_336_800_000, "kr"),
-      tw: offsetByRegion(1_699_336_800_000, "tw"),
-    },
-    seasonIcon: "/INV_Misc_Head_Dragon_Black_Nightmare.png",
-    encounterIds: [
-      2687, // Amalgamation Chamber
-      2682, // Assault of the Zaqali
-      2684, // Echo of Neltharion
-      2693, // Forgotten Experiments
-      2688, // Kazzara
-      2683, // Magmorax
-      2680, // Rashok, the Elder
-      2685, // Sarkareth
-      2689, // The Vigilant Steward, Zskarn
-      12520, // Brackenhide Hollow
-      61754, // Freehold
-      12527, // Halls of Infusion
-      61458, // Neltharion's Lair
-      12519, // Neltharus
-      12451, // Uldaman: Legacy of Tyr
-      61841, // The Underrot
-      10657, // The Vortex Pinnacle
-    ],
-    ptr: false,
-  },
-  {
-    name: "DF S1",
-    slug: "df-season-1",
-    startDates: {
-      us: offsetByRegion(1_670_943_600_000, "us"),
-      eu: offsetByRegion(1_670_943_600_000, "eu"),
-      kr: offsetByRegion(1_670_943_600_000, "kr"),
-      tw: offsetByRegion(1_670_943_600_000, "tw"),
-    },
-    endDates: {
-      us: offsetByRegion(1_683_007_200_000, "us"),
-      eu: offsetByRegion(1_683_007_200_000, "eu"),
-      kr: offsetByRegion(1_683_007_200_000, "kr"),
-      tw: offsetByRegion(1_683_007_200_000, "tw"),
-    },
-    seasonIcon: "/Shaman_PVP_LeaderClan.png",
-    encounterIds: [
-      2614, // Broodkeeper Diurna
-      2635, // Dathea, Ascended
-      2587, // Eranog
-      2605, // Kurog Grimtotem
-      2590, // Primal Council
-      2607, // Raszageth the Storm-Eater
-      2592, // Sennarth, the Cold Breath
-      2639, // Terros
-      12526, // Algeth'ar Academy
-      12515, // The Azure Vault
-      61571, // Court of Stars
-      61477, // Halls of Valor
-      12516, // The Nokhud Offensive
-      12521, // Ruby Life Pools
-      61176, // Shadowmoon Burial Grounds
-      10960, // Temple of the Jade Serpent
     ],
     ptr: false,
   },

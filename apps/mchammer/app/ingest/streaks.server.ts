@@ -1,3 +1,4 @@
+import type { PlayerDetail } from "@topplethenun/mchammer-wcl";
 import { and, desc, eq, gte, lte } from "drizzle-orm";
 import { groupBy } from "lodash-es";
 
@@ -17,8 +18,7 @@ import { dodgeParryMissStreak } from "#app/lib/db/schema.ts";
 import { debug, error, info, warn } from "#app/lib/log.server.ts";
 import type { Timings } from "#app/lib/timing.server.ts";
 import { time } from "#app/lib/timing.server.ts";
-import { isPresent } from "#app/typeGuards.js";
-import type { PlayerDetail } from "#app/wcl/schema.server.ts";
+import { isPresent } from "#app/typeGuards.ts";
 
 const groupDamageTakenEventsByPlayer = (
   damageTakenEvents: IngestedReportDamageTakenEvent[],

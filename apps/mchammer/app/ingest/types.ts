@@ -1,10 +1,14 @@
+import type {
+  DamageTakenEvent,
+  PlayerDetail,
+} from "@topplethenun/mchammer-wcl";
+
 import type { Region } from "#app/constants.ts";
 import type {
   Character,
   DodgeParryMissStreak,
   Fight,
 } from "#app/lib/db/schema.ts";
-import type { DamageTakenEvent, PlayerDetail } from "#app/wcl/schema.server.ts";
 
 export type ReportFight = {
   reportID: string;

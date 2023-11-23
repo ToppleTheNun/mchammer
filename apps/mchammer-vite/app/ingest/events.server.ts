@@ -42,7 +42,7 @@ const getDamageTakenEventsDuringTimestamp = async (
   const results = await time(
     () => wcl.getPhysicalDamageTakenEvents(queryVariables),
     {
-      type: `wcl.query.getPhysicalDamageTakenEvents(${reportID})`,
+      type: `wcl.getPhysicalDamageTakenEvents(${reportID})`,
       timings,
     },
   );

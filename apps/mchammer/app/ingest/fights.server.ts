@@ -18,21 +18,15 @@ import { time, type Timings } from "#app/lib/timing.server.ts";
 import { findSeasonsByTimestamp } from "#app/seasons.ts";
 import { isPresent } from "#app/typeGuards.ts";
 import { pipe } from "#app/utils.ts";
-import {
-  getFights,
-  getPlayerDetails,
-} from "#app/wcl/queries/queries.server.ts";
-import {
-  type PlayerDetail,
-  playerDetailsDpsHealerTankSchema,
-} from "#app/wcl/schema.server.ts";
+import { wcl } from "#app/lib/wcl.server.ts";
+import { PlayerDetail, playerDetailsDpsHealerTankSchema } from "@topplethenun/mchammer-wcl";
 
 const getReport = async (
   reportID: string,
   timings: Timings,
 ): Promise<Report> => {
-  const rawFightData = await time(() => getFights({ reportID }), {
-    type: `wcl.query.getFights(${reportID})`,
+  const rawFightData = await time(() => wcl.getFights({ reportID }), {
+    type: `wcl.getFights(${reportID})`,
     timings,
   });
   if (!rawFightData.reportData || !rawFightData.reportData.report) {
@@ -117,11 +111,11 @@ const addIngestibleFightsToReport = async (
   debug(`Retrieving player details for report ${basicReport.reportID}`);
   const rawPlayerDetails = await time(
     () =>
-      getPlayerDetails({
+      wcl.getPlayerDetails({
         reportID: basicReport.reportID,
         fightIDs,
       }),
-    { type: `wcl.query.getFights(${basicReport.reportID})`, timings },
+    { type: `wcl.getPlayerDetails(${basicReport.reportID})`, timings },
   );
 
   const playerDetailsResult = playerDetailsDpsHealerTankSchema.safeParse(

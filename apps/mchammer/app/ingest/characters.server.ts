@@ -1,3 +1,4 @@
+import type { PlayerDetail } from "@topplethenun/mchammer-wcl";
 import { eq } from "drizzle-orm";
 
 import { type Region } from "#app/constants.ts";
@@ -5,7 +6,6 @@ import { drizzle } from "#app/lib/db.server.ts";
 import { type Character, character } from "#app/lib/db/schema.ts";
 import { debug } from "#app/lib/log.server.ts";
 import { time, type Timings } from "#app/lib/timing.server.ts";
-import { type PlayerDetail } from "#app/wcl/schema.server.ts";
 
 const findCharacter = (
   playerDetail: PlayerDetail,

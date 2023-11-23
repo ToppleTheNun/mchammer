@@ -1,3 +1,9 @@
+import type {
+  DamageTakenEvents,
+  GetPhysicalDamageTakenEventsQueryVariables,
+  PlayerDetail,
+} from "@topplethenun/mchammer-wcl";
+import { damageTakenEventArraySchema } from "@topplethenun/mchammer-wcl";
 import { uniqBy } from "lodash-es";
 
 import { type Region } from "#app/constants.ts";
@@ -14,13 +20,7 @@ import type {
 import { type Character } from "#app/lib/db/schema.ts";
 import { debug, error, info, warn } from "#app/lib/log.server.ts";
 import { time, type Timings } from "#app/lib/timing.server.ts";
-import { getPhysicalDamageTakenEvents } from "#app/wcl/queries/queries.server.ts";
-import {
-  damageTakenEventArraySchema,
-  type DamageTakenEvents,
-  type PlayerDetail,
-} from "#app/wcl/schema.server.ts";
-import { type GetPhysicalDamageTakenEventsQueryVariables } from "#app/wcl/types.ts";
+import { wcl } from "#app/lib/wcl.server.ts";
 
 type GetDamageTakenEventsDuringTimestampResult = {
   nextPageTimestamp: number | null;
@@ -36,9 +36,9 @@ const getDamageTakenEventsDuringTimestamp = async (
   );
 
   const results = await time(
-    () => getPhysicalDamageTakenEvents(queryVariables),
+    () => wcl.getPhysicalDamageTakenEvents(queryVariables),
     {
-      type: `wcl.query.getPhysicalDamageTakenEvents(${reportID})`,
+      type: `wcl.getPhysicalDamageTakenEvents(${reportID})`,
       timings,
     },
   );
