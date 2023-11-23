@@ -43,6 +43,9 @@ importers:
       '@conform-to/zod':
         specifier: 0.9.1
         version: 0.9.1(@conform-to/dom@0.9.1)(zod@3.22.4)
+      '@epic-web/client-hints':
+        specifier: 1.2.2
+        version: 1.2.2
       '@radix-ui/react-avatar':
         specifier: 1.0.4
         version: 1.0.4(@types/react-dom@18.2.17)(@types/react@18.2.38)(react-dom@18.2.0)(react@18.2.0)
@@ -117,7 +120,7 @@ importers:
         version: 2.30.0
       drizzle-orm:
         specifier: 0.29.0
-        version: 0.29.0(@types/better-sqlite3@7.6.8)(@vercel/postgres@0.5.1)(postgres@3.4.3)
+        version: 0.29.0(@vercel/postgres@0.5.1)(postgres@3.4.3)
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -358,7 +361,7 @@ importers:
         version: 0.6.0
       drizzle-orm:
         specifier: 0.29.0
-        version: 0.29.0(@types/better-sqlite3@7.6.8)(@vercel/postgres@0.5.1)(postgres@3.4.3)
+        version: 0.29.0(@vercel/postgres@0.5.1)(postgres@3.4.3)
       express:
         specifier: 4.18.2
         version: 4.18.2
@@ -420,9 +423,6 @@ importers:
       '@total-typescript/ts-reset':
         specifier: 0.5.1
         version: 0.5.1
-      '@types/better-sqlite3':
-        specifier: 7.6.8
-        version: 7.6.8
       '@types/cookie':
         specifier: 0.5.4
         version: 0.5.4
@@ -1434,6 +1434,10 @@ packages:
   /@emotion/hash@0.9.1:
     resolution: {integrity: sha512-gJB6HLm5rYwSLI6PQa+X1t5CFGrv1J1TWG+sOyMCeKz2ojaj6Fnl/rZEspogG+cvqbt4AE/2eIyD2QfLKTBNlQ==}
     dev: true
+
+  /@epic-web/client-hints@1.2.2:
+    resolution: {integrity: sha512-36ei/PACvvi/nh/7uKbITnZd8EP39UzYdmofrk5lqJLaPRpBt4pMeDf1bgOp0DXpuiWSVd02tcQgpu0H7blB2A==}
+    dev: false
 
   /@esbuild-kit/core-utils@3.3.2:
     resolution: {integrity: sha512-sPRAnw9CdSsRmEtnsl2WXWdyquogVpB3yZ3dgwJfe8zrOzTsV7cJvmwrKVa+0ma5BoiGJ+BoqkMvawbayKUsqQ==}
@@ -4943,11 +4947,6 @@ packages:
       '@babel/types': 7.23.3
     dev: true
 
-  /@types/better-sqlite3@7.6.8:
-    resolution: {integrity: sha512-ASndM4rdGrzk7iXXqyNC4fbwt4UEjpK0i3j4q4FyeQrLAthfB6s7EF135ZJE0qQxtKIMFwmyT6x0switET7uIw==}
-    dependencies:
-      '@types/node': 20.9.4
-
   /@types/body-parser@1.19.5:
     resolution: {integrity: sha512-fB3Zu92ucau0iQ0JMCFQE7b/dv8Ot07NI3KaZIkIUNXq82k4eBAqUaneXfleGY9JWskeS9y+u0nXMyspcuQrCg==}
     dependencies:
@@ -7073,7 +7072,7 @@ packages:
       - utf-8-validate
     dev: true
 
-  /drizzle-orm@0.29.0(@types/better-sqlite3@7.6.8)(@vercel/postgres@0.5.1)(postgres@3.4.3):
+  /drizzle-orm@0.29.0(@vercel/postgres@0.5.1)(postgres@3.4.3):
     resolution: {integrity: sha512-AC+CuW4GezVjsZDGU9u9B4HyikudOyYVhjm6he3Xn1D6Kky7bHGKob97MMX2piO+t9b6UuajLzlii/T/lu1qwA==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
@@ -7135,7 +7134,6 @@ packages:
       sqlite3:
         optional: true
     dependencies:
-      '@types/better-sqlite3': 7.6.8
       '@vercel/postgres': 0.5.1
       postgres: 3.4.3
     dev: false

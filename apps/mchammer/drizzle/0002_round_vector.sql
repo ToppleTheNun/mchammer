@@ -1,1 +1,0 @@
-ALTER TABLE "dodge_parry_miss_streak" ADD COLUMN "streak" integer NOT NULL;
