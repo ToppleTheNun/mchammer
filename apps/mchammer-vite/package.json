@@ -61,7 +61,7 @@
     "react-wrap-balancer": "1.1.0",
     "redis": "4.6.11",
     "tailwind-merge": "2.0.0",
-    "tsx": "4.3.0",
+    "tsx": "4.4.0",
     "zod": "3.22.4"
   },
   "devDependencies": {
