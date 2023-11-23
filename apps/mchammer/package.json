@@ -45,7 +45,7 @@
     "@remix-run/react": "2.3.1",
     "@remix-run/router": "1.12.0",
     "@remix-run/serve": "2.3.1",
-    "@sentry/remix": "7.80.1",
+    "@sentry/remix": "7.81.1",
     "@urql/core": "4.2.0",
     "@vercel/analytics": "1.1.1",
     "@vercel/kv": "1.0.0",
