@@ -7,8 +7,6 @@
     "**/*.tsx"
   ],
   "compilerOptions": {
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
     "baseUrl": ".",
     "paths": {
       "#*": ["./*"]

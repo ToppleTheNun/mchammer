@@ -1,8 +1,8 @@
+import type { WCLAuth, WCLOAuthResponse } from "@topplethenun/mchammer-wcl";
 import { WclClient } from "@topplethenun/mchammer-wcl";
 
 import { kv } from "#app/lib/kv.server.ts";
 import { singleton } from "#app/lib/singleton.server.ts";
-import type { WCLAuth, WCLOAuthResponse } from "#app/wcl/auth.server.ts";
 
 const setWCLAuthentication = async ({
   access_token,

@@ -423,6 +423,9 @@ importers:
       '@sly-cli/sly':
         specifier: 1.4.10
         version: 1.4.10(patch_hash=mdxutmozbpzzn3cailueilr3cm)(typescript@5.2.2)
+      '@topplethenun/mchammer-tsconfig':
+        specifier: workspace:*
+        version: link:../../config/tsconfig
       '@total-typescript/ts-reset':
         specifier: 0.5.1
         version: 0.5.1

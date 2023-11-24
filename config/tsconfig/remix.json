@@ -9,7 +9,6 @@
     "moduleResolution": "Bundler",
     "resolveJsonModule": true,
     "target": "ES2022",
-    "allowJs": true,
-    "baseUrl": "."
+    "allowJs": true
   }
 }
