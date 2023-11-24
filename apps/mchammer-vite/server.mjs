@@ -1,3 +1,5 @@
+import process from "node:process";
+
 import {
   unstable_createViteServer,
   unstable_loadViteServerBuild,
@@ -13,22 +15,22 @@ const logger = pino({ name: "mchammer:server" });
 
 installGlobals();
 
-let vite =
-  process.env.NODE_ENV === "production"
+const vite
+  = process.env.NODE_ENV === "production"
     ? undefined
     : await unstable_createViteServer();
 
 const app = express();
 
 // http logging
-if (process.env.NODE_ENV === "production") {
+if (process.env.NODE_ENV === "production")
   app.use(pinoHttp());
-}
 
 // handle asset requests
 if (vite) {
   app.use(vite.middlewares);
-} else {
+}
+else {
   app.use(
     "/build",
     express.static("public/build", { immutable: true, maxAge: "1y" }),
@@ -53,5 +55,4 @@ app.all(
 
 const port = process.env.PORT ?? 3000;
 app.listen(port, () =>
-  logger.info(`App is listening on http://localhost:${port}`),
-);
+  logger.info(`App is listening on http://localhost:${port}`));

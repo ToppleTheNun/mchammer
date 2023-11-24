@@ -1,5 +1,5 @@
 import { isRouteErrorResponse } from "@remix-run/react";
-import { type ReactNode } from "react";
+import type { ReactNode } from "react";
 
 import {
   PageHeader,
@@ -11,26 +11,30 @@ import { SiteFooter } from "#app/components/SiteFooter.tsx";
 import { SiteHeader } from "#app/components/SiteHeader.tsx";
 import { H2, Lead } from "#app/components/typography.tsx";
 
-const Header = () => (
-  <PageHeader className="pb-8">
-    <PageHeaderHeading>Apparently, you could touch this.</PageHeaderHeading>
-    <PageHeaderDescription>
-      We were only able to dodge, parry, or make you miss for so long.
-    </PageHeaderDescription>
-  </PageHeader>
-);
+function Header() {
+  return (
+    <PageHeader className="pb-8">
+      <PageHeaderHeading>Apparently, you could touch this.</PageHeaderHeading>
+      <PageHeaderDescription>
+        We were only able to dodge, parry, or make you miss for so long.
+      </PageHeaderDescription>
+    </PageHeader>
+  );
+}
 
-const ErrorLayout = ({ children }: { children: ReactNode }) => (
-  <div className="relative flex min-h-screen flex-col">
-    <SiteHeader theme={null} />
-    <div className="flex-1">
-      <PageLayout pageHeader={<Header />}>{children}</PageLayout>
+function ErrorLayout({ children }: { children: ReactNode }) {
+  return (
+    <div className="relative flex min-h-screen flex-col">
+      <SiteHeader theme={null} />
+      <div className="flex-1">
+        <PageLayout pageHeader={<Header />}>{children}</PageLayout>
+      </div>
+      <SiteFooter />
     </div>
-    <SiteFooter />
-  </div>
-);
+  );
+}
 
-export const AppErrorBoundary = ({ error }: { error: unknown }) => {
+export function AppErrorBoundary({ error }: { error: unknown }) {
   if (isRouteErrorResponse(error)) {
     return (
       <ErrorLayout>
@@ -38,7 +42,9 @@ export const AppErrorBoundary = ({ error }: { error: unknown }) => {
           <div className="overflow-hidden rounded-lg border bg-background px-4 shadow">
             <div className="flex h-[50vh] flex-col items-center justify-center gap-2">
               <H2>
-                {error.status} {error.statusText}
+                {error.status}
+                {" "}
+                {error.statusText}
               </H2>
               <Lead>{error.data}</Lead>
             </div>
@@ -82,4 +88,4 @@ export const AppErrorBoundary = ({ error }: { error: unknown }) => {
       </section>
     </ErrorLayout>
   );
-};
+}

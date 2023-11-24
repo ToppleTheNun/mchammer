@@ -7,6 +7,6 @@ import { makeTimings } from "#app/lib/timing.server.ts";
 (async () => {
   info("Starting drizzle seeding...");
   const timings = makeTimings("drizzle seed");
-  await ingestWarcraftLogsReport("wR2PAVQNGcBvr9d1", timings);
+  await ingestWarcraftLogsReport("qydYpAkQD249NFT3", timings);
   info("Finished drizzle seeing!");
 })().catch(error);

@@ -1,3 +1,5 @@
+import process from "node:process";
+
 import { drizzle as drizzlePostgresJsAdapter } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import { createClient } from "redis";
@@ -15,5 +17,4 @@ export const pg = singleton("pg", () => {
 export const redis = singleton("redis", () =>
   createClient({
     url: process.env.REDIS_URL,
-  }),
-);
+  }));

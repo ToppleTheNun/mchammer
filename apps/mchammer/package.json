@@ -1,9 +1,10 @@
 {
   "name": "@topplethenun/mchammer",
   "type": "module",
+  "private": true,
   "author": "Richard Harrah",
   "license": "MIT",
-  "private": true,
+  "sideEffects": false,
   "engines": {
     "node": ">=18"
   },
@@ -21,8 +22,7 @@
     "gql": "nr gql:introspection && nr gql:generate",
     "gql:generate": "nr with-env graphql-codegen && prettier --write app/wcl/types.ts && prettier --write schema.json && prettier --write app/wcl/gql/schema.graphql",
     "gql:introspection": "nr with-env tsx -r dotenv/config app/wcl/queries/introspection.ts",
-    "lint": "eslint app",
-    "lint:fix": "eslint --fix app",
+    "lint": "eslint .",
     "start": "tsx other/generate-env.ts && nr with-env remix-serve build",
     "test": "vitest --passWithNoTests",
     "typecheck": "tsc",
@@ -76,6 +76,7 @@
     "zod": "3.22.4"
   },
   "devDependencies": {
+    "@antfu/eslint-config": "2.1.0",
     "@antfu/ni": "0.21.10",
     "@graphql-codegen/cli": "5.0.0",
     "@graphql-codegen/introspection": "4.0.0",
@@ -103,6 +104,9 @@
     "dotenv-cli": "7.3.0",
     "drizzle-kit": "0.20.4",
     "eslint": "8.54.0",
+    "eslint-plugin-react": "7.33.2",
+    "eslint-plugin-react-hooks": "4.6.0",
+    "eslint-plugin-react-refresh": "0.4.4",
     "eslint-plugin-simple-import-sort": "10.0.0",
     "execa": "8.0.1",
     "fontpie": "0.3.0",
@@ -119,7 +123,6 @@
     "typescript": "5.2.2",
     "vitest": "0.34.6"
   },
-  "sideEffects": false,
   "graphql": {
     "schema": "./schema.json"
   }

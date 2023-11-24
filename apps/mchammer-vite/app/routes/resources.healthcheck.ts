@@ -7,9 +7,9 @@ import { pg } from "~/lib/storage.server.ts";
 
 const logger = getLogger(["resources", "healthcheck"]);
 
-export const loader = async ({ request }: DataFunctionArgs) => {
-  const host =
-    request.headers.get("X-Forwarded-Host") ?? request.headers.get("host");
+export async function loader({ request }: DataFunctionArgs) {
+  const host
+    = request.headers.get("X-Forwarded-Host") ?? request.headers.get("host");
 
   try {
     await Promise.all([
@@ -20,12 +20,14 @@ export const loader = async ({ request }: DataFunctionArgs) => {
         method: "HEAD",
         headers: { "X-Healthcheck": "true" },
       }).then((r) => {
-        if (!r.ok) return Promise.reject(r);
+        if (!r.ok)
+          return Promise.reject(r);
       }),
     ]);
     return new Response("OK");
-  } catch (error: unknown) {
+  }
+  catch (error: unknown) {
     logger.error({ err: error }, "healthcheck ❌");
     return new Response("ERROR", { status: 500 });
   }
-};
+}

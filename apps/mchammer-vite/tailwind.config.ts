@@ -1,7 +1,7 @@
-const { fontFamily } = require("tailwindcss/defaultTheme");
+import type { Config } from "tailwindcss";
+import { fontFamily } from "tailwindcss/defaultTheme";
 
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   darkMode: ["class"],
   content: ["./app/**/*.{ts,tsx}"],
   theme: {
@@ -54,16 +54,17 @@ module.exports = {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
+
         sans: ["Inter", "Inter Fallback", ...fontFamily.sans],
       },
       keyframes: {
         "accordion-down": {
-          from: { height: 0 },
+          from: { height: "0" },
           to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
           from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: 0 },
+          to: { height: "0" },
         },
       },
       animation: {
@@ -72,5 +73,6 @@ module.exports = {
       },
     },
   },
+  // eslint-disable-next-line ts/no-require-imports
   plugins: [require("tailwindcss-animate")],
-};
+} satisfies Config;

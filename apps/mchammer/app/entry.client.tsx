@@ -1,15 +1,14 @@
 import { RemixBrowser } from "@remix-run/react";
-import { startTransition, StrictMode } from "react";
+import { StrictMode, startTransition } from "react";
 import { hydrateRoot } from "react-dom/client";
 
 import { reportWebVitalsToVercelAnalytics } from "#app/lib/vitals.client.ts";
 
-if (ENV.MODE === "production" && ENV.SENTRY_DSN) {
+if (ENV.MODE === "production" && ENV.SENTRY_DSN)
   import("./lib/monitoring.client.ts").then(({ init }) => init());
-}
 
-const hydrate = () =>
-  startTransition(() => {
+function hydrate() {
+  return startTransition(() => {
     hydrateRoot(
       document,
       <StrictMode>
@@ -17,10 +16,12 @@ const hydrate = () =>
       </StrictMode>,
     );
   });
+}
 
 if (typeof requestIdleCallback === "function") {
   requestIdleCallback(hydrate);
-} else {
+}
+else {
   // Safari doesn't support requestIdleCallback
   // https://caniuse.com/requestidlecallback
   setTimeout(hydrate, 1);

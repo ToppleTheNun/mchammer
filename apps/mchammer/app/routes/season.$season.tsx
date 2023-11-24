@@ -12,9 +12,9 @@ import { Lead } from "#app/components/typography.tsx";
 import { serverTiming } from "#app/constants.ts";
 import { combineHeaders, invariantResponse } from "#app/lib/misc.ts";
 import { makeTimings } from "#app/lib/timing.server.ts";
-import { findSeasonByName, type Season } from "#app/seasons.ts";
+import { type Season, findSeasonByName } from "#app/seasons.ts";
 
-export const loader = ({ params }: DataFunctionArgs) => {
+export function loader({ params }: DataFunctionArgs) {
   invariantResponse(
     "season" in params && params.season,
     "Missing season parameter",
@@ -31,19 +31,24 @@ export const loader = ({ params }: DataFunctionArgs) => {
       headers: combineHeaders({ [serverTiming]: timings.toString() }),
     },
   );
-};
+}
 
-const Header = ({ season }: { season: Season }) => (
-  <PageHeader className="pb-8">
-    <PageHeaderHeading>Can&apos;t touch this.</PageHeaderHeading>
-    <PageHeaderDescription>
-      Consecutive parry, dodge, and miss leaderboard for instanced World of
-      Warcraft content in {season.name}.
-    </PageHeaderDescription>
-  </PageHeader>
-);
+function Header({ season }: { season: Season }) {
+  return (
+    <PageHeader className="pb-8">
+      <PageHeaderHeading>Can&apos;t touch this.</PageHeaderHeading>
+      <PageHeaderDescription>
+        Consecutive parry, dodge, and miss leaderboard for instanced World of
+        Warcraft content in
+        {" "}
+        {season.name}
+        .
+      </PageHeaderDescription>
+    </PageHeader>
+  );
+}
 
-const SeasonRoute = () => {
+function SeasonRoute() {
   const { season } = useLoaderData<typeof loader>();
 
   return (
@@ -59,6 +64,6 @@ const SeasonRoute = () => {
       </section>
     </PageLayout>
   );
-};
+}
 
 export default SeasonRoute;

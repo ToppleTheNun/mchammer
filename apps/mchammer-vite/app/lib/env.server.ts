@@ -1,3 +1,5 @@
+import process from "node:process";
+
 import { z } from "zod";
 
 import { generated } from "~/generated/env.ts";
@@ -22,6 +24,7 @@ const schema = z.object({
 });
 
 declare global {
+  // eslint-disable-next-line ts/no-namespace
   namespace NodeJS {
     interface ProcessEnv extends z.infer<typeof schema> {}
   }
@@ -64,8 +67,9 @@ export function getEnv() {
 type ENV = ReturnType<typeof getEnv>;
 
 declare global {
+  // eslint-disable-next-line no-var,vars-on-top
   var ENV: ENV;
   interface Window {
-    ENV: ENV;
+    ENV: ENV
   }
 }

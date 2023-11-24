@@ -1,6 +1,8 @@
 import { and, eq, gte, lte } from "drizzle-orm";
 import { sortBy } from "lodash-es";
 
+import type { PlayerDetail } from "@topplethenun/mchammer-wcl";
+import { playerDetailsDpsHealerTankSchema } from "@topplethenun/mchammer-wcl";
 import { isRegion } from "#app/constants.ts";
 import { DIFFERENT_REPORT_TOLERANCE } from "#app/ingest/constants.server.ts";
 import type {
@@ -14,43 +16,37 @@ import type {
 import { drizzle } from "#app/lib/db.server.ts";
 import { fight } from "#app/lib/db/schema.ts";
 import { debug, error, info } from "#app/lib/log.server.ts";
-import { time, type Timings } from "#app/lib/timing.server.ts";
+import { type Timings, time } from "#app/lib/timing.server.ts";
 import { findSeasonsByTimestamp } from "#app/seasons.ts";
 import { isPresent } from "#app/typeGuards.ts";
 import { pipe } from "#app/utils.ts";
 import { wcl } from "#app/lib/wcl.server.ts";
-import { PlayerDetail, playerDetailsDpsHealerTankSchema } from "@topplethenun/mchammer-wcl";
 
-const getReport = async (
-  reportID: string,
-  timings: Timings,
-): Promise<Report> => {
+async function getReport(reportID: string, timings: Timings): Promise<Report> {
   const rawFightData = await time(() => wcl.getFights({ reportID }), {
     type: `wcl.getFights(${reportID})`,
     timings,
   });
-  if (!rawFightData.reportData || !rawFightData.reportData.report) {
+  if (!rawFightData.reportData || !rawFightData.reportData.report)
     throw new Error(`Unable to get report details for report ID ${reportID}`);
-  }
 
   const fights = rawFightData.reportData.report.fights;
-  const reportRegion =
-    rawFightData.reportData.report.region?.slug?.toLowerCase();
+  const reportRegion
+    = rawFightData.reportData.report.region?.slug?.toLowerCase();
   const reportStartTime = rawFightData.reportData.report.startTime;
   const reportEndTime = rawFightData.reportData.report.endTime;
   const title = rawFightData.reportData.report.title;
-  if (!reportRegion || !isRegion(reportRegion)) {
+  if (!reportRegion || !isRegion(reportRegion))
     throw new Error(`Unable to determine region for report ID ${reportID}`);
-  }
-  if (!isPresent(fights)) {
+
+  if (!isPresent(fights))
     throw new Error(`Unable to retrieve fights for report ID ${reportID}`);
-  }
 
   const reportFights = fights
     .filter(isPresent)
     // filter out fights where there is no difficulty
-    .filter((fight) => fight.difficulty)
-    .map<ReportFight>((fight) => ({
+    .filter(fight => fight.difficulty)
+    .map<ReportFight>(fight => ({
       reportID,
       reportStartTime,
       reportEndTime,
@@ -73,25 +69,21 @@ const getReport = async (
     region: reportRegion,
     startTime: reportStartTime,
     endTime: reportEndTime,
-    reportFights: reportFights,
+    reportFights,
   };
-};
+}
 
-const makeReportFightIngestible = (
-  basicReportFight: ReportFight,
-  playerDetails: PlayerDetail[],
-  tankDetails: PlayerDetail[],
-): IngestibleReportFight => {
+function makeReportFightIngestible(basicReportFight: ReportFight, playerDetails: PlayerDetail[], tankDetails: PlayerDetail[]): IngestibleReportFight {
   const friendlyPlayerDetails = basicReportFight.friendlyPlayerIDs
-    .map<PlayerDetail | undefined>((playerId) =>
-      playerDetails.find((player) => player.id === playerId),
+    .map<PlayerDetail | undefined>(playerId =>
+      playerDetails.find(player => player.id === playerId),
     )
     .filter(isPresent);
   const friendlyPlayers = sortBy(
-    friendlyPlayerDetails.map((player) => player.guid),
+    friendlyPlayerDetails.map(player => player.guid),
   ).join(":");
 
-  const tanksInFight = tankDetails.filter((tank) =>
+  const tanksInFight = tankDetails.filter(tank =>
     basicReportFight.friendlyPlayerIDs.includes(tank.id),
   );
 
@@ -100,13 +92,10 @@ const makeReportFightIngestible = (
     friendlyPlayerDetails: tanksInFight,
     friendlyPlayers,
   };
-};
+}
 
-const addIngestibleFightsToReport = async (
-  basicReport: Report,
-  timings: Timings,
-): Promise<ReportWithIngestibleFights> => {
-  const fightIDs = basicReport.reportFights.map((fight) => fight.id);
+async function addIngestibleFightsToReport(basicReport: Report, timings: Timings): Promise<ReportWithIngestibleFights> {
+  const fightIDs = basicReport.reportFights.map(fight => fight.id);
 
   debug(`Retrieving player details for report ${basicReport.reportID}`);
   const rawPlayerDetails = await time(
@@ -135,8 +124,8 @@ const addIngestibleFightsToReport = async (
   debug(
     `Retrieving player details for report ${basicReport.reportID}: ${playerDetails.length} players, ${playerDetailsResult.data.tanks.length} tanks`,
   );
-  const reportFightsWithDetails =
-    basicReport.reportFights.map<IngestibleReportFight>((fight) =>
+  const reportFightsWithDetails
+    = basicReport.reportFights.map<IngestibleReportFight>(fight =>
       makeReportFightIngestible(
         fight,
         playerDetails,
@@ -145,26 +134,26 @@ const addIngestibleFightsToReport = async (
     );
 
   return { ...basicReport, fights: reportFightsWithDetails };
-};
+}
 
-const isFightInSeason = (fight: IngestibleReportFight): boolean => {
+function isFightInSeason(fight: IngestibleReportFight): boolean {
   const seasons = findSeasonsByTimestamp(fight.absoluteStartTime);
   if (seasons.length === 0) {
     debug(`Unable to find season for timestamp ${fight.absoluteStartTime}`);
     return false;
   }
 
-  return seasons.some((season) =>
+  return seasons.some(season =>
     season.encounterIds.includes(fight.encounterID),
   );
-};
+}
 
-export const filterReportFightsToOnlyThoseInSeason = (
-  enhanceReport: ReportWithIngestibleFights,
-): ReportWithIngestibleFights => ({
-  ...enhanceReport,
-  fights: enhanceReport.fights.filter(isFightInSeason),
-});
+export function filterReportFightsToOnlyThoseInSeason(enhanceReport: ReportWithIngestibleFights): ReportWithIngestibleFights {
+  return {
+    ...enhanceReport,
+    fights: enhanceReport.fights.filter(isFightInSeason),
+  };
+}
 
 // const filterToOnlyOne = (
 //   enhanceReport: ReportWithIngestibleFights,
@@ -178,10 +167,7 @@ export const filterIngestibleReportFights = pipe(
   // filterToOnlyOne,
 );
 
-export const ingestFight = async (
-  reportFight: IngestibleReportFight,
-  timings: Timings,
-): Promise<IngestedReportFight> => {
+export async function ingestFight(reportFight: IngestibleReportFight, timings: Timings): Promise<IngestedReportFight> {
   debug(
     `Checking if fight ${reportFight.id} from report ${reportFight.reportID} has already been ingested from another report...`,
   );
@@ -254,18 +240,13 @@ export const ingestFight = async (
   );
 
   return { ...reportFight, ingestedFight: createdFight };
-};
+}
 
-export const ingestFights = (
-  reportFights: IngestibleReportFight[],
-  timings: Timings,
-) =>
-  Promise.allSettled(reportFights.map((fight) => ingestFight(fight, timings)));
+export function ingestFights(reportFights: IngestibleReportFight[], timings: Timings) {
+  return Promise.allSettled(reportFights.map(fight => ingestFight(fight, timings)));
+}
 
-export const ingestFightsFromReport = async (
-  reportID: string,
-  timings: Timings,
-): Promise<ReportWithIngestedFights> => {
+export async function ingestFightsFromReport(reportID: string, timings: Timings): Promise<ReportWithIngestedFights> {
   const report = await getReport(reportID, timings);
   if (!report) {
     throw new Error(
@@ -289,13 +270,13 @@ export const ingestFightsFromReport = async (
 
   ingestedFightResults
     .filter((it): it is PromiseRejectedResult => it.status === "rejected")
-    .forEach((it) => error(it.reason));
+    .forEach(it => error(it.reason));
   const ingestedFights = ingestedFightResults
     .filter(
       (it): it is PromiseFulfilledResult<IngestedReportFight> =>
         it.status === "fulfilled",
     )
-    .map((it) => it.value);
+    .map(it => it.value);
 
   return { ...report, fights: ingestedFights };
-};
+}

@@ -2,68 +2,64 @@ export type Timings = Record<
   string,
   Array<
     { desc?: string } & (
-      | { time: number; start?: never }
-      | { time?: never; start: number }
+      | { time: number, start?: never }
+      | { time?: never, start: number }
     )
   >
 >;
 
-export const makeTimings = (type: string, desc?: string) => {
+export function makeTimings(type: string, desc?: string) {
   const timings: Timings = {
     [type]: [{ desc, start: performance.now() }],
   };
   Object.defineProperty(timings, "toString", {
-    value: function () {
+    value() {
       return getServerTimeHeader(timings);
     },
     enumerable: false,
   });
   return timings;
-};
+}
 
-const createTimer = (type: string, desc?: string) => {
+function createTimer(type: string, desc?: string) {
   const start = performance.now();
   return {
     end(timings: Timings) {
       let timingType = timings[type];
 
-      if (!timingType) {
-        // eslint-disable-next-line no-multi-assign
+      if (!timingType)
+
         timingType = timings[type] = [];
-      }
+
       timingType.push({ desc, time: performance.now() - start });
     },
   };
-};
+}
 
-export const time = async <ReturnType>(
-  fn: Promise<ReturnType> | (() => ReturnType | Promise<ReturnType>),
-  {
-    type,
-    desc,
-    timings,
-  }: {
-    type: string;
-    desc?: string;
-    timings?: Timings;
-  },
-): Promise<ReturnType> => {
+export async function time<ReturnType>(fn: Promise<ReturnType> | (() => ReturnType | Promise<ReturnType>), {
+  type,
+  desc,
+  timings,
+}: {
+  type: string
+  desc?: string
+  timings?: Timings
+}): Promise<ReturnType> {
   const timer = createTimer(type, desc);
   const promise = typeof fn === "function" ? fn() : fn;
-  if (!timings) {
+  if (!timings)
     return promise;
-  }
 
   const result = await promise;
 
   timer.end(timings);
   return result;
-};
+}
 
-export const getServerTimeHeader = (timings?: Timings) => {
-  if (!timings) {
+export function getServerTimeHeader(timings?: Timings) {
+  if (!timings)
     return "";
-  }
+
   return Object.entries(timings)
     .map(([key, timingInfos]) => {
       const dur = timingInfos
@@ -73,7 +69,7 @@ export const getServerTimeHeader = (timings?: Timings) => {
         }, 0)
         .toFixed(1);
       const desc = timingInfos
-        .map((t) => t.desc)
+        .map(t => t.desc)
         .filter(Boolean)
         .join(" & ");
       return [
@@ -85,4 +81,4 @@ export const getServerTimeHeader = (timings?: Timings) => {
         .join(";");
     })
     .join(",");
-};
+}

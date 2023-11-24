@@ -1,7 +1,6 @@
-export const TailwindIndicator = () => {
-  if (ENV.MODE === "production") {
+export function TailwindIndicator() {
+  if (ENV.MODE === "production")
     return null;
-  }
 
   return (
     <div className="fixed bottom-1 left-1 z-50 flex h-6 w-6 items-center justify-center rounded-full bg-gray-800 p-3 font-mono text-xs text-white">
@@ -13,4 +12,4 @@ export const TailwindIndicator = () => {
       <div className="hidden 2xl:block">2xl</div>
     </div>
   );
-};
+}

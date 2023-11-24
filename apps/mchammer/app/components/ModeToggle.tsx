@@ -13,11 +13,11 @@ import { useOptimisticThemeMode } from "#app/hooks/useTheme.ts";
 import type { Theme } from "#app/lib/theme.server.ts";
 import type { action } from "#app/routes/actions.theme.ts";
 
-export const ModeToggle = ({
+export function ModeToggle({
   userPreference,
 }: {
-  userPreference?: Theme | null;
-}) => {
+  userPreference?: Theme | null
+}) {
   const fetcher = useFetcher<typeof action>();
 
   const optimisticMode = useOptimisticThemeMode();
@@ -57,4 +57,4 @@ export const ModeToggle = ({
       </DropdownMenuContent>
     </DropdownMenu>
   );
-};
+}

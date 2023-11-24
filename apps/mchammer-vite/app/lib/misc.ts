@@ -1,41 +1,35 @@
 /**
  * Merge multiple headers objects into one (uses set so headers are overridden)
  */
-export const mergeHeaders = (
-  ...headers: Array<ResponseInit["headers"] | null | undefined>
-) => {
+export function mergeHeaders(...headers: Array<ResponseInit["headers"] | null | undefined>) {
   const merged = new Headers();
   for (const header of headers) {
-    if (!header) continue;
-    for (const [key, value] of new Headers(header).entries()) {
+    if (!header)
+      continue;
+    for (const [key, value] of new Headers(header).entries())
       merged.set(key, value);
-    }
   }
   return merged;
-};
+}
 
 /**
  * Combine multiple header objects into one (uses append so headers are not overridden)
  */
-export const combineHeaders = (
-  ...headers: Array<ResponseInit["headers"] | null | undefined>
-) => {
+export function combineHeaders(...headers: Array<ResponseInit["headers"] | null | undefined>) {
   const combined = new Headers();
   for (const header of headers) {
-    if (!header) continue;
-    for (const [key, value] of new Headers(header).entries()) {
+    if (!header)
+      continue;
+    for (const [key, value] of new Headers(header).entries())
       combined.append(key, value);
-    }
   }
   return combined;
-};
+}
 
 /**
  * Combine multiple response init objects into one (uses combineHeaders)
  */
-export const combineResponseInits = (
-  ...responseInits: Array<ResponseInit | null | undefined>
-) => {
+export function combineResponseInits(...responseInits: Array<ResponseInit | null | undefined>) {
   let combined: ResponseInit = {};
   for (const responseInit of responseInits) {
     combined = {
@@ -44,7 +38,7 @@ export const combineResponseInits = (
     };
   }
   return combined;
-};
+}
 
 /**
  * Provide a condition and if that condition is falsey, this throws an error
@@ -65,9 +59,8 @@ export function invariant(
   condition: any,
   message: string | (() => string),
 ): asserts condition {
-  if (!condition) {
+  if (!condition)
     throw new Error(typeof message === "function" ? message() : message);
-  }
 }
 
 /**
@@ -98,11 +91,11 @@ export function invariantResponse(
   }
 }
 
-export const getDomainUrl = (request: Request) => {
-  const host =
-    request.headers.get("X-Forwarded-Host") ??
-    request.headers.get("host") ??
-    new URL(request.url).host;
+export function getDomainUrl(request: Request) {
+  const host
+    = request.headers.get("X-Forwarded-Host")
+    ?? request.headers.get("host")
+    ?? new URL(request.url).host;
   const protocol = host.includes("localhost") ? "http" : "https";
   return `${protocol}://${host}`;
-};
+}

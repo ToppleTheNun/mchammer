@@ -1,7 +1,6 @@
 import { access, mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
-
-import { format } from "prettier";
+import process from "node:process";
 
 const date = new Date();
 
@@ -13,17 +12,17 @@ export const generated = {
 } as const;
 `;
 
-const ensureDir = async (path: string) => {
+async function ensureDir(path: string) {
   try {
     await access(path);
-  } catch (e) {
+  }
+  catch (e) {
     await mkdir(path);
   }
-};
+}
 
 (async () => {
-  const formatted = await format(contents, { parser: "typescript" });
   const pathToEnv = join(process.cwd(), "app", "generated");
   await ensureDir(pathToEnv);
-  await writeFile(join(pathToEnv, "env.ts"), formatted, "utf-8");
+  await writeFile(join(pathToEnv, "env.ts"), contents, "utf-8");
 })();

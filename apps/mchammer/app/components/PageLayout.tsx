@@ -1,14 +1,16 @@
 import type { ReactNode } from "react";
 
-export const PageLayout = ({
+export function PageLayout({
   children,
   pageHeader,
 }: {
-  children: ReactNode;
-  pageHeader?: ReactNode;
-}) => (
-  <main className="container relative">
-    {pageHeader}
-    {children}
-  </main>
-);
+  children: ReactNode
+  pageHeader?: ReactNode
+}) {
+  return (
+    <main className="container relative">
+      {pageHeader}
+      {children}
+    </main>
+  );
+}

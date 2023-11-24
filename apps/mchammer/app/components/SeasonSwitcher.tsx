@@ -26,14 +26,14 @@ import { cn } from "#app/lib/utils.ts";
 import { seasons } from "#app/seasons.ts";
 import { isPresent } from "#app/typeGuards.ts";
 
-type Season = { label: string; value: string; icon: string };
-type SeasonGroup = { label: string; seasons: Season[] };
+interface Season { label: string, value: string, icon: string }
+interface SeasonGroup { label: string, seasons: Season[] }
 
 const ptrSeasons: SeasonGroup = {
   label: "PTR Seasons",
   seasons: seasons
-    .filter((season) => season.ptr)
-    .map((season) => ({
+    .filter(season => season.ptr)
+    .map(season => ({
       label: season.name,
       value: season.slug,
       icon: season.seasonIcon,
@@ -42,8 +42,8 @@ const ptrSeasons: SeasonGroup = {
 const liveSeasons: SeasonGroup = {
   label: "Live Seasons",
   seasons: seasons
-    .filter((season) => !season.ptr)
-    .map((season) => ({
+    .filter(season => !season.ptr)
+    .map(season => ({
       label: season.name,
       value: season.slug,
       icon: season.seasonIcon,
@@ -55,15 +55,16 @@ const groups: SeasonGroup[] = [
   liveSeasons,
 ].filter(isPresent);
 
-const findMatchingSeason = (name: string | undefined): Season | undefined =>
-  groups
-    .flatMap((group) => group.seasons)
-    .find((season) => season.value === name);
+function findMatchingSeason(name: string | undefined): Season | undefined {
+  return groups
+    .flatMap(group => group.seasons)
+    .find(season => season.value === name);
+}
 
 type PopoverTriggerProps = ComponentPropsWithoutRef<typeof PopoverTrigger>;
 
 interface SeasonSwitcherProps extends PopoverTriggerProps {}
-export const SeasonSwitcher = ({ className }: SeasonSwitcherProps) => {
+export function SeasonSwitcher({ className }: SeasonSwitcherProps) {
   const navigate = useNavigate();
   const params = useParams();
   const [open, setOpen] = useState(false);
@@ -75,7 +76,7 @@ export const SeasonSwitcher = ({ className }: SeasonSwitcherProps) => {
     const down = (e: KeyboardEvent) => {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
-        setOpen((open) => !open);
+        setOpen(open => !open);
       }
     };
 
@@ -112,9 +113,9 @@ export const SeasonSwitcher = ({ className }: SeasonSwitcherProps) => {
           <CommandList>
             <CommandInput placeholder="Search season..." />
             <CommandEmpty>No season found.</CommandEmpty>
-            {groups.map((group) => (
+            {groups.map(group => (
               <CommandGroup key={group.label} heading={group.label}>
-                {group.seasons.map((season) => (
+                {group.seasons.map(season => (
                   <CommandItem
                     key={season.value}
                     onSelect={() => {
@@ -151,4 +152,4 @@ export const SeasonSwitcher = ({ className }: SeasonSwitcherProps) => {
       </PopoverContent>
     </Popover>
   );
-};
+}

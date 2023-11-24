@@ -13,15 +13,15 @@ import { siteConfig } from "~/config/site.ts";
 import { cn } from "~/lib/utils.ts";
 
 interface MobileLinkProps extends LinkProps {
-  onOpenChange?: (open: boolean) => void;
+  onOpenChange?: (open: boolean) => void
 }
-const MobileLink = ({
+function MobileLink({
   to,
   onOpenChange,
   className,
   children,
   ...props
-}: MobileLinkProps) => {
+}: MobileLinkProps) {
   const navigate = useNavigate();
 
   return (
@@ -32,13 +32,14 @@ const MobileLink = ({
         onOpenChange?.(false);
       }}
       className={cn(className)}
+      {...props}
     >
       {children}
     </Link>
   );
-};
+}
 
-export const MobileNav = () => {
+export function MobileNav() {
   const [open, setOpen] = useState(false);
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -67,4 +68,4 @@ export const MobileNav = () => {
       </SheetContent>
     </Sheet>
   );
-};
+}

@@ -9,27 +9,26 @@ import type {
 import { debug, error, info } from "#app/lib/log.server.ts";
 import type { Timings } from "#app/lib/timing.server.ts";
 
-export const ingestWarcraftLogsReport = async (
-  reportCode: string,
-  timings: Timings,
-) => {
+export async function ingestWarcraftLogsReport(reportCode: string, timings: Timings) {
   info(`Ingesting WCL report: ${reportCode}`);
   let fights: ReportWithIngestedFights;
   try {
     fights = await ingestFightsFromReport(reportCode, timings);
-  } catch (e) {
+  }
+  catch (e) {
     error(`Unable to ingest WCL report: ${reportCode}`, e);
     return;
   }
   debug(
     `Ingested fights from ${reportCode}:`,
-    fights.fights.map((fight) => fight.id)?.join(", "),
+    fights.fights.map(fight => fight.id)?.join(", "),
   );
 
   let damageTakenEvents: ReportWithIngestedDamageTakenEvents;
   try {
     damageTakenEvents = await ingestDamageTakenEvents(fights, timings);
-  } catch (e) {
+  }
+  catch (e) {
     error(
       `Unable to ingest WCL damage taken events for report: ${reportCode}`,
       e,
@@ -47,7 +46,8 @@ export const ingestWarcraftLogsReport = async (
       damageTakenEvents,
       timings,
     );
-  } catch (e) {
+  }
+  catch (e) {
     error(
       `Unable to ingest dodge/parry/miss streaks for report: ${reportCode}`,
       e,
@@ -58,4 +58,4 @@ export const ingestWarcraftLogsReport = async (
     `Ingested dodge/parry/miss streaks from ${reportCode}: `,
     dodgeParryMissStreaks.dodgeParryMissStreaks.length,
   );
-};
+}

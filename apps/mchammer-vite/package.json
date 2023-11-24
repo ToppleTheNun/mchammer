@@ -1,9 +1,9 @@
 {
   "name": "@topplethenun/mchammer-vite",
   "type": "module",
+  "private": true,
   "author": "Richard Harrah",
   "license": "MIT",
-  "private": true,
   "engines": {
     "node": ">=18"
   },
@@ -16,11 +16,10 @@
     "dev": "nr build:generate-env && nr build:icons && nr dev:remix",
     "dev:remix": "nr with-env node ./server.mjs | pino-pretty",
     "drizzle:gen": "nr with-env drizzle-kit generate:pg",
-    "drizzle:migrate": "nr with-env tsx app/lib/db/migrate.ts",
+    "drizzle:migrate": "nr with-env tsx app/lib/db/migrate.server.ts",
     "drizzle:push": "nr with-env drizzle-kit push:pg",
-    "drizzle:seed": "nr with-env tsx app/lib/db/seed.ts",
-    "lint": "eslint app",
-    "lint:fix": "eslint --fix app",
+    "drizzle:seed": "nr with-env tsx app/lib/db/seed.server.ts",
+    "lint": "eslint .",
     "start": "cross-env NODE_ENV=production dotenv -e ../../.env -- node ./server.mjs",
     "test": "vitest --passWithNoTests",
     "typecheck": "tsc",
@@ -29,6 +28,7 @@
   "dependencies": {
     "@conform-to/react": "0.9.1",
     "@conform-to/zod": "0.9.1",
+    "@epic-web/client-hints": "1.2.2",
     "@radix-ui/react-avatar": "1.0.4",
     "@radix-ui/react-dialog": "1.0.5",
     "@radix-ui/react-dropdown-menu": "2.0.6",
@@ -65,6 +65,7 @@
     "zod": "3.22.4"
   },
   "devDependencies": {
+    "@antfu/eslint-config": "2.1.0",
     "@antfu/ni": "0.21.10",
     "@remix-run/dev": "2.3.1",
     "@remix-run/eslint-config": "2.3.1",
@@ -86,6 +87,9 @@
     "dotenv-cli": "7.3.0",
     "drizzle-kit": "0.20.4",
     "eslint": "8.54.0",
+    "eslint-plugin-react": "7.33.2",
+    "eslint-plugin-react-hooks": "4.6.0",
+    "eslint-plugin-react-refresh": "0.4.4",
     "execa": "8.0.1",
     "fontpie": "0.3.0",
     "fs-extra": "11.1.1",

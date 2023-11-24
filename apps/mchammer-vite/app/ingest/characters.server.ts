@@ -1,31 +1,25 @@
-import { type PlayerDetail } from "@topplethenun/mchammer-wcl";
+import type { PlayerDetail } from "@topplethenun/mchammer-wcl";
 import { eq } from "drizzle-orm";
 
-import { type Region } from "~/constants.ts";
+import type { Region } from "~/constants.ts";
 import { type Character, character } from "~/lib/db/schema.ts";
 import { getLogger } from "~/lib/logger.server.ts";
 import { pg } from "~/lib/storage.server.ts";
-import { time, type Timings } from "~/lib/timing.server.ts";
+import { type Timings, time } from "~/lib/timing.server.ts";
 
 const ingestCharactersLogger = getLogger(["ingest", "characters"]);
 
-const findCharacter = (
-  playerDetail: PlayerDetail,
-  timings: Timings,
-): Promise<Character | undefined> =>
-  time(
+function findCharacter(playerDetail: PlayerDetail, timings: Timings): Promise<Character | undefined> {
+  return time(
     () =>
       pg.query.character.findFirst({
         where: eq(character.id, playerDetail.guid),
       }),
     { type: `findCharacter(${playerDetail.guid})`, timings },
   );
+}
 
-export const findOrCreateCharacter = async (
-  playerDetail: PlayerDetail,
-  region: Region,
-  timings: Timings,
-): Promise<Character> => {
+export async function findOrCreateCharacter(playerDetail: PlayerDetail, region: Region, timings: Timings): Promise<Character> {
   const logger = ingestCharactersLogger.child({ character: playerDetail.guid });
 
   const foundCharacter = await findCharacter(playerDetail, timings);
@@ -65,4 +59,4 @@ export const findOrCreateCharacter = async (
   throw new Error(
     `Unable to find or create character with guid: ${playerDetail.guid}`,
   );
-};
+}

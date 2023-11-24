@@ -2,16 +2,16 @@ import type { ColumnDef } from "@tanstack/react-table";
 
 import type { Region } from "~/constants.ts";
 
-export type DodgeParryMissStreak = {
-  id: number;
-  region: Region;
-  realm: string;
-  character: string;
-  dodge: number;
-  parry: number;
-  miss: number;
-  streak: number;
-};
+export interface DodgeParryMissStreak {
+  id: number
+  region: Region
+  realm: string
+  character: string
+  dodge: number
+  parry: number
+  miss: number
+  streak: number
+}
 
 export const columns: ColumnDef<DodgeParryMissStreak>[] = [
   {

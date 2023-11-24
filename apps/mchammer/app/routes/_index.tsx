@@ -7,7 +7,7 @@ import { combineHeaders, invariantResponse } from "#app/lib/misc.ts";
 import { makeTimings, time } from "#app/lib/timing.server.ts";
 import { findSeasonByName } from "#app/seasons.ts";
 
-export const loader = async () => {
+export async function loader() {
   const timings = makeTimings("index loader");
 
   const latest = await time(() => findSeasonByName("latest"), {
@@ -23,7 +23,7 @@ export const loader = async () => {
     status: 307,
     headers: combineHeaders({ [serverTiming]: timings.toString() }),
   });
-};
+}
 
 const IndexRoute = () => <Outlet />;
 

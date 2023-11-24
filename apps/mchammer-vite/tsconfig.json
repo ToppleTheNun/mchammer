@@ -1,10 +1,11 @@
 {
   "extends": ["@topplethenun/mchammer-tsconfig/remix.json"],
-  "include": ["env.d.ts", "reset.d.ts", "**/*.ts", "**/*.tsx"],
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
       "~/*": ["./app/*"]
     }
-  }
+  },
+  "include": ["env.d.ts", "reset.d.ts", "**/*.ts", "**/*.tsx",
+    "**/*.js"]
 }

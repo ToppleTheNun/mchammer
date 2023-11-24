@@ -18,12 +18,13 @@ const Command = React.forwardRef<
     )}
     {...props}
   />
-));
+),
+);
 Command.displayName = CommandPrimitive.displayName;
 
 interface CommandDialogProps extends DialogProps {}
 
-const CommandDialog = ({ children, ...props }: CommandDialogProps) => {
+function CommandDialog({ children, ...props }: CommandDialogProps) {
   return (
     <Dialog {...props}>
       <DialogContent className="overflow-hidden p-0 shadow-lg">
@@ -33,7 +34,7 @@ const CommandDialog = ({ children, ...props }: CommandDialogProps) => {
       </DialogContent>
     </Dialog>
   );
-};
+}
 
 const CommandInput = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.Input>,
@@ -54,7 +55,8 @@ const CommandInput = React.forwardRef<
       {...props}
     />
   </div>
-));
+),
+);
 
 CommandInput.displayName = CommandPrimitive.Input.displayName;
 
@@ -67,7 +69,8 @@ const CommandList = React.forwardRef<
     className={cn("max-h-[300px] overflow-y-auto overflow-x-hidden", className)}
     {...props}
   />
-));
+),
+);
 
 CommandList.displayName = CommandPrimitive.List.displayName;
 
@@ -80,7 +83,8 @@ const CommandEmpty = React.forwardRef<
     className="py-6 text-center text-sm"
     {...props}
   />
-));
+),
+);
 
 CommandEmpty.displayName = CommandPrimitive.Empty.displayName;
 
@@ -96,7 +100,8 @@ const CommandGroup = React.forwardRef<
     )}
     {...props}
   />
-));
+),
+);
 
 CommandGroup.displayName = CommandPrimitive.Group.displayName;
 
@@ -109,7 +114,8 @@ const CommandSeparator = React.forwardRef<
     className={cn("bg-border -mx-1 h-px", className)}
     {...props}
   />
-));
+),
+);
 CommandSeparator.displayName = CommandPrimitive.Separator.displayName;
 
 const CommandItem = React.forwardRef<
@@ -124,14 +130,15 @@ const CommandItem = React.forwardRef<
     )}
     {...props}
   />
-));
+),
+);
 
 CommandItem.displayName = CommandPrimitive.Item.displayName;
 
-const CommandShortcut = ({
+function CommandShortcut({
   className,
   ...props
-}: React.HTMLAttributes<HTMLSpanElement>) => {
+}: React.HTMLAttributes<HTMLSpanElement>) {
   return (
     <span
       className={cn(
@@ -141,7 +148,7 @@ const CommandShortcut = ({
       {...props}
     />
   );
-};
+}
 CommandShortcut.displayName = "CommandShortcut";
 
 export {

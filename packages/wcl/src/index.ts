@@ -1,4 +1,4 @@
-import { getGqlClient, type GetGqlClientParams } from "./client.ts";
+import { type GetGqlClientParams, getGqlClient } from "./client.ts";
 import {
   GetCombatantInfoEventsDocument,
   type GetCombatantInfoEventsQuery,
@@ -30,9 +30,9 @@ export class WclClient {
     const result = await client
       .query<GetFightsQuery, GetFightsQueryVariables>(GetFightsDocument, params)
       .toPromise();
-    if (!result.data) {
+    if (!result.data)
       throw new Error("Unable to retrieve fight data");
-    }
+
     return result.data;
   }
 
@@ -47,9 +47,9 @@ export class WclClient {
         params,
       )
       .toPromise();
-    if (!result.data) {
+    if (!result.data)
       throw new Error("Unable to retrieve fight by ID data");
-    }
+
     return result.data;
   }
 
@@ -64,9 +64,9 @@ export class WclClient {
         params,
       )
       .toPromise();
-    if (!result.data) {
+    if (!result.data)
       throw new Error("Unable to retrieve player details data");
-    }
+
     return result.data;
   }
 
@@ -81,9 +81,9 @@ export class WclClient {
         params,
       )
       .toPromise();
-    if (!result.data) {
+    if (!result.data)
       throw new Error("Unable to retrieve combatant info events data");
-    }
+
     return result.data;
   }
 
@@ -96,11 +96,13 @@ export class WclClient {
       .query<
         GetPhysicalDamageTakenEventsQuery,
         GetPhysicalDamageTakenEventsQueryVariables
-      >(GetPhysicalDamageTakenEventsDocument, params)
+      >(GetPhysicalDamageTakenEventsDocument,
+        params,
+      )
       .toPromise();
-    if (!result.data) {
+    if (!result.data)
       throw new Error("Unable to retrieve physical damage taken events data");
-    }
+
     return result.data;
   }
 }

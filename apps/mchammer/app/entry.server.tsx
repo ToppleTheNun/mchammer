@@ -13,11 +13,10 @@ import { getEnv, init } from "./lib/env.server.ts";
 const ABORT_DELAY = 5_000;
 
 init();
-global.ENV = getEnv();
+globalThis.ENV = getEnv();
 
-if (ENV.MODE === "production" && ENV.SENTRY_DSN) {
+if (ENV.MODE === "production" && ENV.SENTRY_DSN)
   import("./lib/monitoring.server.ts").then(({ init }) => init());
-}
 
 export function handleError(
   error: unknown,
@@ -25,7 +24,8 @@ export function handleError(
 ): void {
   if (error instanceof Error) {
     captureRemixServerException(error, "remix.server.ts", request);
-  } else {
+  }
+  else {
     // Optionally capture non-Error objects
     captureException(error);
   }
@@ -47,17 +47,17 @@ export default function handleRequest(
   }
   return isbot(request.headers.get("user-agent"))
     ? handleBotRequest(
-        request,
-        responseStatusCode,
-        responseHeaders,
-        remixContext,
-      )
+      request,
+      responseStatusCode,
+      responseHeaders,
+      remixContext,
+    )
     : handleBrowserRequest(
-        request,
-        responseStatusCode,
-        responseHeaders,
-        remixContext,
-      );
+      request,
+      responseStatusCode,
+      responseHeaders,
+      remixContext,
+    );
 }
 
 function handleVercelRequest(
@@ -114,9 +114,8 @@ function handleBotRequest(
           // Log streaming rendering errors from inside the shell.  Don't log
           // errors encountered during initial shell rendering since they'll
           // reject and get logged in handleDocumentRequest.
-          if (shellRendered) {
+          if (shellRendered)
             console.error(error);
-          }
         },
       },
     );
@@ -164,9 +163,8 @@ function handleBrowserRequest(
           // Log streaming rendering errors from inside the shell.  Don't log
           // errors encountered during initial shell rendering since they'll
           // reject and get logged in handleDocumentRequest.
-          if (shellRendered) {
+          if (shellRendered)
             console.error(error);
-          }
         },
       },
     );

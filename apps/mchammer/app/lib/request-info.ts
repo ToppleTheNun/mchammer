@@ -1,7 +1,7 @@
 import { useRouteLoaderData } from "@remix-run/react";
 
 import { invariant } from "#app/lib/misc.ts";
-import { type loader as rootLoader } from "#app/root.tsx";
+import type { loader as rootLoader } from "#app/root.tsx";
 
 /**
  * @returns the request info from the root loader

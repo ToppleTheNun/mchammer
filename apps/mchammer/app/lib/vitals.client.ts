@@ -1,22 +1,20 @@
-import { type Metric } from "web-vitals";
+import type { Metric } from "web-vitals";
 
 const vitalsUrl = "https://vitals.vercel-analytics.com/v1/vitals";
 
 declare global {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface Navigator {
     connection?: {
-      effectiveType?: string;
-    };
+      effectiveType?: string
+    }
   }
 }
 
 function sendToVercelAnalytics(metric: Metric): void {
   const analyticsId = window.ENV.VERCEL_ANALYTICS_ID;
 
-  if (!analyticsId) {
+  if (!analyticsId)
     return;
-  }
 
   const body = {
     dsn: analyticsId,
@@ -34,7 +32,8 @@ function sendToVercelAnalytics(metric: Metric): void {
   });
   if (navigator.sendBeacon) {
     navigator.sendBeacon(vitalsUrl, blob);
-  } else {
+  }
+  else {
     void fetch(vitalsUrl, {
       body: blob,
       method: "POST",
@@ -44,7 +43,7 @@ function sendToVercelAnalytics(metric: Metric): void {
   }
 }
 
-export const reportWebVitalsToVercelAnalytics = (): void => {
+export function reportWebVitalsToVercelAnalytics(): void {
   import(/* webpackChunkName: "web-vitals" */ "web-vitals").then(
     ({ onCLS, onFID, onFCP, onLCP, onTTFB }) => {
       onCLS(sendToVercelAnalytics);
@@ -54,4 +53,4 @@ export const reportWebVitalsToVercelAnalytics = (): void => {
       onTTFB(sendToVercelAnalytics);
     },
   );
-};
+}

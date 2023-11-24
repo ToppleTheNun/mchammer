@@ -6,7 +6,7 @@ import type {
 import { damageTakenEventArraySchema } from "@topplethenun/mchammer-wcl";
 import { uniqBy } from "lodash-es";
 
-import { type Region } from "#app/constants.ts";
+import type { Region } from "#app/constants.ts";
 import { findOrCreateCharacter } from "#app/ingest/characters.server.js";
 import type {
   IngestedReportDamageTakenEvent,
@@ -17,19 +17,16 @@ import type {
   ReportWithIngestedFights,
   ReportWithIngestibleDamageTakenEvents,
 } from "#app/ingest/types.ts";
-import { type Character } from "#app/lib/db/schema.ts";
+import type { Character } from "#app/lib/db/schema.ts";
 import { debug, error, info, warn } from "#app/lib/log.server.ts";
-import { time, type Timings } from "#app/lib/timing.server.ts";
+import { type Timings, time } from "#app/lib/timing.server.ts";
 import { wcl } from "#app/lib/wcl.server.ts";
 
-type GetDamageTakenEventsDuringTimestampResult = {
-  nextPageTimestamp: number | null;
-  events: DamageTakenEvents;
-};
-const getDamageTakenEventsDuringTimestamp = async (
-  queryVariables: GetPhysicalDamageTakenEventsQueryVariables,
-  timings: Timings,
-): Promise<GetDamageTakenEventsDuringTimestampResult> => {
+interface GetDamageTakenEventsDuringTimestampResult {
+  nextPageTimestamp: number | null
+  events: DamageTakenEvents
+}
+async function getDamageTakenEventsDuringTimestamp(queryVariables: GetPhysicalDamageTakenEventsQueryVariables, timings: Timings): Promise<GetDamageTakenEventsDuringTimestampResult> {
   const reportID = queryVariables.reportID;
   debug(
     `Retrieving physical damage taken events taken from ${queryVariables.startTime} to ${queryVariables.endTime} for ${reportID}`,
@@ -44,8 +41,8 @@ const getDamageTakenEventsDuringTimestamp = async (
   );
 
   const rawEvents = results.reportData?.report?.events?.data;
-  const nextPageTimestamp =
-    results.reportData?.report?.events?.nextPageTimestamp;
+  const nextPageTimestamp
+    = results.reportData?.report?.events?.nextPageTimestamp;
   const parseResults = await time(
     () => damageTakenEventArraySchema.safeParseAsync(rawEvents),
     {
@@ -69,12 +66,9 @@ const getDamageTakenEventsDuringTimestamp = async (
     nextPageTimestamp: nextPageTimestamp ?? null,
     events: parseResults.data,
   };
-};
+}
 
-const getReportDamageTakenEventsForFight = async (
-  fight: IngestedReportFight,
-  timings: Timings,
-): Promise<ReportDamageTakenEvent[]> => {
+async function getReportDamageTakenEventsForFight(fight: IngestedReportFight, timings: Timings): Promise<ReportDamageTakenEvent[]> {
   let startTime = fight.startTime;
   const endTime = fight.endTime;
   const reportID = fight.reportID;
@@ -85,8 +79,8 @@ const getReportDamageTakenEventsForFight = async (
   );
 
   do {
-    const { nextPageTimestamp, events } =
-      await getDamageTakenEventsDuringTimestamp(
+    const { nextPageTimestamp, events }
+      = await getDamageTakenEventsDuringTimestamp(
         {
           startTime,
           endTime,
@@ -96,7 +90,7 @@ const getReportDamageTakenEventsForFight = async (
       );
     startTime = nextPageTimestamp ?? -1;
     fightDamageTakenEvents = fightDamageTakenEvents.concat(
-      events.map<ReportDamageTakenEvent>((event) => ({
+      events.map<ReportDamageTakenEvent>(event => ({
         ...event,
         reportID: fight.reportID,
         reportRegion: fight.reportRegion,
@@ -107,24 +101,19 @@ const getReportDamageTakenEventsForFight = async (
   } while (startTime > 0);
 
   return fightDamageTakenEvents;
-};
+}
 
-const getReportDamageTakenEvents = async (
-  report: ReportWithIngestedFights,
-  timings: Timings,
-) =>
-  Promise.allSettled(
-    report.fights.map((fight) =>
+async function getReportDamageTakenEvents(report: ReportWithIngestedFights, timings: Timings) {
+  return Promise.allSettled(
+    report.fights.map(fight =>
       getReportDamageTakenEventsForFight(fight, timings),
     ),
   );
+}
 
-const makeReportDamageTakenEventIngestible = async (
-  damageEvent: ReportDamageTakenEvent,
-  report: ReportWithIngestedFights,
-): Promise<IngestibleReportDamageTakenEvent> => {
+async function makeReportDamageTakenEventIngestible(damageEvent: ReportDamageTakenEvent, report: ReportWithIngestedFights): Promise<IngestibleReportDamageTakenEvent> {
   const reportFight = report.fights.find(
-    (fight) =>
+    fight =>
       fight.reportID === damageEvent.reportID && fight.id === damageEvent.fight,
   );
   if (!reportFight) {
@@ -133,7 +122,7 @@ const makeReportDamageTakenEventIngestible = async (
     );
   }
   const character = reportFight.friendlyPlayerDetails.find(
-    (player) => damageEvent.targetID === player.id,
+    player => damageEvent.targetID === player.id,
   );
   if (!character) {
     throw new Error(
@@ -146,19 +135,16 @@ const makeReportDamageTakenEventIngestible = async (
     ingestedFight: reportFight.ingestedFight,
     character,
   };
-};
+}
 
-const addIngestibleDamageTakenEventsToReport = async (
-  report: ReportWithIngestedFights,
-  timings: Timings,
-): Promise<ReportWithIngestibleDamageTakenEvents> => {
+async function addIngestibleDamageTakenEventsToReport(report: ReportWithIngestedFights, timings: Timings): Promise<ReportWithIngestibleDamageTakenEvents> {
   const reportDamageTakenEventResults = await getReportDamageTakenEvents(
     report,
     timings,
   );
   reportDamageTakenEventResults
     .filter((it): it is PromiseRejectedResult => it.status === "rejected")
-    .forEach((it) => error(it.reason));
+    .forEach(it => error(it.reason));
   const reportDamageTakenEvents = reportDamageTakenEventResults
     .filter(
       (it): it is PromiseFulfilledResult<ReportDamageTakenEvent[]> =>
@@ -170,40 +156,34 @@ const addIngestibleDamageTakenEventsToReport = async (
     );
 
   const ingestibleEventResults = await Promise.allSettled(
-    reportDamageTakenEvents.map((event) =>
+    reportDamageTakenEvents.map(event =>
       makeReportDamageTakenEventIngestible(event, report),
     ),
   );
   ingestibleEventResults
     .filter((it): it is PromiseRejectedResult => it.status === "rejected")
-    .forEach((it) => error(it.reason));
+    .forEach(it => error(it.reason));
   const ingestibleEvents = ingestibleEventResults
     .filter(
       (it): it is PromiseFulfilledResult<IngestibleReportDamageTakenEvent> =>
         it.status === "fulfilled",
     )
-    .map((it) => it.value);
+    .map(it => it.value);
 
   return { ...report, damageTakenEvents: ingestibleEvents };
-};
+}
 
-const ingestCharacters = async (
-  playerDetails: PlayerDetail[],
-  reportRegion: Region,
-  timings: Timings,
-) =>
-  Promise.allSettled(
-    playerDetails.map((playerDetail) =>
+async function ingestCharacters(playerDetails: PlayerDetail[], reportRegion: Region, timings: Timings) {
+  return Promise.allSettled(
+    playerDetails.map(playerDetail =>
       findOrCreateCharacter(playerDetail, reportRegion, timings),
     ),
   );
+}
 
-const ingestDamageTakenEvent = async (
-  damageTakenEvent: IngestibleReportDamageTakenEvent,
-  characters: Character[],
-): Promise<IngestedReportDamageTakenEvent> => {
+async function ingestDamageTakenEvent(damageTakenEvent: IngestibleReportDamageTakenEvent, characters: Character[]): Promise<IngestedReportDamageTakenEvent> {
   const matchingCharacter = characters.find(
-    (character) => character.id === damageTakenEvent.character.guid,
+    character => character.id === damageTakenEvent.character.guid,
   );
   if (!matchingCharacter) {
     throw new Error(
@@ -211,22 +191,19 @@ const ingestDamageTakenEvent = async (
     );
   }
   return { ...damageTakenEvent, ingestedCharacter: matchingCharacter };
-};
+}
 
-const ingestDamageTakenEventsForReport = async (
-  report: ReportWithIngestibleDamageTakenEvents,
-  timings: Timings,
-) => {
+async function ingestDamageTakenEventsForReport(report: ReportWithIngestibleDamageTakenEvents, timings: Timings) {
   const allPlayerDetails = report.fights.flatMap(
-    (it) => it.friendlyPlayerDetails,
+    it => it.friendlyPlayerDetails,
   );
   const uniquePlayerDetails = uniqBy(
     allPlayerDetails,
-    (playerDetail) => playerDetail.guid,
+    playerDetail => playerDetail.guid,
   );
-  const filteredPlayerDetails = uniquePlayerDetails.filter((playerDetails) =>
+  const filteredPlayerDetails = uniquePlayerDetails.filter(playerDetails =>
     report.damageTakenEvents.some(
-      (damageTakenEvent) => damageTakenEvent.targetID === playerDetails.id,
+      damageTakenEvent => damageTakenEvent.targetID === playerDetails.id,
     ),
   );
 
@@ -241,44 +218,41 @@ const ingestDamageTakenEventsForReport = async (
   );
   ingestCharactersResults
     .filter((it): it is PromiseRejectedResult => it.status === "rejected")
-    .forEach((it) => error(it.reason));
+    .forEach(it => error(it.reason));
   const characters = ingestCharactersResults
     .filter(
       (it): it is PromiseFulfilledResult<Character> =>
         it.status === "fulfilled",
     )
-    .map((it) => it.value)
+    .map(it => it.value)
     .flat();
   info(`Ingested players for report ${report.reportID}:`, characters.length);
 
   return Promise.allSettled(
-    report.damageTakenEvents.map((damageTakenEvent) =>
+    report.damageTakenEvents.map(damageTakenEvent =>
       ingestDamageTakenEvent(damageTakenEvent, characters),
     ),
   );
-};
+}
 
-export const ingestDamageTakenEvents = async (
-  report: ReportWithIngestedFights,
-  timings: Timings,
-): Promise<ReportWithIngestedDamageTakenEvents> => {
-  const reportWithIngestibleDamageTakenEvents =
-    await addIngestibleDamageTakenEventsToReport(report, timings);
+export async function ingestDamageTakenEvents(report: ReportWithIngestedFights, timings: Timings): Promise<ReportWithIngestedDamageTakenEvents> {
+  const reportWithIngestibleDamageTakenEvents
+    = await addIngestibleDamageTakenEventsToReport(report, timings);
 
-  const ingestedDamageTakenEventsResults =
-    await ingestDamageTakenEventsForReport(
+  const ingestedDamageTakenEventsResults
+    = await ingestDamageTakenEventsForReport(
       reportWithIngestibleDamageTakenEvents,
       timings,
     );
   ingestedDamageTakenEventsResults
     .filter((it): it is PromiseRejectedResult => it.status === "rejected")
-    .forEach((it) => error(it.reason));
+    .forEach(it => error(it.reason));
   const ingestedDamageTakenEvents = ingestedDamageTakenEventsResults
     .filter(
       (it): it is PromiseFulfilledResult<IngestedReportDamageTakenEvent> =>
         it.status === "fulfilled",
     )
-    .map((it) => it.value);
+    .map(it => it.value);
 
   return { ...report, damageTakenEvents: ingestedDamageTakenEvents };
-};
+}

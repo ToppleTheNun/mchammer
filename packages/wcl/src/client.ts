@@ -1,12 +1,13 @@
 import { Client, fetchExchange } from "@urql/core";
 
-import { wclOAuthResponseSchema, WCLOAuthResponse, WCLAuth } from "./zod.ts";
+import type { WCLAuth, WCLOAuthResponse } from "./zod.ts";
+import { wclOAuthResponseSchema } from "./zod.ts";
 
-type Cache = {
-  client: Client | null;
-  expiresAt: number | null;
-  pending: boolean;
-};
+interface Cache {
+  client: Client | null
+  expiresAt: number | null
+  pending: boolean
+}
 
 const cache: Cache = {
   client: null,
@@ -16,27 +17,26 @@ const cache: Cache = {
 
 const FIVE_DAYS_IN_SECONDS = 5 * 24 * 60 * 60;
 
-const mustRefreshToken = (expiresAt: number) => {
+function mustRefreshToken(expiresAt: number) {
   const now = Math.floor(Date.now() / 1000);
 
   return expiresAt <= now || expiresAt - now <= FIVE_DAYS_IN_SECONDS;
-};
+}
 
 export interface GetGqlClientParams {
-  clientId: string;
-  clientSecret: string;
-  getWCLAuthentication: () => Promise<WCLAuth | null>;
-  setWCLAuthentication: (wclOAuthResponse: WCLOAuthResponse) => Promise<void>;
+  clientId: string
+  clientSecret: string
+  getWCLAuthentication: () => Promise<WCLAuth | null>
+  setWCLAuthentication: (wclOAuthResponse: WCLOAuthResponse) => Promise<void>
 }
-export const getGqlClient = async ({
+export async function getGqlClient({
   clientId,
   clientSecret,
   getWCLAuthentication,
   setWCLAuthentication,
-}: GetGqlClientParams): Promise<Client> => {
-  if (!clientId || !clientSecret) {
+}: GetGqlClientParams): Promise<Client> {
+  if (!clientId || !clientSecret)
     throw new Error("missing WCL environment variables");
-  }
 
   if (cache.pending) {
     await new Promise((resolve) => {
@@ -51,19 +51,18 @@ export const getGqlClient = async ({
     });
   }
 
-  if (cache.client && cache.expiresAt && !mustRefreshToken(cache.expiresAt)) {
+  if (cache.client && cache.expiresAt && !mustRefreshToken(cache.expiresAt))
     return cache.client;
-  }
 
   cache.pending = true;
   const persisted = await getWCLAuthentication();
 
   if (
-    persisted?.token &&
-    persisted.expiresAt &&
-    !mustRefreshToken(persisted.expiresAt) &&
-    !cache.client &&
-    !cache.expiresAt
+    persisted?.token
+    && persisted.expiresAt
+    && !mustRefreshToken(persisted.expiresAt)
+    && !cache.client
+    && !cache.expiresAt
   ) {
     cache.client = new Client({
       url: "https://www.warcraftlogs.com/api/v2/client",
@@ -101,9 +100,9 @@ export const getGqlClient = async ({
 
       await setWCLAuthentication(json);
 
-      cache.client =
-        cache.client ??
-        new Client({
+      cache.client
+        = cache.client
+        ?? new Client({
           url: "https://www.warcraftlogs.com/api/v2/client",
           exchanges: [fetchExchange],
           fetchOptions: () => ({
@@ -119,7 +118,8 @@ export const getGqlClient = async ({
     }
 
     throw new Error("unable to authenticate with WCL");
-  } catch {
+  }
+  catch {
     throw new Error("unable to authenticate with WCL");
   }
-};
+}

@@ -3,7 +3,7 @@ import { sentryVitePlugin } from "@sentry/vite-plugin";
 import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
-export default defineConfig((env) => ({
+export default defineConfig({
   build: {
     sourcemap: true,
   },
@@ -18,4 +18,4 @@ export default defineConfig((env) => ({
       project: "mchammer",
     }),
   ],
-}));
+});

@@ -15,12 +15,12 @@ const hintsUtils = getHintUtils({
 
 export const { getHints } = hintsUtils;
 
-export const useHints = () => {
+export function useHints() {
   const requestInfo = useRequestInfo();
   return requestInfo.hints;
-};
+}
 
-export const ClientHintCheck = ({ nonce }: { nonce: string }) => {
+export function ClientHintCheck({ nonce }: { nonce: string }) {
   const { revalidate } = useRevalidator();
   useEffect(() => subscribeToSchemeChange(() => revalidate()), [revalidate]);
 
@@ -32,4 +32,4 @@ export const ClientHintCheck = ({ nonce }: { nonce: string }) => {
       }}
     />
   );
-};
+}

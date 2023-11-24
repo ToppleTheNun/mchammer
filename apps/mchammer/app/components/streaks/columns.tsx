@@ -12,16 +12,16 @@ import {
 } from "#app/components/ui/dropdown-menu.tsx";
 import type { Region } from "#app/constants.ts";
 
-export type DodgeParryMissStreak = {
-  id: number;
-  region: Region;
-  realm: string;
-  character: string;
-  dodge: number;
-  parry: number;
-  miss: number;
-  streak: number;
-};
+export interface DodgeParryMissStreak {
+  id: number
+  region: Region
+  realm: string
+  character: string
+  dodge: number
+  parry: number
+  miss: number
+  streak: number
+}
 
 export const columns: ColumnDef<DodgeParryMissStreak>[] = [
   {
@@ -29,9 +29,9 @@ export const columns: ColumnDef<DodgeParryMissStreak>[] = [
     header: "Region",
     cell: ({ row }) => {
       const region = row.getValue("region");
-      if (typeof region === "string") {
+      if (typeof region === "string")
         return <div>{region.toUpperCase()}</div>;
-      }
+
       return <div>???</div>;
     },
   },
@@ -47,7 +47,7 @@ export const columns: ColumnDef<DodgeParryMissStreak>[] = [
     accessorKey: "dodge",
     header: () => <div className="text-right">Dodge</div>,
     cell: ({ row }) => {
-      const amount = parseInt(row.getValue("dodge"));
+      const amount = Number.parseInt(row.getValue("dodge"));
       return <div className="text-right font-medium">{amount}</div>;
     },
   },
@@ -55,7 +55,7 @@ export const columns: ColumnDef<DodgeParryMissStreak>[] = [
     accessorKey: "parry",
     header: () => <div className="text-right">Parry</div>,
     cell: ({ row }) => {
-      const amount = parseInt(row.getValue("parry"));
+      const amount = Number.parseInt(row.getValue("parry"));
       return <div className="text-right font-medium">{amount}</div>;
     },
   },
@@ -63,7 +63,7 @@ export const columns: ColumnDef<DodgeParryMissStreak>[] = [
     accessorKey: "miss",
     header: () => <div className="text-right">Miss</div>,
     cell: ({ row }) => {
-      const amount = parseInt(row.getValue("miss"));
+      const amount = Number.parseInt(row.getValue("miss"));
       return <div className="text-right font-medium">{amount}</div>;
     },
   },
@@ -71,16 +71,14 @@ export const columns: ColumnDef<DodgeParryMissStreak>[] = [
     accessorKey: "streak",
     header: () => <div className="text-right">Streak</div>,
     cell: ({ row }) => {
-      const amount = parseInt(row.getValue("streak"));
+      const amount = Number.parseInt(row.getValue("streak"));
       return <div className="text-right font-medium">{amount}</div>;
     },
   },
   {
     id: "actions",
-    cell: ({ row }) => {
-      const streak = row.original;
-
-      return (
+    cell: () =>
+      (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
@@ -96,7 +94,6 @@ export const columns: ColumnDef<DodgeParryMissStreak>[] = [
             <DropdownMenuItem>View streak on WarcraftLogs</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      );
-    },
+      ),
   },
 ];

@@ -39,7 +39,7 @@ export const fight = pgTable(
     createdAt: timestamp("created_at").notNull().defaultNow(),
     updatedAt: timestamp("updated_at").notNull().defaultNow(),
   },
-  (t) => ({
+  t => ({
     unq: unique("idx_same_room").on(
       t.startTime,
       t.endTime,

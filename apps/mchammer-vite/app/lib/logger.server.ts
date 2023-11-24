@@ -1,3 +1,5 @@
+import process from "node:process";
+
 import pino from "pino";
 
 export const logger = pino({
@@ -5,5 +7,6 @@ export const logger = pino({
   level: process.env.PINO_LOG_LEVEL ?? "info",
 });
 
-export const getLogger = (pathSegments: string[]) =>
-  logger.child({ name: ["mchammer", ...pathSegments].join(":") });
+export function getLogger(pathSegments: string[]) {
+  return logger.child({ name: ["mchammer", ...pathSegments].join(":") });
+}

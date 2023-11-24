@@ -2,18 +2,18 @@ import type { Region } from "~/constants.ts";
 
 const UNKNOWN_SEASON_START_OR_ENDING = null;
 
-export type Season = {
-  name: string;
-  shortName: string;
-  slug: string;
-  startDates: Record<Region, number | null>;
-  endDates: Record<Region, number | null>;
-  seasonIcon: string;
-  encounterIds: ReadonlyArray<number>;
-  ptr: boolean;
-};
+export interface Season {
+  name: string
+  shortName: string
+  slug: string
+  startDates: Record<Region, number | null>
+  endDates: Record<Region, number | null>
+  seasonIcon: string
+  encounterIds: ReadonlyArray<number>
+  ptr: boolean
+}
 
-const offsetByRegion = (timestamp: number, region: Region): number => {
+function offsetByRegion(timestamp: number, region: Region): number {
   switch (region) {
     case "us": {
       return timestamp;
@@ -25,7 +25,7 @@ const offsetByRegion = (timestamp: number, region: Region): number => {
     case "tw":
       return timestamp + 111_600_000;
   }
-};
+}
 
 export const seasons: readonly Season[] = [
   {
@@ -68,68 +68,62 @@ export const seasons: readonly Season[] = [
   },
 ] as const;
 
-export const hasSeasonEndedForAllRegions = (slug: string): boolean => {
-  const season = seasons.find((season) => season.slug === slug);
+export function hasSeasonEndedForAllRegions(slug: string): boolean {
+  const season = seasons.find(season => season.slug === slug);
 
-  if (!season) {
+  if (!season)
     return true;
-  }
 
   const endDates = Object.values(season.endDates);
 
-  if (endDates.includes(UNKNOWN_SEASON_START_OR_ENDING)) {
+  if (endDates.includes(UNKNOWN_SEASON_START_OR_ENDING))
     return false;
-  }
 
   const now = Date.now();
 
-  return endDates.every((date) => now >= (date ?? 0));
-};
+  return endDates.every(date => now >= (date ?? 0));
+}
 
-export const findSeasonByTimestamp = (
-  timestamp = Date.now(),
-): Season | null => {
+export function findSeasonByTimestamp(timestamp = Date.now()): Season | null {
   const season = seasons.find(
-    (season) =>
+    season =>
       Object.values(season.startDates).some(
-        (start) => start && timestamp >= start,
-      ) &&
-      Object.values(season.endDates).some(
-        (end) => end === UNKNOWN_SEASON_START_OR_ENDING || end > timestamp,
+        start => start && timestamp >= start,
+      )
+      && Object.values(season.endDates).some(
+        end => end === UNKNOWN_SEASON_START_OR_ENDING || end > timestamp,
       ),
   );
 
   return season ?? null;
-};
+}
 
-export const findSeasonsByTimestamp = (timestamp = Date.now()): Season[] => {
+export function findSeasonsByTimestamp(timestamp = Date.now()): Season[] {
   return seasons.filter(
-    (season) =>
+    season =>
       Object.values(season.startDates).some(
-        (start) => start && timestamp >= start,
-      ) &&
-      Object.values(season.endDates).some(
-        (end) => end === UNKNOWN_SEASON_START_OR_ENDING || end > timestamp,
+        start => start && timestamp >= start,
+      )
+      && Object.values(season.endDates).some(
+        end => end === UNKNOWN_SEASON_START_OR_ENDING || end > timestamp,
       ),
   );
-};
+}
 
-export const findSeasonByName = (slug: string): Season | null => {
+export function findSeasonByName(slug: string): Season | null {
   if (slug === "latest") {
     const ongoingSeason = findSeasonByTimestamp();
 
-    if (ongoingSeason) {
+    if (ongoingSeason)
       return ongoingSeason;
-    }
 
     const mostRecentlyStartedSeason = seasons.find(
-      (season) =>
+      season =>
         season.startDates.us !== null && Date.now() >= season.startDates.us,
     );
 
-    if (mostRecentlyStartedSeason) {
+    if (mostRecentlyStartedSeason)
       return mostRecentlyStartedSeason;
-    }
   }
 
   const match = seasons.find((season) => {
@@ -137,4 +131,4 @@ export const findSeasonByName = (slug: string): Season | null => {
   });
 
   return match ?? null;
-};
+}

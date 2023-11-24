@@ -12,7 +12,6 @@
     "build": "turbo build",
     "clean": "turbo clean",
     "dev": "turbo dev --no-cache  --continue",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "lint": "turbo lint",
     "test": "turbo test",
     "typecheck": "turbo typecheck"
@@ -20,9 +19,8 @@
   "devDependencies": {
     "@antfu/ni": "0.21.10",
     "@turbo/gen": "1.10.16",
-    "prettier": "3.1.0",
-    "prettier-plugin-pkg": "0.18.0",
-    "prettier-plugin-tailwindcss": "0.5.7",
+    "lint-staged": "15.1.0",
+    "simple-git-hooks": "2.9.0",
     "turbo": "1.10.16",
     "typescript": "5.2.2"
   },
@@ -32,10 +30,7 @@
       "@sly-cli/sly@1.4.10": "patches/@sly-cli__sly@1.4.10.patch"
     }
   },
-  "prettier": {
-    "plugins": [
-      "prettier-plugin-pkg",
-      "prettier-plugin-tailwindcss"
-    ]
+  "simple-git-hooks": {
+    "pre-commit": "pnpm lint-staged"
   }
 }

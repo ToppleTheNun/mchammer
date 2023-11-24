@@ -7,5 +7,4 @@ import { singleton } from "#app/lib/singleton.server.ts";
 export const db = singleton("db", () => createPool());
 
 export const drizzle = singleton("drizzle", () =>
-  drizzleVercelPostgresAdapter(db, { schema }),
-);
+  drizzleVercelPostgresAdapter(db, { schema }));

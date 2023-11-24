@@ -1,13 +1,15 @@
+import process from "node:process";
+
 import type { WCLAuth, WCLOAuthResponse } from "@topplethenun/mchammer-wcl";
 import { WclClient } from "@topplethenun/mchammer-wcl";
 
 import { kv } from "#app/lib/kv.server.ts";
 import { singleton } from "#app/lib/singleton.server.ts";
 
-const setWCLAuthentication = async ({
+async function setWCLAuthentication({
   access_token,
   expires_in,
-}: WCLOAuthResponse): Promise<void> => {
+}: WCLOAuthResponse): Promise<void> {
   const payload: WCLAuth = {
     token: access_token,
     expiresAt: Math.round(Date.now() / 1000) + expires_in,
@@ -16,9 +18,9 @@ const setWCLAuthentication = async ({
   await kv.set<WCLAuth>("wcl-auth-token", payload, {
     ex: expires_in,
   });
-};
+}
 
-const getWCLAuthentication = (): Promise<WCLAuth | null> => {
+function getWCLAuthentication(): Promise<WCLAuth | null> {
   if (process.env.NODE_ENV === "test") {
     return Promise.resolve({
       token: "mock-token",
@@ -27,7 +29,7 @@ const getWCLAuthentication = (): Promise<WCLAuth | null> => {
   }
 
   return kv.get<WCLAuth>("wcl-auth-token");
-};
+}
 
 export const wcl = singleton(
   "wcl",

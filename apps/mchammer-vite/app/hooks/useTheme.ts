@@ -13,9 +13,9 @@ export const themeFormSchema = z.object({
  * If the user's changing their theme mode preference, this will return the
  * value it's being changed to.
  */
-export const useOptimisticThemeMode = () => {
+export function useOptimisticThemeMode() {
   const fetchers = useFetchers();
-  const themeFetcher = fetchers.find((f) => f.formAction === "/");
+  const themeFetcher = fetchers.find(f => f.formAction === "/");
 
   if (themeFetcher && themeFetcher.formData) {
     const submission = parse(themeFetcher.formData, {
@@ -23,18 +23,18 @@ export const useOptimisticThemeMode = () => {
     });
     return submission.value?.theme;
   }
-};
+}
 
 /**
  * @returns the user's theme preference, or the client hint theme if the user
  * has not set a preference.
  */
-export const useTheme = () => {
+export function useTheme() {
   const hints = useHints();
   const requestInfo = useRequestInfo();
   const optimisticMode = useOptimisticThemeMode();
-  if (optimisticMode) {
+  if (optimisticMode)
     return optimisticMode === "system" ? hints.theme : optimisticMode;
-  }
+
   return requestInfo.userPrefs.theme ?? hints.theme;
-};
+}

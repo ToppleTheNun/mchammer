@@ -33,7 +33,7 @@ import { ClientHintCheck, getHints } from "#app/lib/client-hints.tsx";
 import { getEnv } from "#app/lib/env.server.ts";
 import { combineHeaders, getDomainUrl } from "#app/lib/misc.ts";
 import { useNonce } from "#app/lib/nonce-provider.ts";
-import { getTheme, type Theme } from "#app/lib/theme.server.ts";
+import { type Theme, getTheme } from "#app/lib/theme.server.ts";
 import { makeTimings } from "#app/lib/timing.server.ts";
 import tailwindStylesheetUrl from "#app/tailwind.css";
 import { isPresent } from "#app/typeGuards.ts";
@@ -112,7 +112,7 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export const loader = ({ request }: DataFunctionArgs) => {
+export function loader({ request }: DataFunctionArgs) {
   const timings = makeTimings("root loader");
 
   return json(
@@ -129,7 +129,7 @@ export const loader = ({ request }: DataFunctionArgs) => {
     },
     { headers: combineHeaders({ [serverTiming]: timings.toString() }) },
   );
-};
+}
 
 export const headers: HeadersFunction = ({ loaderHeaders }) => {
   return {
@@ -137,17 +137,17 @@ export const headers: HeadersFunction = ({ loaderHeaders }) => {
   };
 };
 
-const Document = ({
+function Document({
   children,
   nonce,
   theme,
   env,
 }: {
-  children: ReactNode;
-  nonce: string;
-  theme?: Theme;
-  env?: Record<string, string>;
-}) => {
+  children: ReactNode
+  nonce: string
+  theme?: Theme
+  env?: Record<string, string>
+}) {
   return (
     <html className={`${theme} h-full overflow-x-hidden`} lang="en" dir="auto">
       <head>
@@ -172,9 +172,9 @@ const Document = ({
       </body>
     </html>
   );
-};
+}
 
-export const ErrorBoundary = () => {
+export function ErrorBoundary() {
   const error = useRouteError();
   const nonce = useNonce();
 
@@ -185,9 +185,9 @@ export const ErrorBoundary = () => {
       <AppErrorBoundary error={error} />
     </Document>
   );
-};
+}
 
-const App = () => {
+function App() {
   const data = useLoaderData<typeof loader>();
   const nonce = useNonce();
   const theme = useTheme();
@@ -204,6 +204,6 @@ const App = () => {
       <Analytics />
     </Document>
   );
-};
+}
 
 export default withSentry(App);

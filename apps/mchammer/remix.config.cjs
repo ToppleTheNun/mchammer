@@ -6,4 +6,4 @@ module.exports = {
   tailwind: true,
   postcss: true,
   watchPaths: ["./tailwind.config.ts"],
-}
+};
