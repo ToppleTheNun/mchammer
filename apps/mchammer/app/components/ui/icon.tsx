@@ -9,6 +9,7 @@ export { IconName };
 
 const sizeClassName = {
   font: "w-[1em] h-[1em]",
+  xxs: "w-2 h-2",
   xs: "w-3 h-3",
   sm: "w-4 h-4",
   md: "w-5 h-5",
@@ -20,6 +21,7 @@ type Size = keyof typeof sizeClassName;
 
 const childrenSizeClassName = {
   font: "gap-1.5",
+  xxs: "gap-1.5",
   xs: "gap-1.5",
   sm: "gap-1.5",
   md: "gap-2",

@@ -49,7 +49,7 @@ const SeasonRoute = () => {
   return (
     <PageLayout pageHeader={<Header season={season} />}>
       <section className="hidden md:block">
-        <div className="overflow-hidden rounded-lg border bg-background px-4 shadow">
+        <div className="bg-background overflow-hidden rounded-lg border px-4 shadow">
           <div className="flex h-[50vh] flex-col items-center justify-center gap-2">
             <Lead>
               Hey, we&apos;re building here. Mind looking somewhere else?

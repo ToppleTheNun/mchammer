@@ -88,6 +88,9 @@ importers:
       '@sentry/remix':
         specifier: 7.81.1
         version: 7.81.1(@remix-run/node@2.3.1)(@remix-run/react@2.3.1)(react@18.2.0)
+      '@tanstack/react-table':
+        specifier: 8.10.7
+        version: 8.10.7(react-dom@18.2.0)(react@18.2.0)
       '@topplethenun/mchammer-wcl':
         specifier: workspace:*
         version: link:../../packages/wcl
@@ -142,9 +145,6 @@ importers:
       lodash-es:
         specifier: 4.17.21
         version: 4.17.21
-      lucide-react:
-        specifier: 0.292.0
-        version: 0.292.0(react@18.2.0)
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -341,6 +341,9 @@ importers:
       '@sentry/remix':
         specifier: 7.81.1
         version: 7.81.1(@remix-run/node@2.3.1)(@remix-run/react@2.3.1)(react@18.2.0)
+      '@tanstack/react-table':
+        specifier: 8.10.7
+        version: 8.10.7(react-dom@18.2.0)(react@18.2.0)
       '@topplethenun/mchammer-wcl':
         specifier: workspace:*
         version: link:../../packages/wcl
@@ -371,9 +374,6 @@ importers:
       isbot:
         specifier: 3.7.1
         version: 3.7.1
-      lucide-react:
-        specifier: 0.292.0
-        version: 0.292.0(react@18.2.0)
       nanoid:
         specifier: 5.0.3
         version: 5.0.3
@@ -4826,6 +4826,23 @@ packages:
       legacy-swc-helpers: /@swc/helpers@0.4.14
       tslib: 2.6.2
     dev: true
+
+  /@tanstack/react-table@8.10.7(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-bXhjA7xsTcsW8JPTTYlUg/FuBpn8MNjiEPhkNhIGCUR6iRQM2+WEco4OBpvDeVcR9SE+bmWLzdfiY7bCbCSVuA==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      react: '>=16'
+      react-dom: '>=16'
+    dependencies:
+      '@tanstack/table-core': 8.10.7
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
+  /@tanstack/table-core@8.10.7:
+    resolution: {integrity: sha512-KQk5OMg5OH6rmbHZxuNROvdI+hKDIUxANaHlV+dPlNN7ED3qYQ/WkpY2qlXww1SIdeMlkIhpN/2L00rof0fXFw==}
+    engines: {node: '>=12'}
+    dev: false
 
   /@testing-library/dom@8.20.1:
     resolution: {integrity: sha512-/DiOQ5xBxgdYRC8LNk7U+RWat0S3qRLeIw3ZIkMQ9kkVlRmwD/Eg8k8CqIpD6GW7u20JIUOfMKbxtiLutpjQ4g==}
@@ -9819,14 +9836,6 @@ packages:
     dependencies:
       es5-ext: 0.10.62
     dev: true
-
-  /lucide-react@0.292.0(react@18.2.0):
-    resolution: {integrity: sha512-rRgUkpEHWpa5VCT66YscInCQmQuPCB1RFRzkkxMxg4b+jaL0V12E3riWWR2Sh5OIiUhCwGW/ZExuEO4Az32E6Q==}
-    peerDependencies:
-      react: ^16.5.1 || ^17.0.0 || ^18.0.0
-    dependencies:
-      react: 18.2.0
-    dev: false
 
   /lz-string@1.5.0:
     resolution: {integrity: sha512-h5bgJWpxJNswbU7qCrV0tIKQCaS3blPDrqKWx+QxzuzL1zGUzij9XCWLrSLsJPu5t+eWA/ycetzYAO5IOMcWAQ==}
