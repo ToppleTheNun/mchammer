@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": ["@tsconfig/vite-react/tsconfig.json"],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["./app/*"]
+    },
+    "allowImportingTsExtensions": true
+  },
+  "include": ["env.d.ts", "reset.d.ts", "**/*.ts", "**/*.tsx", "**/*.js"]
+}

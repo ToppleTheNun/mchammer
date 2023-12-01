@@ -1,11 +1,12 @@
 node_modules
 
-build
-dist
-
-
+/.cache
+/build
+/public/build
 .env
 
 .idea
-.turbo
-.vercel
+
+app/generated
+
+app/components/ui/icons
