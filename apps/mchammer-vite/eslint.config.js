@@ -1,3 +1,3 @@
-import { mchammer } from '@topplethenun/mchammer-eslint-config';
+import { mchammer } from "@topplethenun/mchammer-eslint-config";
 
 export default mchammer();

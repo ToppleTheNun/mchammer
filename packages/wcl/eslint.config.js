@@ -1,8 +1,3 @@
-import antfu from "@antfu/eslint-config";
+import { mchammer } from "@topplethenun/mchammer-eslint-config";
 
-export default await antfu({
-  stylistic: {
-    semi: true,
-    quotes: "double",
-  },
-});
+export default mchammer();
