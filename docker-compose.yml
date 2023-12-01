@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 volumes:
   database:
@@ -18,14 +18,14 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=postgres
     ports:
-      - '5432:5432'
+      - "5432:5432"
     volumes:
       - database:/var/lib/postgresql-docker/data
   redis:
     image: redis/redis-stack:latest
     container_name: mchammer-redis
     ports:
-      - '6379:6379'
+      - "6379:6379"
     volumes:
       - redis:/var/lib/redis
       - redis-config:/usr/local/etc/redis/redis.conf

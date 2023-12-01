@@ -1,6 +1,6 @@
-import { access, mkdir, writeFile } from 'node:fs/promises';
-import { join } from 'node:path';
-import process from 'node:process';
+import { access, mkdir, writeFile } from "node:fs/promises";
+import { join } from "node:path";
+import process from "node:process";
 
 const date = new Date();
 
@@ -8,21 +8,20 @@ const contents = `
 export const generated = {
   BUILD_TIME: "${date.toISOString()}",
   BUILD_TIMESTAMP: "${Number(date).toString()}",
-  COMMIT_SHA: "${process.env.GITHUB_SHA ?? ''}",
+  COMMIT_SHA: "${process.env.GITHUB_SHA ?? ""}",
 } as const;
 `;
 
 async function ensureDir(path: string) {
   try {
     await access(path);
-  }
-  catch (e) {
+  } catch (e) {
     await mkdir(path);
   }
 }
 
 (async () => {
-  const pathToEnv = join(process.cwd(), 'app', 'generated');
+  const pathToEnv = join(process.cwd(), "app", "generated");
   await ensureDir(pathToEnv);
-  await writeFile(join(pathToEnv, 'env.ts'), contents, 'utf-8');
+  await writeFile(join(pathToEnv, "env.ts"), contents, "utf-8");
 })();

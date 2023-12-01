@@ -1,9 +1,9 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const wclOAuthResponseSchema = z.object({
   access_token: z.string(),
   expires_in: z.number().int(),
-  token_type: z.literal('Bearer'),
+  token_type: z.literal("Bearer"),
 });
 export type WCLOAuthResponse = z.infer<typeof wclOAuthResponseSchema>;
 
@@ -50,7 +50,7 @@ export type PlayerDetailsResponse = z.infer<typeof playerDetailsResponseSchema>;
 
 export const damageTakenEventSchema = z.object({
   timestamp: z.number(),
-  type: z.literal('damage'),
+  type: z.literal("damage"),
   sourceID: z.number(),
   sourceInstance: z.number().optional(),
   targetID: z.number(),

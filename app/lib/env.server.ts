@@ -1,8 +1,8 @@
-import process from 'node:process';
+import process from "node:process";
 
-import { z } from 'zod';
+import { z } from "zod";
 
-import { generated } from '~/generated/env.ts';
+import { generated } from "~/generated/env.ts";
 
 const schema = z.object({
   // Client
@@ -10,15 +10,14 @@ const schema = z.object({
   BUILD_TIMESTAMP: z.string(),
   COMMIT_SHA: z.string(),
   SENTRY_DSN: z.string().optional(),
+  ENVIRONMENT_NAME: z.enum(["production", "vanilla-ice"]).optional(),
   // Server
-  NODE_ENV: z
-    .enum(['development', 'test', 'production'])
-    .default('development'),
+  NODE_ENV: z.enum(["development", "test", "production"]),
   PINO_LOG_LEVEL: z
-    .enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent'])
-    .default('info'),
+    .enum(["fatal", "error", "warn", "info", "debug", "trace", "silent"])
+    .optional(),
   DATABASE_URL: z.string(),
-  REDIS_URL: z.string(),
+  REDIS_URL: z.string().url(),
   WARCRAFT_LOGS_CLIENT_ID: z.string(),
   WARCRAFT_LOGS_CLIENT_SECRET: z.string(),
 });
@@ -35,11 +34,11 @@ export function init() {
 
   if (!parsed.success) {
     console.error(
-      '❌ Invalid environment variables:',
+      "❌ Invalid environment variables:",
       parsed.error.flatten().fieldErrors,
     );
 
-    throw new Error('Invalid environment variables');
+    throw new Error("Invalid environment variables");
   }
 }
 
@@ -59,8 +58,7 @@ export function getEnv() {
     BUILD_TIMESTAMP: generated.BUILD_TIMESTAMP,
     COMMIT_SHA: generated.COMMIT_SHA,
     SENTRY_DSN: process.env.SENTRY_DSN,
-    VERCEL_ENV: process.env.VERCEL_ENV,
-    VERCEL_ANALYTICS_ID: process.env.VERCEL_ANALYTICS_ID,
+    ENVIRONMENT_NAME: process.env.ENVIRONMENT_NAME ?? "local",
   };
 }
 
@@ -70,6 +68,6 @@ declare global {
   // eslint-disable-next-line no-var,vars-on-top
   var ENV: ENV;
   interface Window {
-    ENV: ENV
+    ENV: ENV;
   }
 }

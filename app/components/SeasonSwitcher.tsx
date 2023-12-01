@@ -1,13 +1,13 @@
-import { useNavigate, useParams } from '@remix-run/react';
-import type { ComponentPropsWithoutRef } from 'react';
-import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from "@remix-run/react";
+import type { ComponentPropsWithoutRef } from "react";
+import { useEffect, useState } from "react";
 
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from '~/components/ui/avatar.tsx';
-import { Button } from '~/components/ui/button.tsx';
+} from "~/components/ui/avatar.tsx";
+import { Button } from "~/components/ui/button.tsx";
 import {
   Command,
   CommandEmpty,
@@ -15,25 +15,33 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '~/components/ui/command.tsx';
-import { Icon } from '~/components/ui/icon.tsx';
+} from "~/components/ui/command.tsx";
+import { Icon } from "~/components/ui/icon.tsx";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '~/components/ui/popover.tsx';
-import { cn } from '~/lib/utils.ts';
-import { seasons } from '~/seasons.ts';
-import { isPresent } from '~/typeGuards.ts';
+} from "~/components/ui/popover.tsx";
+import { cn } from "~/lib/utils.ts";
+import { seasons } from "~/seasons.ts";
+import { isPresent } from "~/typeGuards.ts";
 
-interface Season { label: string, value: string, icon: string, fallback: string }
-interface SeasonGroup { label: string, seasons: Season[] }
+interface Season {
+  label: string;
+  value: string;
+  icon: string;
+  fallback: string;
+}
+interface SeasonGroup {
+  label: string;
+  seasons: Season[];
+}
 
 const ptrSeasons: SeasonGroup = {
-  label: 'PTR Seasons',
+  label: "PTR Seasons",
   seasons: seasons
-    .filter(season => season.ptr)
-    .map(season => ({
+    .filter((season) => season.ptr)
+    .map((season) => ({
       label: season.name,
       value: season.slug,
       icon: season.seasonIcon,
@@ -41,10 +49,10 @@ const ptrSeasons: SeasonGroup = {
     })),
 };
 const liveSeasons: SeasonGroup = {
-  label: 'Live Seasons',
+  label: "Live Seasons",
   seasons: seasons
-    .filter(season => !season.ptr)
-    .map(season => ({
+    .filter((season) => !season.ptr)
+    .map((season) => ({
       label: season.name,
       value: season.slug,
       icon: season.seasonIcon,
@@ -59,8 +67,8 @@ const groups: SeasonGroup[] = [
 
 function findMatchingSeason(name: string | undefined): Season | undefined {
   return groups
-    .flatMap(group => group.seasons)
-    .find(season => season.value === name);
+    .flatMap((group) => group.seasons)
+    .find((season) => season.value === name);
 }
 
 type PopoverTriggerProps = ComponentPropsWithoutRef<typeof PopoverTrigger>;
@@ -76,14 +84,14 @@ export function SeasonSwitcher({ className }: SeasonSwitcherProps) {
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
-      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
-        setOpen(open => !open);
+        setOpen((open) => !open);
       }
     };
 
-    document.addEventListener('keydown', down);
-    return () => document.removeEventListener('keydown', down);
+    document.addEventListener("keydown", down);
+    return () => document.removeEventListener("keydown", down);
   }, []);
 
   return (
@@ -94,16 +102,16 @@ export function SeasonSwitcher({ className }: SeasonSwitcherProps) {
           role="combobox"
           aria-expanded={open}
           aria-label="Select a team"
-          className={cn('w-[200px] justify-between', className)}
+          className={cn("w-[200px] justify-between", className)}
         >
           <Avatar className="mr-2 h-5 w-5">
             <AvatarImage
               src={selectedSeason?.icon}
               alt={selectedSeason?.label}
             />
-            <AvatarFallback>{selectedSeason?.fallback ?? 'WoW'}</AvatarFallback>
+            <AvatarFallback>{selectedSeason?.fallback ?? "WoW"}</AvatarFallback>
           </Avatar>
-          {selectedSeason?.label ?? 'No Season Selected'}
+          {selectedSeason?.label ?? "No Season Selected"}
           <Icon
             name="caret-sort"
             className="ml-auto h-4 w-4 shrink-0 opacity-50"
@@ -115,9 +123,9 @@ export function SeasonSwitcher({ className }: SeasonSwitcherProps) {
           <CommandList>
             <CommandInput placeholder="Search season..." />
             <CommandEmpty>No season found.</CommandEmpty>
-            {groups.map(group => (
+            {groups.map((group) => (
               <CommandGroup key={group.label} heading={group.label}>
-                {group.seasons.map(season => (
+                {group.seasons.map((season) => (
                   <CommandItem
                     key={season.value}
                     onSelect={() => {
@@ -139,10 +147,10 @@ export function SeasonSwitcher({ className }: SeasonSwitcherProps) {
                     <Icon
                       name="check"
                       className={cn(
-                        'ml-auto h-4 w-4',
+                        "ml-auto h-4 w-4",
                         selectedSeason?.value === season.value
-                          ? 'opacity-100'
-                          : 'opacity-0',
+                          ? "opacity-100"
+                          : "opacity-0",
                       )}
                     />
                   </CommandItem>

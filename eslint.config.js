@@ -1,32 +1,29 @@
-import antfu, { GLOB_JSX, GLOB_TSX } from '@antfu/eslint-config';
+import antfu, { GLOB_JSX, GLOB_TSX } from "@antfu/eslint-config";
 
 export default antfu(
   {
-    ignores: [
-    ],
+    ignores: [],
     overrides: {
       react: {
-        'react/prop-types': 'off',
+        "react/prop-types": "off",
       },
     },
     // react: true,
-    stylistic: {
-      semi: true,
-    },
+    stylistic: false,
   },
   {
-    name: 'mchammer:allow-console-log',
-    files: ['other/**/*.ts', '**/*.server.ts'],
+    name: "mchammer:allow-console-log",
+    files: ["other/**/*.ts", "**/*.server.ts"],
     rules: {
-      'no-console': 'off',
+      "no-console": "off",
     },
   },
   {
-    name: 'mchammer:react-version',
+    name: "mchammer:react-version",
     files: [GLOB_JSX, GLOB_TSX],
     settings: {
       react: {
-        version: 'detect',
+        version: "detect",
       },
     },
   },

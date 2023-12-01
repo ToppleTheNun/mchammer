@@ -2,8 +2,8 @@ export type Timings = Record<
   string,
   Array<
     { desc?: string } & (
-      | { time: number, start?: never }
-      | { time?: never, start: number }
+      | { time: number; start?: never }
+      | { time?: never; start: number }
     )
   >
 >;
@@ -12,7 +12,7 @@ export function makeTimings(type: string, desc?: string) {
   const timings: Timings = {
     [type]: [{ desc, start: performance.now() }],
   };
-  Object.defineProperty(timings, 'toString', {
+  Object.defineProperty(timings, "toString", {
     value() {
       return getServerTimeHeader(timings);
     },
@@ -27,28 +27,28 @@ function createTimer(type: string, desc?: string) {
     end(timings: Timings) {
       let timingType = timings[type];
 
-      if (!timingType)
-
-        timingType = timings[type] = [];
+      if (!timingType) timingType = timings[type] = [];
 
       timingType.push({ desc, time: performance.now() - start });
     },
   };
 }
 
-export async function time<ReturnType>(fn: Promise<ReturnType> | (() => ReturnType | Promise<ReturnType>), {
-  type,
-  desc,
-  timings,
-}: {
-  type: string
-  desc?: string
-  timings?: Timings
-}): Promise<ReturnType> {
+export async function time<ReturnType>(
+  fn: Promise<ReturnType> | (() => ReturnType | Promise<ReturnType>),
+  {
+    type,
+    desc,
+    timings,
+  }: {
+    type: string;
+    desc?: string;
+    timings?: Timings;
+  },
+): Promise<ReturnType> {
   const timer = createTimer(type, desc);
-  const promise = typeof fn === 'function' ? fn() : fn;
-  if (!timings)
-    return promise;
+  const promise = typeof fn === "function" ? fn() : fn;
+  if (!timings) return promise;
 
   const result = await promise;
 
@@ -57,8 +57,7 @@ export async function time<ReturnType>(fn: Promise<ReturnType> | (() => ReturnTy
 }
 
 export function getServerTimeHeader(timings?: Timings) {
-  if (!timings)
-    return '';
+  if (!timings) return "";
 
   return Object.entries(timings)
     .map(([key, timingInfos]) => {
@@ -69,16 +68,16 @@ export function getServerTimeHeader(timings?: Timings) {
         }, 0)
         .toFixed(1);
       const desc = timingInfos
-        .map(t => t.desc)
+        .map((t) => t.desc)
         .filter(Boolean)
-        .join(' & ');
+        .join(" & ");
       return [
-        key.replaceAll(/([: @=;,/\\])/g, '_'),
+        key.replaceAll(/([: @=;,/\\])/g, "_"),
         desc ? `desc=${JSON.stringify(desc)}` : null,
         `dur=${dur}`,
       ]
         .filter(Boolean)
-        .join(';');
+        .join(";");
     })
-    .join(',');
+    .join(",");
 }

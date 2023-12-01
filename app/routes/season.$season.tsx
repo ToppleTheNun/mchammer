@@ -1,27 +1,27 @@
-import type { DataFunctionArgs } from '@remix-run/node';
-import { json } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import type { DataFunctionArgs } from "@remix-run/node";
+import { json } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
 
 import {
   PageHeader,
   PageHeaderDescription,
   PageHeaderHeading,
-} from '~/components/PageHeader.tsx';
-import { PageLayout } from '~/components/PageLayout.tsx';
-import { Lead } from '~/components/typography.tsx';
-import { serverTiming } from '~/constants.ts';
-import { combineHeaders, invariantResponse } from '~/lib/misc.ts';
-import { makeTimings } from '~/lib/timing.server.ts';
-import { type Season, findSeasonByName } from '~/seasons.ts';
+} from "~/components/PageHeader.tsx";
+import { PageLayout } from "~/components/PageLayout.tsx";
+import { Lead } from "~/components/typography.tsx";
+import { serverTiming } from "~/constants.ts";
+import { combineHeaders, invariantResponse } from "~/lib/misc.ts";
+import { makeTimings } from "~/lib/timing.server.ts";
+import { type Season, findSeasonByName } from "~/seasons.ts";
 
 export function loader({ params }: DataFunctionArgs) {
   invariantResponse(
-    'season' in params && params.season,
-    'Missing season parameter',
+    "season" in params && params.season,
+    "Missing season parameter",
   );
 
   const season = findSeasonByName(params.season);
-  invariantResponse(season, 'Unable to find season by provided name');
+  invariantResponse(season, "Unable to find season by provided name");
 
   const timings = makeTimings(`${season.name} loader`);
 
@@ -39,10 +39,7 @@ function Header({ season }: { season: Season }) {
       <PageHeaderHeading>Can&apos;t touch this.</PageHeaderHeading>
       <PageHeaderDescription>
         Consecutive parry, dodge, and miss leaderboard for instanced World of
-        Warcraft content in
-        {' '}
-        {season.name}
-        .
+        Warcraft content in {season.name}.
       </PageHeaderDescription>
     </PageHeader>
   );

@@ -1,15 +1,18 @@
-import { eq } from 'drizzle-orm';
+import { eq } from "drizzle-orm";
 
-import type { Region } from '~/constants.ts';
-import { type Character, character } from '~/lib/db/schema.ts';
-import { getLogger } from '~/lib/logger.server.ts';
-import { pg } from '~/lib/storage.server.ts';
-import { type Timings, time } from '~/lib/timing.server.ts';
-import type { PlayerDetail } from '~/wcl/zod.server.ts';
+import type { Region } from "~/constants.ts";
+import { type Character, character } from "~/lib/db/schema.ts";
+import { getLogger } from "~/lib/logger.server.ts";
+import { pg } from "~/lib/storage.server.ts";
+import { type Timings, time } from "~/lib/timing.server.ts";
+import type { PlayerDetail } from "~/wcl/zod.server.ts";
 
-const ingestCharactersLogger = getLogger(['ingest', 'characters']);
+const ingestCharactersLogger = getLogger(["ingest", "characters"]);
 
-function findCharacter(playerDetail: PlayerDetail, timings: Timings): Promise<Character | undefined> {
+function findCharacter(
+  playerDetail: PlayerDetail,
+  timings: Timings,
+): Promise<Character | undefined> {
   return time(
     () =>
       pg.query.character.findFirst({
@@ -19,12 +22,16 @@ function findCharacter(playerDetail: PlayerDetail, timings: Timings): Promise<Ch
   );
 }
 
-export async function findOrCreateCharacter(playerDetail: PlayerDetail, region: Region, timings: Timings): Promise<Character> {
+export async function findOrCreateCharacter(
+  playerDetail: PlayerDetail,
+  region: Region,
+  timings: Timings,
+): Promise<Character> {
   const logger = ingestCharactersLogger.child({ character: playerDetail.guid });
 
   const foundCharacter = await findCharacter(playerDetail, timings);
   if (foundCharacter) {
-    logger.debug('Found existing character');
+    logger.debug("Found existing character");
     return foundCharacter;
   }
 
@@ -47,13 +54,13 @@ export async function findOrCreateCharacter(playerDetail: PlayerDetail, region: 
   );
   const insertedCharacter = insertResult.at(0);
   if (insertedCharacter) {
-    logger.debug('Ingested character');
+    logger.debug("Ingested character");
     return insertedCharacter;
   }
 
   const lastTryCharacter = await findCharacter(playerDetail, timings);
   if (lastTryCharacter) {
-    logger.debug('Found existing character');
+    logger.debug("Found existing character");
     return lastTryCharacter;
   }
   throw new Error(

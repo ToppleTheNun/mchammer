@@ -1,12 +1,12 @@
-import { getHintUtils } from '@epic-web/client-hints';
+import { getHintUtils } from "@epic-web/client-hints";
 import {
   clientHint as colorSchemeHint,
   subscribeToSchemeChange,
-} from '@epic-web/client-hints/color-scheme';
-import { useRevalidator } from '@remix-run/react';
-import { useEffect } from 'react';
+} from "@epic-web/client-hints/color-scheme";
+import { useRevalidator } from "@remix-run/react";
+import { useEffect } from "react";
 
-import { useRequestInfo } from './request-info.ts';
+import { useRequestInfo } from "./request-info.ts";
 
 const hintsUtils = getHintUtils({
   theme: colorSchemeHint,

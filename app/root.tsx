@@ -1,13 +1,13 @@
-import '~/font.css';
-import '~/tailwind.css';
+import "~/font.css";
+import "~/tailwind.css";
 
 import type {
   DataFunctionArgs,
   HeadersFunction,
   LinksFunction,
   MetaFunction,
-} from '@remix-run/node';
-import { json } from '@remix-run/node';
+} from "@remix-run/node";
+import { json } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -17,59 +17,59 @@ import {
   ScrollRestoration,
   useLoaderData,
   useRouteError,
-} from '@remix-run/react';
-import { captureRemixErrorBoundaryError, withSentry } from '@sentry/remix';
-import type { ReactNode } from 'react';
+} from "@remix-run/react";
+import { captureRemixErrorBoundaryError, withSentry } from "@sentry/remix";
+import type { ReactNode } from "react";
 
-import { AppErrorBoundary } from '~/components/AppErrorBoundary.tsx';
-import { SiteFooter } from '~/components/SiteFooter.tsx';
-import { SiteHeader } from '~/components/SiteHeader.tsx';
-import { TailwindIndicator } from '~/components/TailwindIndicator.tsx';
-import { href as iconsHref } from '~/components/ui/icon.tsx';
-import { siteConfig } from '~/config/site.ts';
-import { serverTiming } from '~/constants.ts';
-import { useTheme } from '~/hooks/useTheme.ts';
-import { ClientHintCheck, getHints } from '~/lib/client-hints.tsx';
-import { getEnv } from '~/lib/env.server.ts';
-import { combineHeaders, getDomainUrl } from '~/lib/misc.ts';
-import { useNonce } from '~/lib/nonce-provider.ts';
-import type { Theme } from '~/lib/theme.server.ts';
-import { getTheme } from '~/lib/theme.server.ts';
-import { makeTimings } from '~/lib/timing.server.ts';
-import { isPresent } from '~/typeGuards.ts';
+import { AppErrorBoundary } from "~/components/AppErrorBoundary.tsx";
+import { SiteFooter } from "~/components/SiteFooter.tsx";
+import { SiteHeader } from "~/components/SiteHeader.tsx";
+import { TailwindIndicator } from "~/components/TailwindIndicator.tsx";
+import { href as iconsHref } from "~/components/ui/icon.tsx";
+import { siteConfig } from "~/config/site.ts";
+import { serverTiming } from "~/constants.ts";
+import { useTheme } from "~/hooks/useTheme.ts";
+import { ClientHintCheck, getHints } from "~/lib/client-hints.tsx";
+import { getEnv } from "~/lib/env.server.ts";
+import { combineHeaders, getDomainUrl } from "~/lib/misc.ts";
+import { useNonce } from "~/lib/nonce-provider.ts";
+import type { Theme } from "~/lib/theme.server.ts";
+import { getTheme } from "~/lib/theme.server.ts";
+import { makeTimings } from "~/lib/timing.server.ts";
+import { isPresent } from "~/typeGuards.ts";
 
 export const links: LinksFunction = () => {
   return [
     // Preload svg sprite as a resource to avoid render blocking
-    { rel: 'preload', href: iconsHref, as: 'image' },
+    { rel: "preload", href: iconsHref, as: "image" },
 
     {
-      rel: 'apple-touch-icon',
-      sizes: '180x180',
-      href: '/apple-touch-icon.png?v=1',
+      rel: "apple-touch-icon",
+      sizes: "180x180",
+      href: "/apple-touch-icon.png?v=1",
     },
     {
-      rel: 'icon',
-      type: 'image/png',
-      sizes: '32x32',
-      href: '/favicon-32x32.png?v=1',
+      rel: "icon",
+      type: "image/png",
+      sizes: "32x32",
+      href: "/favicon-32x32.png?v=1",
     },
     {
-      rel: 'icon',
-      type: 'image/png',
-      sizes: '16x16',
-      href: '/favicon-16x16.png?v=1',
+      rel: "icon",
+      type: "image/png",
+      sizes: "16x16",
+      href: "/favicon-16x16.png?v=1",
     },
     {
-      rel: 'icon',
-      type: 'image/x-icon',
-      href: '/favicon.ico?v=1',
+      rel: "icon",
+      type: "image/x-icon",
+      href: "/favicon.ico?v=1",
     },
-    { rel: 'manifest', href: '/site.webmanifest?v=1' },
+    { rel: "manifest", href: "/site.webmanifest?v=1" },
     {
-      rel: 'mask-icon',
-      href: '/safari-pinned-tab.svg?v=1',
-      color: '#5bbad5',
+      rel: "mask-icon",
+      href: "/safari-pinned-tab.svg?v=1",
+      color: "#5bbad5",
     },
   ].filter(isPresent);
 };
@@ -77,34 +77,34 @@ export const links: LinksFunction = () => {
 export const meta: MetaFunction = () => {
   return [
     { title: siteConfig.title },
-    { property: 'og:url', content: siteConfig.url },
-    { property: 'twitter:url', content: siteConfig.url },
-    { property: 'image:alt', content: siteConfig.title },
-    { property: 'og:type', content: 'website' },
-    { property: 'og:title', content: siteConfig.title },
-    { property: 'og:site_name', content: siteConfig.title },
-    { property: 'og:locale', content: 'en_US' },
-    { property: 'og:image', content: siteConfig.ogImage },
-    { property: 'og:image:alt', content: siteConfig.title },
-    { property: 'og:description', content: siteConfig.description },
-    { property: 'twitter:description', content: siteConfig.description },
-    { property: 'twitter:creator', content: '@ToppleTheNun' },
-    { property: 'twitter:title', content: siteConfig.title },
-    { property: 'twitter:image', content: siteConfig.ogImage },
-    { property: 'twitter:image:alt', content: siteConfig.title },
-    { property: 'twitter:card', content: 'summary' },
-    { property: 'description', content: siteConfig.description },
-    { property: 'name', content: siteConfig.title },
-    { property: 'author', content: 'Richard Harrah' },
-    { property: 'revisit-after', content: '7days' },
-    { property: 'distribution', content: 'global' },
-    { property: 'msapplication-TileColor', content: '#da532c' },
-    { property: 'theme-color', content: '#ffffff' },
+    { property: "og:url", content: siteConfig.url },
+    { property: "twitter:url", content: siteConfig.url },
+    { property: "image:alt", content: siteConfig.title },
+    { property: "og:type", content: "website" },
+    { property: "og:title", content: siteConfig.title },
+    { property: "og:site_name", content: siteConfig.title },
+    { property: "og:locale", content: "en_US" },
+    { property: "og:image", content: siteConfig.ogImage },
+    { property: "og:image:alt", content: siteConfig.title },
+    { property: "og:description", content: siteConfig.description },
+    { property: "twitter:description", content: siteConfig.description },
+    { property: "twitter:creator", content: "@ToppleTheNun" },
+    { property: "twitter:title", content: siteConfig.title },
+    { property: "twitter:image", content: siteConfig.ogImage },
+    { property: "twitter:image:alt", content: siteConfig.title },
+    { property: "twitter:card", content: "summary" },
+    { property: "description", content: siteConfig.description },
+    { property: "name", content: siteConfig.title },
+    { property: "author", content: "Richard Harrah" },
+    { property: "revisit-after", content: "7days" },
+    { property: "distribution", content: "global" },
+    { property: "msapplication-TileColor", content: "#da532c" },
+    { property: "theme-color", content: "#ffffff" },
   ];
 };
 
 export function loader({ request }: DataFunctionArgs) {
-  const timings = makeTimings('root loader');
+  const timings = makeTimings("root loader");
 
   return json(
     {
@@ -124,7 +124,7 @@ export function loader({ request }: DataFunctionArgs) {
 
 export const headers: HeadersFunction = ({ loaderHeaders }) => {
   return {
-    'Server-Timing': loaderHeaders.get('Server-Timing') ?? '',
+    "Server-Timing": loaderHeaders.get("Server-Timing") ?? "",
   };
 };
 
@@ -134,10 +134,10 @@ function Document({
   theme,
   env,
 }: {
-  children: ReactNode
-  nonce: string
-  theme?: Theme
-  env?: Record<string, string>
+  children: ReactNode;
+  nonce: string;
+  theme?: Theme;
+  env?: Record<string, string>;
 }) {
   return (
     <html className={`${theme} h-full overflow-x-hidden`} lang="en" dir="auto">

@@ -1,28 +1,28 @@
-import { useFetcher } from '@remix-run/react';
+import { useFetcher } from "@remix-run/react";
 
-import { Button } from '~/components/ui/button.tsx';
+import { Button } from "~/components/ui/button.tsx";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '~/components/ui/dropdown-menu.tsx';
-import { Icon } from '~/components/ui/icon.tsx';
-import { useOptimisticThemeMode } from '~/hooks/useTheme.ts';
-import type { Theme } from '~/lib/theme.server.ts';
-import type { action } from '~/routes/actions.theme.ts';
+} from "~/components/ui/dropdown-menu.tsx";
+import { Icon } from "~/components/ui/icon.tsx";
+import { useOptimisticThemeMode } from "~/hooks/useTheme.ts";
+import type { Theme } from "~/lib/theme.server.ts";
+import type { action } from "~/routes/actions.theme.ts";
 
 export function ModeToggle({
   userPreference,
 }: {
-  userPreference?: Theme | null
+  userPreference?: Theme | null;
 }) {
   const fetcher = useFetcher<typeof action>();
 
   const optimisticMode = useOptimisticThemeMode();
-  const mode = optimisticMode ?? userPreference ?? 'system';
+  const mode = optimisticMode ?? userPreference ?? "system";
   const changeTheme = (theme: typeof mode) => {
-    fetcher.submit({ theme }, { action: '/actions/theme', method: 'POST' });
+    fetcher.submit({ theme }, { action: "/actions/theme", method: "POST" });
   };
 
   return (
@@ -41,13 +41,13 @@ export function ModeToggle({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => changeTheme('light')}>
+        <DropdownMenuItem onClick={() => changeTheme("light")}>
           Light
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => changeTheme('dark')}>
+        <DropdownMenuItem onClick={() => changeTheme("dark")}>
           Dark
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => changeTheme('system')}>
+        <DropdownMenuItem onClick={() => changeTheme("system")}>
           System
         </DropdownMenuItem>
       </DropdownMenuContent>

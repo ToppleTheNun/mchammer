@@ -1,0 +1,20 @@
+name: CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-vanilla-ice:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: vanilla-ice
+    steps:
+      - uses: actions/checkout@v4
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+        with:
+          version: 0.1.127
+      - run: flyctl deploy -c ./fly.vanilla-ice.toml --remote-only
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}

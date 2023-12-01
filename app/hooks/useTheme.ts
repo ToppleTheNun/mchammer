@@ -1,12 +1,12 @@
-import { parse } from '@conform-to/zod';
-import { useFetchers } from '@remix-run/react';
-import { z } from 'zod';
+import { parse } from "@conform-to/zod";
+import { useFetchers } from "@remix-run/react";
+import { z } from "zod";
 
-import { useHints } from '~/lib/client-hints.tsx';
-import { useRequestInfo } from '~/lib/request-info.ts';
+import { useHints } from "~/lib/client-hints.tsx";
+import { useRequestInfo } from "~/lib/request-info.ts";
 
 export const themeFormSchema = z.object({
-  theme: z.enum(['system', 'light', 'dark']),
+  theme: z.enum(["system", "light", "dark"]),
 });
 
 /**
@@ -15,7 +15,7 @@ export const themeFormSchema = z.object({
  */
 export function useOptimisticThemeMode() {
   const fetchers = useFetchers();
-  const themeFetcher = fetchers.find(f => f.formAction === '/');
+  const themeFetcher = fetchers.find((f) => f.formAction === "/");
 
   if (themeFetcher && themeFetcher.formData) {
     const submission = parse(themeFetcher.formData, {
@@ -34,7 +34,7 @@ export function useTheme() {
   const requestInfo = useRequestInfo();
   const optimisticMode = useOptimisticThemeMode();
   if (optimisticMode)
-    return optimisticMode === 'system' ? hints.theme : optimisticMode;
+    return optimisticMode === "system" ? hints.theme : optimisticMode;
 
   return requestInfo.userPrefs.theme ?? hints.theme;
 }

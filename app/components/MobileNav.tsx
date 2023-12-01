@@ -1,19 +1,15 @@
-import { Link, type LinkProps, useNavigate } from '@remix-run/react';
-import { useState } from 'react';
+import { Link, type LinkProps, useNavigate } from "@remix-run/react";
+import { useState } from "react";
 
-import { Button } from '~/components/ui/button.tsx';
-import { Icon } from '~/components/ui/icon.tsx';
-import { ScrollArea } from '~/components/ui/scroll-area.tsx';
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-} from '~/components/ui/sheet.tsx';
-import { siteConfig } from '~/config/site.ts';
-import { cn } from '~/lib/utils.ts';
+import { Button } from "~/components/ui/button.tsx";
+import { Icon } from "~/components/ui/icon.tsx";
+import { ScrollArea } from "~/components/ui/scroll-area.tsx";
+import { Sheet, SheetContent, SheetTrigger } from "~/components/ui/sheet.tsx";
+import { siteConfig } from "~/config/site.ts";
+import { cn } from "~/lib/utils.ts";
 
 interface MobileLinkProps extends LinkProps {
-  onOpenChange?: (open: boolean) => void
+  onOpenChange?: (open: boolean) => void;
 }
 function MobileLink({
   to,

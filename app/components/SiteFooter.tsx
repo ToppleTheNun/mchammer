@@ -1,12 +1,11 @@
-import { siteConfig } from '~/config/site.ts';
+import { siteConfig } from "~/config/site.ts";
 
 export function SiteFooter() {
   return (
     <footer className="space-y-2 py-6 md:px-8 md:py-0">
       <div className="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
         <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
-          Built by
-          {' '}
+          Built by{" "}
           <a
             href={siteConfig.links.twitter}
             target="_blank"
@@ -15,8 +14,7 @@ export function SiteFooter() {
           >
             ToppleTheNun
           </a>
-          . The source code is available on
-          {' '}
+          . The source code is available on{" "}
           <a
             href={siteConfig.links.github}
             target="_blank"
@@ -28,8 +26,7 @@ export function SiteFooter() {
           .
         </p>
         <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
-          Using and inspired by
-          {' '}
+          Using and inspired by{" "}
           <a
             href="https://ui.shadcn.com"
             target="_blank"
