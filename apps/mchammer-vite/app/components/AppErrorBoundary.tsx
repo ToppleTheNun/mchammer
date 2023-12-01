@@ -1,15 +1,15 @@
-import { isRouteErrorResponse } from "@remix-run/react";
-import type { ReactNode } from "react";
+import { isRouteErrorResponse } from '@remix-run/react';
+import type { ReactNode } from 'react';
 
 import {
   PageHeader,
   PageHeaderDescription,
   PageHeaderHeading,
-} from "~/components/PageHeader.tsx";
-import { PageLayout } from "~/components/PageLayout.tsx";
-import { SiteFooter } from "~/components/SiteFooter.tsx";
-import { SiteHeader } from "~/components/SiteHeader.tsx";
-import { H2, Lead } from "~/components/typography.tsx";
+} from '~/components/PageHeader.tsx';
+import { PageLayout } from '~/components/PageLayout.tsx';
+import { SiteFooter } from '~/components/SiteFooter.tsx';
+import { SiteHeader } from '~/components/SiteHeader.tsx';
+import { H2, Lead } from '~/components/typography.tsx';
 
 function Header() {
   return (
@@ -43,7 +43,7 @@ export function AppErrorBoundary({ error }: { error: unknown }) {
             <div className="flex h-[50vh] flex-col items-center justify-center gap-2">
               <H2>
                 {error.status}
-                {" "}
+                {' '}
                 {error.statusText}
               </H2>
               <Lead>{error.data}</Lead>

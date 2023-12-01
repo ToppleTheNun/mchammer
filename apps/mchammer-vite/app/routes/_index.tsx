@@ -1,20 +1,20 @@
-import { redirect } from "@remix-run/node";
-import { Outlet } from "@remix-run/react";
+import { redirect } from '@remix-run/node';
+import { Outlet } from '@remix-run/react';
 
-import { serverTiming } from "~/constants.ts";
-import { combineHeaders, invariantResponse } from "~/lib/misc.ts";
-import { makeTimings, time } from "~/lib/timing.server.ts";
-import { findSeasonByName } from "~/seasons.ts";
+import { serverTiming } from '~/constants.ts';
+import { combineHeaders, invariantResponse } from '~/lib/misc.ts';
+import { makeTimings, time } from '~/lib/timing.server.ts';
+import { findSeasonByName } from '~/seasons.ts';
 
 export async function loader() {
-  const timings = makeTimings("index loader");
+  const timings = makeTimings('index loader');
 
-  const latest = await time(() => findSeasonByName("latest"), {
-    type: "findSeasonByName-latest",
+  const latest = await time(() => findSeasonByName('latest'), {
+    type: 'findSeasonByName-latest',
     timings,
   });
 
-  invariantResponse(latest, "Could not determine latest season.", {
+  invariantResponse(latest, 'Could not determine latest season.', {
     status: 500,
   });
 

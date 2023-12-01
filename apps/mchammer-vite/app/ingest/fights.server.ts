@@ -1,10 +1,10 @@
-import type { PlayerDetail } from "@topplethenun/mchammer-wcl";
-import { playerDetailsDpsHealerTankSchema } from "@topplethenun/mchammer-wcl";
-import { and, eq, gte, lte } from "drizzle-orm";
-import { sortBy } from "lodash-es";
+import type { PlayerDetail } from '@topplethenun/mchammer-wcl';
+import { playerDetailsDpsHealerTankSchema } from '@topplethenun/mchammer-wcl';
+import { and, eq, gte, lte } from 'drizzle-orm';
+import { sortBy } from 'lodash-es';
 
-import { isRegion } from "~/constants.ts";
-import { DIFFERENT_REPORT_TOLERANCE } from "~/ingest/constants.server.ts";
+import { isRegion } from '~/constants.ts';
+import { DIFFERENT_REPORT_TOLERANCE } from '~/ingest/constants.server.ts';
 import type {
   IngestedReportFight,
   IngestibleReportFight,
@@ -12,17 +12,17 @@ import type {
   ReportFight,
   ReportWithIngestedFights,
   ReportWithIngestibleFights,
-} from "~/ingest/types.ts";
-import { pg } from "~/lib/storage.server.ts";
-import { fight } from "~/lib/db/schema.ts";
-import { getLogger } from "~/lib/logger.server.ts";
-import { type Timings, time } from "~/lib/timing.server.ts";
-import { wcl } from "~/lib/wcl.server.ts";
-import { findSeasonsByTimestamp } from "~/seasons.ts";
-import { isPresent } from "~/typeGuards.ts";
-import { pipe } from "~/utils.ts";
+} from '~/ingest/types.ts';
+import { pg } from '~/lib/storage.server.ts';
+import { fight } from '~/lib/db/schema.ts';
+import { getLogger } from '~/lib/logger.server.ts';
+import { type Timings, time } from '~/lib/timing.server.ts';
+import { wcl } from '~/lib/wcl.server.ts';
+import { findSeasonsByTimestamp } from '~/seasons.ts';
+import { isPresent } from '~/typeGuards.ts';
+import { pipe } from '~/utils.ts';
 
-const ingestFightsLogger = getLogger(["ingest", "fights"]);
+const ingestFightsLogger = getLogger(['ingest', 'fights']);
 
 async function getReport(reportID: string, timings: Timings): Promise<Report> {
   const rawFightData = await time(() => wcl.getFights({ reportID }), {
@@ -83,7 +83,7 @@ function makeReportFightIngestible(basicReportFight: ReportFight, playerDetails:
     .filter(isPresent);
   const friendlyPlayers = sortBy(
     friendlyPlayerDetails.map(player => player.guid),
-  ).join(":");
+  ).join(':');
 
   const tanksInFight = tankDetails.filter(tank =>
     basicReportFight.friendlyPlayerIDs.includes(tank.id),
@@ -102,7 +102,7 @@ async function addIngestibleFightsToReport(basicReport: Report, timings: Timings
   });
   const fightIDs = basicReport.reportFights.map(fight => fight.id);
 
-  logger.debug("Retrieving player details");
+  logger.debug('Retrieving player details');
   const rawPlayerDetails = await time(
     () =>
       wcl.getPlayerDetails({
@@ -131,7 +131,7 @@ async function addIngestibleFightsToReport(basicReport: Report, timings: Timings
       numberOfPlayers: playerDetails.length,
       numberOfTanks: playerDetailsResult.data.tanks.length,
     },
-    "Retrieving player details for report",
+    'Retrieving player details for report',
   );
   const reportFightsWithDetails
     = basicReport.reportFights.map<IngestibleReportFight>(fight =>
@@ -156,7 +156,7 @@ function isFightInSeason(fight: IngestibleReportFight): boolean {
   if (seasons.length === 0) {
     logger.debug(
       { absoluteStartTime: fight.absoluteStartTime },
-      "Unable to find season",
+      'Unable to find season',
     );
     return false;
   }
@@ -193,7 +193,7 @@ export async function ingestFight(reportFight: IngestibleReportFight, timings: T
     fightEndTime: reportFight.endTime,
   });
   logger.debug(
-    "Checking if fight has already been ingested from another report...",
+    'Checking if fight has already been ingested from another report...',
   );
   const existingFight = await time(
     () =>
@@ -222,12 +222,12 @@ export async function ingestFight(reportFight: IngestibleReportFight, timings: T
         ),
       }),
     {
-      type: "drizzle.query.fight.findFirst",
+      type: 'drizzle.query.fight.findFirst',
       timings,
     },
   );
   if (existingFight) {
-    logger.info("Fight already ingested, returning existing fight");
+    logger.info('Fight already ingested, returning existing fight');
     return { ...reportFight, ingestedFight: existingFight };
   }
 
@@ -247,7 +247,7 @@ export async function ingestFight(reportFight: IngestibleReportFight, timings: T
         })
         .returning(),
     {
-      type: "drizzle.insert(fight)",
+      type: 'drizzle.insert(fight)',
       timings,
     },
   );
@@ -291,12 +291,12 @@ export async function ingestFightsFromReport(reportID: string, timings: Timings)
   );
 
   ingestedFightResults
-    .filter((it): it is PromiseRejectedResult => it.status === "rejected")
+    .filter((it): it is PromiseRejectedResult => it.status === 'rejected')
     .forEach(it => logger.error(it.reason));
   const ingestedFights = ingestedFightResults
     .filter(
       (it): it is PromiseFulfilledResult<IngestedReportFight> =>
-        it.status === "fulfilled",
+        it.status === 'fulfilled',
     )
     .map(it => it.value);
 

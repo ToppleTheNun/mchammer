@@ -1,0 +1,4 @@
+{
+  "extends": ["@topplethenun/mchammer-tsconfig/node.json"],
+  "include": ["src"]
+}

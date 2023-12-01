@@ -12,7 +12,7 @@ export function makeTimings(type: string, desc?: string) {
   const timings: Timings = {
     [type]: [{ desc, start: performance.now() }],
   };
-  Object.defineProperty(timings, "toString", {
+  Object.defineProperty(timings, 'toString', {
     value() {
       return getServerTimeHeader(timings);
     },
@@ -46,7 +46,7 @@ export async function time<ReturnType>(fn: Promise<ReturnType> | (() => ReturnTy
   timings?: Timings
 }): Promise<ReturnType> {
   const timer = createTimer(type, desc);
-  const promise = typeof fn === "function" ? fn() : fn;
+  const promise = typeof fn === 'function' ? fn() : fn;
   if (!timings)
     return promise;
 
@@ -58,7 +58,7 @@ export async function time<ReturnType>(fn: Promise<ReturnType> | (() => ReturnTy
 
 export function getServerTimeHeader(timings?: Timings) {
   if (!timings)
-    return "";
+    return '';
 
   return Object.entries(timings)
     .map(([key, timingInfos]) => {
@@ -71,14 +71,14 @@ export function getServerTimeHeader(timings?: Timings) {
       const desc = timingInfos
         .map(t => t.desc)
         .filter(Boolean)
-        .join(" & ");
+        .join(' & ');
       return [
-        key.replaceAll(/([: @=;,/\\])/g, "_"),
+        key.replaceAll(/([: @=;,/\\])/g, '_'),
         desc ? `desc=${JSON.stringify(desc)}` : null,
         `dur=${dur}`,
       ]
         .filter(Boolean)
-        .join(";");
+        .join(';');
     })
-    .join(",");
+    .join(',');
 }

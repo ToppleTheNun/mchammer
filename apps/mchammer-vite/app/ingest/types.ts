@@ -1,14 +1,14 @@
 import type {
   DamageTakenEvent,
   PlayerDetail,
-} from "@topplethenun/mchammer-wcl";
+} from '@topplethenun/mchammer-wcl';
 
-import type { Region } from "~/constants.ts";
+import type { Region } from '~/constants.ts';
 import type {
   Character,
   DodgeParryMissStreak,
   Fight,
-} from "~/lib/db/schema.ts";
+} from '~/lib/db/schema.ts';
 
 export interface ReportFight {
   reportID: string
@@ -78,7 +78,7 @@ export interface ReportDodgeParryMissStreak {
 
 export type IngestibleReportDodgeParryMissStreak = Omit<
   ReportDodgeParryMissStreak,
-  "ingestedCharacter"
+  'ingestedCharacter'
 > & {
   streak: number
   ingestedFight: Fight

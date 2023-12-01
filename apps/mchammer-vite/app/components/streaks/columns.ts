@@ -1,6 +1,6 @@
-import type { ColumnDef } from "@tanstack/react-table";
+import type { ColumnDef } from '@tanstack/react-table';
 
-import type { Region } from "~/constants.ts";
+import type { Region } from '~/constants.ts';
 
 export interface DodgeParryMissStreak {
   id: number
@@ -15,31 +15,31 @@ export interface DodgeParryMissStreak {
 
 export const columns: ColumnDef<DodgeParryMissStreak>[] = [
   {
-    accessorKey: "region",
-    header: "Region",
+    accessorKey: 'region',
+    header: 'Region',
   },
   {
-    accessorKey: "realm",
-    header: "Realm",
+    accessorKey: 'realm',
+    header: 'Realm',
   },
   {
-    accessorKey: "character",
-    header: "Character",
+    accessorKey: 'character',
+    header: 'Character',
   },
   {
-    accessorKey: "dodge",
-    header: "Dodge",
+    accessorKey: 'dodge',
+    header: 'Dodge',
   },
   {
-    accessorKey: "parry",
-    header: "Parry",
+    accessorKey: 'parry',
+    header: 'Parry',
   },
   {
-    accessorKey: "miss",
-    header: "Miss",
+    accessorKey: 'miss',
+    header: 'Miss',
   },
   {
-    accessorKey: "streak",
-    header: "Streak",
+    accessorKey: 'streak',
+    header: 'Streak',
   },
 ];

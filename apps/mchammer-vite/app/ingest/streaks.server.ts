@@ -1,8 +1,8 @@
-import type { PlayerDetail } from "@topplethenun/mchammer-wcl";
-import { and, desc, eq, gte, lte } from "drizzle-orm";
-import { groupBy } from "lodash-es";
+import type { PlayerDetail } from '@topplethenun/mchammer-wcl';
+import { and, desc, eq, gte, lte } from 'drizzle-orm';
+import { groupBy } from 'lodash-es';
 
-import { DIFFERENT_REPORT_TOLERANCE } from "~/ingest/constants.server.ts";
+import { DIFFERENT_REPORT_TOLERANCE } from '~/ingest/constants.server.ts';
 import type {
   IngestedReportDamageTakenEvent,
   IngestedReportDodgeParryMissStreak,
@@ -12,15 +12,15 @@ import type {
   ReportWithIngestedDamageTakenEvents,
   ReportWithIngestedDodgeParryMissStreaks,
   ReportWithIngestedFights,
-} from "~/ingest/types.ts";
-import { pg } from "~/lib/storage.server.ts";
-import { dodgeParryMissStreak } from "~/lib/db/schema.ts";
-import { getLogger } from "~/lib/logger.server.ts";
-import type { Timings } from "~/lib/timing.server.ts";
-import { time } from "~/lib/timing.server.ts";
-import { isPresent } from "~/typeGuards.js";
+} from '~/ingest/types.ts';
+import { pg } from '~/lib/storage.server.ts';
+import { dodgeParryMissStreak } from '~/lib/db/schema.ts';
+import { getLogger } from '~/lib/logger.server.ts';
+import type { Timings } from '~/lib/timing.server.ts';
+import { time } from '~/lib/timing.server.ts';
+import { isPresent } from '~/typeGuards.js';
 
-const ingestStreaksLogger = getLogger(["ingest", "streaks"]);
+const ingestStreaksLogger = getLogger(['ingest', 'streaks']);
 
 function groupDamageTakenEventsByPlayer(damageTakenEvents: IngestedReportDamageTakenEvent[]): Record<number, IngestedReportDamageTakenEvent[]> {
   return groupBy(damageTakenEvents, event => event.targetID);
@@ -139,7 +139,7 @@ async function makeReportStreakIngestible(reportDodgeParryMissStreak: ReportDodg
     streak,
   });
 
-  logger.debug("Ingesting");
+  logger.debug('Ingesting');
 
   const ingestedCharacter = reportDodgeParryMissStreak.ingestedCharacter;
   if (!ingestedCharacter) {
@@ -179,7 +179,7 @@ async function getMinimumStreakLengthToIngest(timings: Timings) {
         .from(dodgeParryMissStreak)
         .orderBy(desc(dodgeParryMissStreak.streak))
         .limit(25),
-    { type: "drizzle.query.streak.findTop", timings },
+    { type: 'drizzle.query.streak.findTop', timings },
   );
   if (topStreaks.length === 0)
     return 0;
@@ -239,16 +239,16 @@ async function ingestStreak(ingestibleStreak: IngestibleReportDodgeParryMissStre
         ),
       }),
     {
-      type: "drizzle.query.streak.findFirst",
+      type: 'drizzle.query.streak.findFirst',
       timings,
     },
   );
   if (existingStreak) {
-    logger.info("Streak already ingested, returning existing streak");
+    logger.info('Streak already ingested, returning existing streak');
     return { ...ingestibleStreak, ingestedStreak: existingStreak };
   }
 
-  logger.debug("Persisting streak");
+  logger.debug('Persisting streak');
   const createdStreaks = await time(
     () =>
       pg
@@ -269,7 +269,7 @@ async function ingestStreak(ingestibleStreak: IngestibleReportDodgeParryMissStre
         })
         .returning(),
     {
-      type: "drizzle.insert(dodgeParryMissStreak)",
+      type: 'drizzle.insert(dodgeParryMissStreak)',
       timings,
     },
   );
@@ -279,7 +279,7 @@ async function ingestStreak(ingestibleStreak: IngestibleReportDodgeParryMissStre
     );
   }
   const createdStreak = createdStreaks.at(0)!;
-  logger.info({ createdStreak: createdStreak.id }, "Persisted streak");
+  logger.info({ createdStreak: createdStreak.id }, 'Persisted streak');
   return { ...ingestibleStreak, ingestedStreak: createdStreak };
 }
 
@@ -313,22 +313,22 @@ export async function ingestDodgeParryMissStreaks(report: ReportWithIngestedDama
     `Retrieved ingestible streaks`,
   );
 
-  logger.debug("Fetching minimum streak to ingest");
+  logger.debug('Fetching minimum streak to ingest');
   const minimumStreakToIngest = await getMinimumStreakLengthToIngest(timings);
-  logger.debug({ minimumStreakToIngest }, "Retrieved minimum streak to ingest");
+  logger.debug({ minimumStreakToIngest }, 'Retrieved minimum streak to ingest');
 
   const ingestibleStreaksResults = await Promise.allSettled(
     reportStreaks.map(streak => makeReportStreakIngestible(streak, report)),
   );
   ingestibleStreaksResults
-    .filter((it): it is PromiseRejectedResult => it.status === "rejected")
+    .filter((it): it is PromiseRejectedResult => it.status === 'rejected')
     .forEach(it => logger.error(it.reason));
   const ingestibleStreaks = ingestibleStreaksResults
     .filter(
       (
         it,
       ): it is PromiseFulfilledResult<IngestibleReportDodgeParryMissStreak> =>
-        it.status === "fulfilled",
+        it.status === 'fulfilled',
     )
     .map(it => it.value)
     .filter(it => it.streak >= minimumStreakToIngest);
@@ -340,7 +340,7 @@ export async function ingestDodgeParryMissStreaks(report: ReportWithIngestedDama
 
   const ingestedStreakResults = await ingestStreaks(ingestibleStreaks, timings);
   ingestedStreakResults
-    .filter((it): it is PromiseRejectedResult => it.status === "rejected")
+    .filter((it): it is PromiseRejectedResult => it.status === 'rejected')
     .forEach(it => logger.error(it.reason));
   const childIngestions = ingestedStreakResults
     .filter(
@@ -348,18 +348,18 @@ export async function ingestDodgeParryMissStreaks(report: ReportWithIngestedDama
         it,
       ): it is PromiseFulfilledResult<
         PromiseSettledResult<IngestedReportDodgeParryMissStreak>[]
-      > => it.status === "fulfilled",
+      > => it.status === 'fulfilled',
     )
     .map(it => it.value)
     .flat()
     .filter(isPresent);
   childIngestions
-    .filter((it): it is PromiseRejectedResult => it.status === "rejected")
+    .filter((it): it is PromiseRejectedResult => it.status === 'rejected')
     .forEach(it => logger.error(it.reason));
   const ingestedStreaks: IngestedReportDodgeParryMissStreak[] = childIngestions
     .filter(
       (it): it is PromiseFulfilledResult<IngestedReportDodgeParryMissStreak> =>
-        it.status === "fulfilled",
+        it.status === 'fulfilled',
     )
     .map(it => it.value);
 

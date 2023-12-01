@@ -2,12 +2,12 @@ import type {
   DamageTakenEvents,
   GetPhysicalDamageTakenEventsQueryVariables,
   PlayerDetail,
-} from "@topplethenun/mchammer-wcl";
-import { damageTakenEventArraySchema } from "@topplethenun/mchammer-wcl";
-import { uniqBy } from "lodash-es";
+} from '@topplethenun/mchammer-wcl';
+import { damageTakenEventArraySchema } from '@topplethenun/mchammer-wcl';
+import { uniqBy } from 'lodash-es';
 
-import type { Region } from "~/constants.ts";
-import { findOrCreateCharacter } from "~/ingest/characters.server.js";
+import type { Region } from '~/constants.ts';
+import { findOrCreateCharacter } from '~/ingest/characters.server.js';
 import type {
   IngestedReportDamageTakenEvent,
   IngestedReportFight,
@@ -16,13 +16,13 @@ import type {
   ReportWithIngestedDamageTakenEvents,
   ReportWithIngestedFights,
   ReportWithIngestibleDamageTakenEvents,
-} from "~/ingest/types.ts";
-import type { Character } from "~/lib/db/schema.ts";
-import { getLogger } from "~/lib/logger.server.ts";
-import { type Timings, time } from "~/lib/timing.server.ts";
-import { wcl } from "~/lib/wcl.server.ts";
+} from '~/ingest/types.ts';
+import type { Character } from '~/lib/db/schema.ts';
+import { getLogger } from '~/lib/logger.server.ts';
+import { type Timings, time } from '~/lib/timing.server.ts';
+import { wcl } from '~/lib/wcl.server.ts';
 
-const ingestEventsLogger = getLogger(["ingest", "events"]);
+const ingestEventsLogger = getLogger(['ingest', 'events']);
 
 interface GetDamageTakenEventsDuringTimestampResult {
   nextPageTimestamp: number | null
@@ -34,7 +34,7 @@ async function getDamageTakenEventsDuringTimestamp(queryVariables: GetPhysicalDa
     ...queryVariables,
   });
 
-  logger.debug("Retrieving physical damage taken events taken");
+  logger.debug('Retrieving physical damage taken events taken');
 
   const results = await time(
     () => wcl.getPhysicalDamageTakenEvents(queryVariables),
@@ -57,13 +57,13 @@ async function getDamageTakenEventsDuringTimestamp(queryVariables: GetPhysicalDa
   if (!parseResults.success) {
     logger.warn(
       { issues: parseResults.error.issues },
-      "Unable to parse damage taken events from response",
+      'Unable to parse damage taken events from response',
     );
     return { nextPageTimestamp: null, events: [] };
   }
   logger.info(
     { loadingAnotherPage: Boolean(nextPageTimestamp) },
-    "Loaded and parsed events",
+    'Loaded and parsed events',
   );
   return {
     nextPageTimestamp: nextPageTimestamp ?? null,
@@ -84,7 +84,7 @@ async function getReportDamageTakenEventsForFight(fight: IngestedReportFight, ti
   });
   let fightDamageTakenEvents: ReportDamageTakenEvent[] = [];
 
-  logger.info("Retrieving physical damage taken events taken");
+  logger.info('Retrieving physical damage taken events taken');
 
   do {
     const { nextPageTimestamp, events }
@@ -160,12 +160,12 @@ async function addIngestibleDamageTakenEventsToReport(report: ReportWithIngested
     timings,
   );
   reportDamageTakenEventResults
-    .filter((it): it is PromiseRejectedResult => it.status === "rejected")
+    .filter((it): it is PromiseRejectedResult => it.status === 'rejected')
     .forEach(it => logger.error(it.reason));
   const reportDamageTakenEvents = reportDamageTakenEventResults
     .filter(
       (it): it is PromiseFulfilledResult<ReportDamageTakenEvent[]> =>
-        it.status === "fulfilled",
+        it.status === 'fulfilled',
     )
     .reduce<ReportDamageTakenEvent[]>(
       (acc, current) => acc.concat(current.value),
@@ -178,12 +178,12 @@ async function addIngestibleDamageTakenEventsToReport(report: ReportWithIngested
     ),
   );
   ingestibleEventResults
-    .filter((it): it is PromiseRejectedResult => it.status === "rejected")
+    .filter((it): it is PromiseRejectedResult => it.status === 'rejected')
     .forEach(it => logger.error(it.reason));
   const ingestibleEvents = ingestibleEventResults
     .filter(
       (it): it is PromiseFulfilledResult<IngestibleReportDamageTakenEvent> =>
-        it.status === "fulfilled",
+        it.status === 'fulfilled',
     )
     .map(it => it.value);
 
@@ -235,7 +235,7 @@ async function ingestDamageTakenEventsForReport(report: ReportWithIngestibleDama
 
   logger.info(
     { numberOfPlayers: filteredPlayerDetails.length },
-    "Ingesting players for report",
+    'Ingesting players for report',
   );
   const ingestCharactersResults = await ingestCharacters(
     filteredPlayerDetails,
@@ -243,18 +243,18 @@ async function ingestDamageTakenEventsForReport(report: ReportWithIngestibleDama
     timings,
   );
   ingestCharactersResults
-    .filter((it): it is PromiseRejectedResult => it.status === "rejected")
+    .filter((it): it is PromiseRejectedResult => it.status === 'rejected')
     .forEach(it => logger.error(it.reason));
   const characters = ingestCharactersResults
     .filter(
       (it): it is PromiseFulfilledResult<Character> =>
-        it.status === "fulfilled",
+        it.status === 'fulfilled',
     )
     .map(it => it.value)
     .flat();
   logger.info(
     { numberOfPlayers: filteredPlayerDetails.length },
-    "Ingested players for report",
+    'Ingested players for report',
   );
 
   return Promise.allSettled(
@@ -283,12 +283,12 @@ export async function ingestDamageTakenEvents(report: ReportWithIngestedFights, 
       timings,
     );
   ingestedDamageTakenEventsResults
-    .filter((it): it is PromiseRejectedResult => it.status === "rejected")
+    .filter((it): it is PromiseRejectedResult => it.status === 'rejected')
     .forEach(it => logger.error(it.reason));
   const ingestedDamageTakenEvents = ingestedDamageTakenEventsResults
     .filter(
       (it): it is PromiseFulfilledResult<IngestedReportDamageTakenEvent> =>
-        it.status === "fulfilled",
+        it.status === 'fulfilled',
     )
     .map(it => it.value);
 

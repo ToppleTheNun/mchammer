@@ -1,5 +1,5 @@
 export function TailwindIndicator() {
-  if (ENV.MODE === "production")
+  if (ENV.MODE === 'production')
     return null;
 
   return (

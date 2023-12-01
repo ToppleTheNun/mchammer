@@ -1,31 +1,31 @@
-import { PassThrough } from "node:stream";
+import { PassThrough } from 'node:stream';
 
 import type {
   DataFunctionArgs,
   EntryContext,
-} from "@remix-run/node";
-import { createReadableStreamFromReadable } from "@remix-run/node";
-import { RemixServer } from "@remix-run/react";
-import { captureException, captureRemixServerException } from "@sentry/remix";
-import isbot from "isbot";
-import { renderToPipeableStream } from "react-dom/server";
+} from '@remix-run/node';
+import { createReadableStreamFromReadable } from '@remix-run/node';
+import { RemixServer } from '@remix-run/react';
+import { captureException, captureRemixServerException } from '@sentry/remix';
+import isbot from 'isbot';
+import { renderToPipeableStream } from 'react-dom/server';
 
-import { getEnv, init } from "~/lib/env.server.ts";
+import { getEnv, init } from '~/lib/env.server.ts';
 
 const ABORT_DELAY = 5_000;
 
 init();
 globalThis.ENV = getEnv();
 
-if (ENV.MODE === "production" && ENV.SENTRY_DSN)
-  void import("./lib/monitoring.server.ts").then(({ init }) => init());
+if (ENV.MODE === 'production' && ENV.SENTRY_DSN)
+  void import('./lib/monitoring.server.ts').then(({ init }) => init());
 
 export function handleError(
   error: unknown,
   { request }: DataFunctionArgs,
 ): void {
   if (error instanceof Error) {
-    captureRemixServerException(error, "remix.server.ts", request);
+    captureRemixServerException(error, 'remix.server.ts', request);
   }
   else {
     // Optionally capture non-Error objects
@@ -39,7 +39,7 @@ export default function handleRequest(
   responseHeaders: Headers,
   remixContext: EntryContext,
 ) {
-  return isbot(request.headers.get("user-agent"))
+  return isbot(request.headers.get('user-agent'))
     ? handleBotRequest(
       request,
       responseStatusCode,
@@ -74,7 +74,7 @@ function handleBotRequest(
           const body = new PassThrough();
           const stream = createReadableStreamFromReadable(body);
 
-          responseHeaders.set("Content-Type", "text/html");
+          responseHeaders.set('Content-Type', 'text/html');
 
           resolve(
             new Response(stream, {
@@ -123,7 +123,7 @@ function handleBrowserRequest(
           const body = new PassThrough();
           const stream = createReadableStreamFromReadable(body);
 
-          responseHeaders.set("Content-Type", "text/html");
+          responseHeaders.set('Content-Type', 'text/html');
 
           resolve(
             new Response(stream, {

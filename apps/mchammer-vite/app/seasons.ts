@@ -1,4 +1,4 @@
-import type { Region } from "~/constants.ts";
+import type { Region } from '~/constants.ts';
 
 const UNKNOWN_SEASON_START_OR_ENDING = null;
 
@@ -15,28 +15,28 @@ export interface Season {
 
 function offsetByRegion(timestamp: number, region: Region): number {
   switch (region) {
-    case "us": {
+    case 'us': {
       return timestamp;
     }
-    case "eu": {
+    case 'eu': {
       return timestamp + 46_800_000;
     }
-    case "kr":
-    case "tw":
+    case 'kr':
+    case 'tw':
       return timestamp + 111_600_000;
   }
 }
 
 export const seasons: readonly Season[] = [
   {
-    name: "DF S3",
-    shortName: "S3",
-    slug: "df-season-3",
+    name: 'DF S3',
+    shortName: 'S3',
+    slug: 'df-season-3',
     startDates: {
-      us: offsetByRegion(1_699_974_000_000, "us"),
-      eu: offsetByRegion(1_699_974_000_000, "eu"),
-      kr: offsetByRegion(1_699_974_000_000, "kr"),
-      tw: offsetByRegion(1_699_974_000_000, "tw"),
+      us: offsetByRegion(1_699_974_000_000, 'us'),
+      eu: offsetByRegion(1_699_974_000_000, 'eu'),
+      kr: offsetByRegion(1_699_974_000_000, 'kr'),
+      tw: offsetByRegion(1_699_974_000_000, 'tw'),
     },
     endDates: {
       us: UNKNOWN_SEASON_START_OR_ENDING,
@@ -44,7 +44,7 @@ export const seasons: readonly Season[] = [
       kr: UNKNOWN_SEASON_START_OR_ENDING,
       tw: UNKNOWN_SEASON_START_OR_ENDING,
     },
-    seasonIcon: "/INV_Misc_Head_Dragon_01.png",
+    seasonIcon: '/INV_Misc_Head_Dragon_01.png',
     encounterIds: [
       2728, // Council of Dreams
       2677, // Fyrakk, the Blazing
@@ -111,7 +111,7 @@ export function findSeasonsByTimestamp(timestamp = Date.now()): Season[] {
 }
 
 export function findSeasonByName(slug: string): Season | null {
-  if (slug === "latest") {
+  if (slug === 'latest') {
     const ongoingSeason = findSeasonByTimestamp();
 
     if (ongoingSeason)

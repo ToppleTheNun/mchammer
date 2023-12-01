@@ -1,8 +1,8 @@
-import process from "node:process";
+import process from 'node:process';
 
-import { z } from "zod";
+import { z } from 'zod';
 
-import { generated } from "~/generated/env.ts";
+import { generated } from '~/generated/env.ts';
 
 const schema = z.object({
   // Client
@@ -12,11 +12,11 @@ const schema = z.object({
   SENTRY_DSN: z.string().optional(),
   // Server
   NODE_ENV: z
-    .enum(["development", "test", "production"])
-    .default("development"),
+    .enum(['development', 'test', 'production'])
+    .default('development'),
   PINO_LOG_LEVEL: z
-    .enum(["fatal", "error", "warn", "info", "debug", "trace", "silent"])
-    .default("info"),
+    .enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent'])
+    .default('info'),
   DATABASE_URL: z.string(),
   REDIS_URL: z.string(),
   WARCRAFT_LOGS_CLIENT_ID: z.string(),
@@ -35,11 +35,11 @@ export function init() {
 
   if (!parsed.success) {
     console.error(
-      "❌ Invalid environment variables:",
+      '❌ Invalid environment variables:',
       parsed.error.flatten().fieldErrors,
     );
 
-    throw new Error("Invalid environment variables");
+    throw new Error('Invalid environment variables');
   }
 }
 

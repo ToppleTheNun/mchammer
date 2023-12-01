@@ -1,6 +1,6 @@
-import { Link } from "@remix-run/react";
+import { Link } from '@remix-run/react';
 
-import { siteConfig } from "~/config/site.ts";
+import { siteConfig } from '~/config/site.ts';
 
 export function MainNav() {
   return (

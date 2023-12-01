@@ -1,11 +1,16 @@
 {
-  "extends": ["@topplethenun/mchammer-tsconfig/remix.json"],
+  "extends": ["@topplethenun/mchammer-tsconfig/vite-react.json"],
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
       "~/*": ["./app/*"]
     }
   },
-  "include": ["env.d.ts", "reset.d.ts", "**/*.ts", "**/*.tsx",
-    "**/*.js"]
+  "include": [
+    "env.d.ts",
+    "reset.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.js"
+  ]
 }

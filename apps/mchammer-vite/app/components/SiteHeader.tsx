@@ -1,14 +1,14 @@
-import { NavLink } from "@remix-run/react";
+import { NavLink } from '@remix-run/react';
 
-import { MainNav } from "~/components/MainNav.tsx";
-import { MobileNav } from "~/components/MobileNav.tsx";
-import { ModeToggle } from "~/components/ModeToggle.tsx";
-import { SeasonSwitcher } from "~/components/SeasonSwitcher.tsx";
-import { buttonVariants } from "~/components/ui/button.tsx";
-import { Icon } from "~/components/ui/icon.tsx";
-import { siteConfig } from "~/config/site.ts";
-import type { Theme } from "~/lib/theme.server.ts";
-import { cn } from "~/lib/utils.ts";
+import { MainNav } from '~/components/MainNav.tsx';
+import { MobileNav } from '~/components/MobileNav.tsx';
+import { ModeToggle } from '~/components/ModeToggle.tsx';
+import { SeasonSwitcher } from '~/components/SeasonSwitcher.tsx';
+import { buttonVariants } from '~/components/ui/button.tsx';
+import { Icon } from '~/components/ui/icon.tsx';
+import { siteConfig } from '~/config/site.ts';
+import type { Theme } from '~/lib/theme.server.ts';
+import { cn } from '~/lib/utils.ts';
 
 export function SiteHeader({ theme }: { theme: Theme | null }) {
   return (
@@ -27,7 +27,7 @@ export function SiteHeader({ theme }: { theme: Theme | null }) {
               rel="noreferrer"
             >
               <div
-                className={cn(buttonVariants({ variant: "ghost" }), "w-9 px-0")}
+                className={cn(buttonVariants({ variant: 'ghost' }), 'w-9 px-0')}
               >
                 <Icon name="github-logo" className="h-4 w-4">
                   <span className="sr-only">GitHub</span>

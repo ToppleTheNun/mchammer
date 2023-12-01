@@ -1,7 +1,7 @@
 /**
  * Merge multiple headers objects into one (uses set so headers are overridden)
  */
-export function mergeHeaders(...headers: Array<ResponseInit["headers"] | null | undefined>) {
+export function mergeHeaders(...headers: Array<ResponseInit['headers'] | null | undefined>) {
   const merged = new Headers();
   for (const header of headers) {
     if (!header)
@@ -15,7 +15,7 @@ export function mergeHeaders(...headers: Array<ResponseInit["headers"] | null | 
 /**
  * Combine multiple header objects into one (uses append so headers are not overridden)
  */
-export function combineHeaders(...headers: Array<ResponseInit["headers"] | null | undefined>) {
+export function combineHeaders(...headers: Array<ResponseInit['headers'] | null | undefined>) {
   const combined = new Headers();
   for (const header of headers) {
     if (!header)
@@ -60,7 +60,7 @@ export function invariant(
   message: string | (() => string),
 ): asserts condition {
   if (!condition)
-    throw new Error(typeof message === "function" ? message() : message);
+    throw new Error(typeof message === 'function' ? message() : message);
 }
 
 /**
@@ -84,7 +84,7 @@ export function invariantResponse(
   responseInit?: ResponseInit,
 ): asserts condition {
   if (!condition) {
-    throw new Response(typeof message === "function" ? message() : message, {
+    throw new Response(typeof message === 'function' ? message() : message, {
       status: 400,
       ...responseInit,
     });
@@ -93,9 +93,9 @@ export function invariantResponse(
 
 export function getDomainUrl(request: Request) {
   const host
-    = request.headers.get("X-Forwarded-Host")
-    ?? request.headers.get("host")
+    = request.headers.get('X-Forwarded-Host')
+    ?? request.headers.get('host')
     ?? new URL(request.url).host;
-  const protocol = host.includes("localhost") ? "http" : "https";
+  const protocol = host.includes('localhost') ? 'http' : 'https';
   return `${protocol}://${host}`;
 }

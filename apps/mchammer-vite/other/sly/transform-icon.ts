@@ -1,4 +1,4 @@
-import type { Meta } from "@sly-cli/sly";
+import type { Meta } from '@sly-cli/sly';
 
 /**
  * @type {import('@sly-cli/sly/dist').Transformer}
@@ -15,5 +15,5 @@ function prependLicenseInfo(input: string, meta: Meta): string {
     `<!-- License ${meta.license} -->`,
     `<!-- ${meta.source} -->`,
     input,
-  ].join("\n");
+  ].join('\n');
 }
