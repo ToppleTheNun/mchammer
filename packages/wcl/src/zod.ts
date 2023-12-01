@@ -41,6 +41,13 @@ export type PlayerDetailsDpsHealerTank = z.infer<
   typeof playerDetailsDpsHealerTankSchema
 >;
 
+export const playerDetailsResponseSchema = z.object({
+  data: z.object({
+    playerDetails: playerDetailsDpsHealerTankSchema,
+  }),
+});
+export type PlayerDetailsResponse = z.infer<typeof playerDetailsResponseSchema>;
+
 export const damageTakenEventSchema = z.object({
   timestamp: z.number(),
   type: z.literal("damage"),

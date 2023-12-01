@@ -16,14 +16,14 @@ init();
 globalThis.ENV = getEnv();
 
 if (ENV.MODE === "production" && ENV.SENTRY_DSN)
-  import("./lib/monitoring.server.ts").then(({ init }) => init());
+  void import("./lib/monitoring.server.ts").then(({ init }) => init());
 
 export function handleError(
   error: unknown,
   { request }: DataFunctionArgs,
 ): void {
   if (error instanceof Error) {
-    captureRemixServerException(error, "remix.server.ts", request);
+    void captureRemixServerException(error, "remix.server.ts", request);
   }
   else {
     // Optionally capture non-Error objects

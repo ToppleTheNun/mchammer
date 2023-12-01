@@ -1,9 +1,9 @@
 import process from "node:process";
 
+import { remember } from "@epic-web/remember";
 import type { WCLAuth, WCLOAuthResponse } from "@topplethenun/mchammer-wcl";
 import { WclClient, wclAuthSchema } from "@topplethenun/mchammer-wcl";
 
-import { singleton } from "~/lib/singleton.server.ts";
 import { redis } from "~/lib/storage.server.ts";
 
 async function setWCLAuthentication({
@@ -30,7 +30,7 @@ async function getWCLAuthentication(): Promise<WCLAuth | null> {
   return wclAuthSchema.parseAsync(result);
 }
 
-export const wcl = singleton(
+export const wcl = remember(
   "wcl",
   () =>
     new WclClient({

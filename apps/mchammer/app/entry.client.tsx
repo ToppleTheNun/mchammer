@@ -5,7 +5,7 @@ import { hydrateRoot } from "react-dom/client";
 import { reportWebVitalsToVercelAnalytics } from "#app/lib/vitals.client.ts";
 
 if (ENV.MODE === "production" && ENV.SENTRY_DSN)
-  import("./lib/monitoring.client.ts").then(({ init }) => init());
+  void import("./lib/monitoring.client.ts").then(({ init }) => init());
 
 function hydrate() {
   return startTransition(() => {

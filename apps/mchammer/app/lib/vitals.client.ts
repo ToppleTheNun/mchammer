@@ -52,5 +52,5 @@ export function reportWebVitalsToVercelAnalytics(): void {
       onLCP(sendToVercelAnalytics);
       onTTFB(sendToVercelAnalytics);
     },
-  );
+  ).catch(console.error);
 }

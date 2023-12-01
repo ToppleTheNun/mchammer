@@ -30,9 +30,11 @@
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
+    "@conform-to/dom": "0.9.1",
     "@conform-to/react": "0.9.1",
     "@conform-to/zod": "0.9.1",
     "@epic-web/client-hints": "1.2.2",
+    "@epic-web/remember": "1.0.2",
     "@radix-ui/react-avatar": "1.0.4",
     "@radix-ui/react-dialog": "1.0.5",
     "@radix-ui/react-dropdown-menu": "2.0.6",

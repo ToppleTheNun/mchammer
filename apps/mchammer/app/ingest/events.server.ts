@@ -40,11 +40,10 @@ async function getDamageTakenEventsDuringTimestamp(queryVariables: GetPhysicalDa
     },
   );
 
-  const rawEvents = results.reportData?.report?.events?.data;
   const nextPageTimestamp
     = results.reportData?.report?.events?.nextPageTimestamp;
   const parseResults = await time(
-    () => damageTakenEventArraySchema.safeParseAsync(rawEvents),
+    () => damageTakenEventArraySchema.safeParseAsync(results.reportData?.report?.events?.data),
     {
       type: `damageTakenEventArraySchema.safeParseAsync(${reportID})`,
       timings,
