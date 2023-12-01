@@ -1,11 +1,16 @@
+import type { Submission } from "@conform-to/dom";
 import { parse } from "@conform-to/zod";
-import { type DataFunctionArgs, json, redirect } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
+import type { DataFunctionArgs, TypedResponse } from "@remix-run/node";
 import { route } from "routes-gen";
 
 import { themeFormSchema } from "#app/hooks/useTheme.ts";
 import { setTheme } from "#app/lib/theme.server.ts";
 
-export async function action({ request }: DataFunctionArgs) {
+export type ThemeSubmission = Submission<{ theme: "system" | "dark" | "light" }>;
+export type SetThemeActionResult = Promise<TypedResponse<{ readonly status: "idle", readonly submission: ThemeSubmission } | { readonly status: "error", readonly submission: ThemeSubmission } | { readonly success: boolean, readonly submission: ThemeSubmission }>>;
+
+export async function action({ request }: DataFunctionArgs): SetThemeActionResult {
   const formData = await request.formData();
   const submission = parse(formData, {
     schema: themeFormSchema,

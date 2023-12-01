@@ -25,4 +25,7 @@ async function ensureDir(path: string) {
   const pathToEnv = join(process.cwd(), "app", "generated");
   await ensureDir(pathToEnv);
   await writeFile(join(pathToEnv, "env.ts"), contents, "utf-8");
-})();
+})().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});

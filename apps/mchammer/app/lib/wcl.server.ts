@@ -1,10 +1,10 @@
 import process from "node:process";
 
+import { remember } from "@epic-web/remember";
 import type { WCLAuth, WCLOAuthResponse } from "@topplethenun/mchammer-wcl";
 import { WclClient } from "@topplethenun/mchammer-wcl";
 
 import { kv } from "#app/lib/kv.server.ts";
-import { singleton } from "#app/lib/singleton.server.ts";
 
 async function setWCLAuthentication({
   access_token,
@@ -31,7 +31,7 @@ function getWCLAuthentication(): Promise<WCLAuth | null> {
   return kv.get<WCLAuth>("wcl-auth-token");
 }
 
-export const wcl = singleton(
+export const wcl = remember(
   "wcl",
   () =>
     new WclClient({

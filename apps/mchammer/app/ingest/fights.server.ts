@@ -2,7 +2,7 @@ import { and, eq, gte, lte } from "drizzle-orm";
 import { sortBy } from "lodash-es";
 
 import type { PlayerDetail } from "@topplethenun/mchammer-wcl";
-import { playerDetailsDpsHealerTankSchema } from "@topplethenun/mchammer-wcl";
+import { playerDetailsResponseSchema } from "@topplethenun/mchammer-wcl";
 import { isRegion } from "#app/constants.ts";
 import { DIFFERENT_REPORT_TOLERANCE } from "#app/ingest/constants.server.ts";
 import type {
@@ -106,30 +106,32 @@ async function addIngestibleFightsToReport(basicReport: Report, timings: Timings
       }),
     { type: `wcl.getPlayerDetails(${basicReport.reportID})`, timings },
   );
-
-  const playerDetailsResult = playerDetailsDpsHealerTankSchema.safeParse(
-    rawPlayerDetails.reportData?.report?.playerDetails?.data?.playerDetails,
-  );
-  if (!playerDetailsResult.success) {
+  const playerDetailsResponse = await time(() => playerDetailsResponseSchema.safeParseAsync(rawPlayerDetails.reportData?.report?.playerDetails), {
+    type: `playerDetailsResponseSchema.safeParseAsync(${basicReport.reportID})`,
+    timings,
+  });
+  if (!playerDetailsResponse.success) {
     throw new Error(
       `Unable to retrieve player details for report ${basicReport.reportID}`,
     );
   }
 
+  const playerDetailsResult = playerDetailsResponse.data.data.playerDetails;
+
   const playerDetails = [
-    ...playerDetailsResult.data.dps,
-    ...playerDetailsResult.data.healers,
-    ...playerDetailsResult.data.tanks,
+    ...playerDetailsResult.dps,
+    ...playerDetailsResult.healers,
+    ...playerDetailsResult.tanks,
   ];
   debug(
-    `Retrieving player details for report ${basicReport.reportID}: ${playerDetails.length} players, ${playerDetailsResult.data.tanks.length} tanks`,
+    `Retrieving player details for report ${basicReport.reportID}: ${playerDetails.length} players, ${playerDetailsResult.tanks.length} tanks`,
   );
   const reportFightsWithDetails
     = basicReport.reportFights.map<IngestibleReportFight>(fight =>
       makeReportFightIngestible(
         fight,
         playerDetails,
-        playerDetailsResult.data.tanks,
+        playerDetailsResult.tanks,
       ),
     );
 

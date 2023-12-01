@@ -17,6 +17,9 @@ const ABORT_DELAY = 5_000;
 init();
 globalThis.ENV = getEnv();
 
+if (ENV.MODE === "production" && ENV.SENTRY_DSN)
+  void import("./lib/monitoring.server.ts").then(({ init }) => init());
+
 export function handleError(
   error: unknown,
   { request }: DataFunctionArgs,

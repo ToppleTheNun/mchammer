@@ -84,6 +84,7 @@ export function invariantResponse(
   responseInit?: ResponseInit,
 ): asserts condition {
   if (!condition) {
+    // eslint-disable-next-line ts/no-throw-literal
     throw new Response(typeof message === "function" ? message() : message, {
       status: 400,
       ...responseInit,
