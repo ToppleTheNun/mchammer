@@ -11,6 +11,7 @@ primary_region = "iad"
 
 [env]
   ENVIRONMENT_NAME = "vanilla-ice"
+  PORT = 8080
 
 [http_service]
   internal_port = 8080
