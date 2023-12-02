@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+concurrency:
+  group: CD
+
 jobs:
   deploy-vanilla-ice:
     runs-on: ubuntu-latest
