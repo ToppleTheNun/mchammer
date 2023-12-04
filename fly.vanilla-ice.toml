@@ -24,7 +24,7 @@ processes = []
   path = "/metrics"
 
 [deploy]
-  release_command = "npx --package=@tsconfig/vite-react@2.0.1 tsx ./other/migrate.ts"
+  release_command = "npx --package=@tsconfig/vite-react@2.0.1 --package=tsx@4.6.2 tsx ./other/migrate.ts"
 
 [experimental]
   allowed_public_ports = []
