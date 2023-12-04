@@ -12,4 +12,6 @@ import postgres from "postgres";
   console.log("Starting drizzle migrations...");
   await migrate(drizzle, { migrationsFolder: "drizzle" });
   console.log("Finished drizzle migrations!");
+
+  await pg.end({ timeout: 5 });
 })().catch(console.error);
