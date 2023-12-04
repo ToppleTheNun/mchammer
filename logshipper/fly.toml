@@ -10,7 +10,7 @@ primary_region = "iad"
   image = "ghcr.io/superfly/fly-log-shipper:latest"
 
 [http_service]
-  internal_port = 8086
+  internal_port = 8686
   force_https = true
   auto_stop_machines = true
   auto_start_machines = true
