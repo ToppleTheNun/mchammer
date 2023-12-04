@@ -5,13 +5,13 @@ import { migrate } from "drizzle-orm/postgres-js/migrator";
 
 import postgres from "postgres";
 
-(async () => {
-  const pg = postgres(process.env.DATABASE_URL);
-  const drizzle = drizzlePostgresJsAdapter(pg);
+const pg = postgres(process.env.DATABASE_URL);
+const drizzle = drizzlePostgresJsAdapter(pg);
 
-  console.log("Starting drizzle migrations...");
-  await migrate(drizzle, { migrationsFolder: "drizzle" });
-  console.log("Finished drizzle migrations!");
+console.log("Starting drizzle migrations...");
+await migrate(drizzle, { migrationsFolder: "drizzle" });
+console.log("Finished drizzle migrations!");
 
-  await pg.end({ timeout: 5 });
-})().catch(console.error);
+console.log("Stopping postgres adapter...");
+await pg.end({ timeout: 5 });
+console.log("Stopped postgres adapter!");
