@@ -1,4 +1,4 @@
-import "~/font.css";
+import "unfonts.css";
 import "~/tailwind.css";
 
 import type {
