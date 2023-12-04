@@ -13,7 +13,7 @@ export default antfu(
   },
   {
     name: "mchammer:allow-console-log",
-    files: ["other/**/*.ts", "**/*.server.ts"],
+    files: ["other/**/*.ts", "other/**/*.js", "**/*.server.ts"],
     rules: {
       "no-console": "off",
     },
