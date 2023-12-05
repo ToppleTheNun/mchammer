@@ -102,6 +102,9 @@ app.all(
 app.disable("x-powered-by");
 
 const port = process.env.PORT ?? 3000;
-app.listen(port, () =>
-  logger.info(`App is listening on http://localhost:${port}`),
-);
+app.listen(port, () => logger.info(`app ready: http://localhost:${port}`));
+
+const metricsPort = process.env.METRICS_PORT || 3010;
+metricsApp.listen(metricsPort, () => {
+  logger.info(`metrics ready: http://localhost:${metricsPort}/metrics`);
+});
