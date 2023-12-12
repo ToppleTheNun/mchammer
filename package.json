@@ -18,7 +18,7 @@
     "dev": "nr build:generate-env && nr build:icons && nr dev:remix",
     "dev:remix": "nr with-env node ./server.mjs | pino-pretty",
     "drizzle:gen": "nr with-env drizzle-kit generate:pg",
-    "drizzle:migrate": "nr with-env tsx app/lib/db/migrate.server.ts",
+    "drizzle:migrate": "nr with-env node ./other/migrate.js",
     "drizzle:push": "nr with-env drizzle-kit push:pg",
     "drizzle:seed": "nr with-env tsx app/lib/db/seed.server.ts",
     "gql": "nr gql:introspection && nr gql:generate",
