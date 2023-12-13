@@ -22,30 +22,6 @@ query getFights($reportID: String!) {
   }
 }
 
-query getFightsById($reportID: String!, $fightIDs: [Int]!) {
-  reportData {
-    report(code: $reportID) {
-      title
-      startTime
-      endTime
-
-      region {
-        slug
-      }
-
-      fights(translate: true, fightIDs: $fightIDs) {
-        id
-        startTime
-        endTime
-
-        difficulty
-        encounterID
-        friendlyPlayers
-      }
-    }
-  }
-}
-
 query getCombatantInfoEvents($reportID: String!, $fightIDs: [Int]!) {
   reportData {
     report(code: $reportID) {

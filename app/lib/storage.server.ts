@@ -1,13 +1,16 @@
 import process from "node:process";
 
 import { remember } from "@epic-web/remember";
-import { drizzle as drizzlePostgresJsAdapter } from "drizzle-orm/postgres-js";
-import postgres from "postgres";
+import { PrismaClient } from "@prisma/client";
 import { createClient } from "redis";
 
-import * as schema from "~/lib/db/schema.ts";
+export const redis = remember("redis", () =>
+  createClient({
+    url: process.env.REDIS_URL,
+  }),
+);
 
-const getPgClient = () => {
+export const prisma = remember("prisma", () => {
   const { DATABASE_URL } = process.env;
 
   const databaseUrl = new URL(DATABASE_URL);
@@ -30,14 +33,11 @@ const getPgClient = () => {
     }
   }
 
-  const client = postgres(databaseUrl.toString(), { debug: true });
-  return drizzlePostgresJsAdapter(client, { schema });
-};
+  const client = new PrismaClient({
+    datasources: { db: { url: databaseUrl.toString() } },
+  });
+  // connect eagerly
+  client.$connect();
 
-export const pg = remember("pg", getPgClient);
-
-export const redis = remember("redis", () =>
-  createClient({
-    url: process.env.REDIS_URL,
-  }),
-);
+  return client;
+});

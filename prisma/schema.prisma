@@ -1,0 +1,95 @@
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["relationJoins"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model DodgeParryMissEvent {
+  id String @id @default(cuid())
+
+  report                       String
+  reportFightId                Int
+  reportFightRelativeTimestamp Int
+
+  avoidance Avoidance
+
+  sourceID       Int
+  sourceInstance Int?
+
+  streak   DodgeParryMissEventStreak @relation(fields: [streakId], references: [id])
+  streakId String
+}
+
+model DodgeParryMissEventStreak {
+  id String @id @default(cuid())
+
+  report                   String
+  reportFightId            Int
+  reportFightRelativeStart Int    @default(-1)
+  reportFightRelativeEnd   Int    @default(-1)
+
+  dodge  Int
+  parry  Int
+  miss   Int
+  streak Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  character   Character @relation(fields: [characterId], references: [id])
+  characterId Int
+  fight       Fight     @relation(fields: [fightId], references: [id])
+  fightId     String
+
+  streaks DodgeParryMissEvent[]
+}
+
+model Character {
+  id Int @id
+
+  name   String
+  server String
+  region Regions
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  dodgeParryMissEventStreaks DodgeParryMissEventStreak[]
+}
+
+model Fight {
+  id String @id @default(cuid())
+
+  report          String
+  startTime       DateTime
+  endTime         DateTime
+  difficulty      Int
+  encounterId     Int
+  // colon separated list of ints
+  friendlyPlayers String
+  region          Regions
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  dodgeParryMissEventStreaks DodgeParryMissEventStreak[]
+
+  @@unique([startTime, endTime, encounterId, friendlyPlayers, region])
+}
+
+enum Regions {
+  eu
+  kr
+  tw
+  us
+}
+
+enum Avoidance {
+  dodge
+  parry
+  miss
+}

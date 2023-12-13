@@ -1,9 +1,7 @@
 import type { DataFunctionArgs } from "@remix-run/node";
-import { sql } from "drizzle-orm";
 
-import { dodgeParryMissStreak } from "~/lib/db/schema.ts";
 import { getLogger } from "~/lib/logger.server.ts";
-import { pg } from "~/lib/storage.server.ts";
+import { prisma } from "~/lib/storage.server.ts";
 
 const logger = getLogger(["resources", "healthcheck"]);
 
@@ -13,9 +11,7 @@ export async function loader({ request }: DataFunctionArgs) {
 
   try {
     await Promise.all([
-      pg
-        .select({ count: sql<number>`cast(count(*) as int)` })
-        .from(dodgeParryMissStreak),
+      prisma.fight.count(),
       fetch(`${new URL(request.url).protocol}${host}`, {
         method: "HEAD",
         headers: { "X-Healthcheck": "true" },

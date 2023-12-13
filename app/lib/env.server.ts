@@ -10,7 +10,6 @@ const schema = z.object({
   BUILD_TIMESTAMP: z.string(),
   COMMIT_SHA: z.string(),
   SENTRY_DSN: z.string().optional(),
-  ENVIRONMENT_NAME: z.enum(["production", "vanilla-ice"]).optional(),
   // Server
   NODE_ENV: z.enum(["development", "test", "production"]),
   PINO_LOG_LEVEL: z
@@ -58,7 +57,6 @@ export function getEnv() {
     BUILD_TIMESTAMP: generated.BUILD_TIMESTAMP,
     COMMIT_SHA: generated.COMMIT_SHA,
     SENTRY_DSN: process.env.SENTRY_DSN,
-    ENVIRONMENT_NAME: process.env.ENVIRONMENT_NAME ?? "local",
   };
 }
 

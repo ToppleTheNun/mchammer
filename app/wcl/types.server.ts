@@ -1,6 +1,5 @@
 import type { GraphQLClient, RequestOptions } from "graphql-request";
 import gql from "graphql-tag";
-
 type GraphQLClientRequestHeaders = RequestOptions["requestHeaders"];
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -2107,36 +2106,6 @@ export interface GetFightsQuery {
   } | null;
 }
 
-export type GetFightsByIdQueryVariables = Exact<{
-  reportID: Scalars["String"]["input"];
-  fightIDs:
-    | Array<InputMaybe<Scalars["Int"]["input"]>>
-    | InputMaybe<Scalars["Int"]["input"]>;
-}>;
-
-export interface GetFightsByIdQuery {
-  __typename?: "Query";
-  reportData?: {
-    __typename?: "ReportData";
-    report?: {
-      __typename?: "Report";
-      title: string;
-      startTime: number;
-      endTime: number;
-      region?: { __typename?: "Region"; slug: string } | null;
-      fights?: Array<{
-        __typename?: "ReportFight";
-        id: number;
-        startTime: number;
-        endTime: number;
-        difficulty?: number | null;
-        encounterID: number;
-        friendlyPlayers?: Array<number | null> | null;
-      } | null> | null;
-    } | null;
-  } | null;
-}
-
 export type GetCombatantInfoEventsQueryVariables = Exact<{
   reportID: Scalars["String"]["input"];
   fightIDs:
@@ -2217,28 +2186,6 @@ export const GetFightsDocument = gql`
           slug
         }
         fights(translate: true) {
-          id
-          startTime
-          endTime
-          difficulty
-          encounterID
-          friendlyPlayers
-        }
-      }
-    }
-  }
-`;
-export const GetFightsByIdDocument = gql`
-  query getFightsById($reportID: String!, $fightIDs: [Int]!) {
-    reportData {
-      report(code: $reportID) {
-        title
-        startTime
-        endTime
-        region {
-          slug
-        }
-        fights(translate: true, fightIDs: $fightIDs) {
           id
           startTime
           endTime
@@ -2333,20 +2280,6 @@ export function getSdk(
             ...wrappedRequestHeaders,
           }),
         "getFights",
-        "query",
-      );
-    },
-    getFightsById(
-      variables: GetFightsByIdQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<GetFightsByIdQuery> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<GetFightsByIdQuery>(GetFightsByIdDocument, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        "getFightsById",
         "query",
       );
     },
