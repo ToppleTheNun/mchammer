@@ -147,6 +147,7 @@ async function writeIfChanged(filepath: string, newContent: string) {
     .catch(() => "");
   if (currentContent === newContent) return false;
   await fsExtra.writeFile(filepath, newContent, "utf8");
+  console.log(`Writing to ${filepath}`);
   await $`prettier --write ${filepath} --ignore-unknown`;
   return true;
 }
