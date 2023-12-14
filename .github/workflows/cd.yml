@@ -9,7 +9,7 @@ concurrency:
   group: CD
 
 jobs:
-  deploy-vanilla-ice:
+  deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     environment:

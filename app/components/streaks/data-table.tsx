@@ -5,8 +5,10 @@ import {
   streaksNumberLastFactory,
   streaksNumberNoSubFactory,
   streaksTextFourthFactory,
+  streaksTextHoverCardFactory,
   streaksTextLastFactory,
   streaksTextNoSubFactory,
+  streaksTextTooltipFactory,
 } from "~/components/streaks/columns.tsx";
 import { DataTable } from "~/components/ui/data-table.tsx";
 import { H2 } from "~/components/typography.tsx";
@@ -38,12 +40,6 @@ const generateDodgeParryMissStreak = (): DodgeParryMissStreak => {
 };
 
 const data: DodgeParryMissStreak[] = [
-  generateDodgeParryMissStreak(),
-  generateDodgeParryMissStreak(),
-  generateDodgeParryMissStreak(),
-  generateDodgeParryMissStreak(),
-  generateDodgeParryMissStreak(),
-  generateDodgeParryMissStreak(),
   generateDodgeParryMissStreak(),
   generateDodgeParryMissStreak(),
   generateDodgeParryMissStreak(),
@@ -179,6 +175,53 @@ export function StreaksDataTable() {
         <div className="rounded-md border">
           <DataTable
             columns={streaksNumberNoSubFactory("text-right")}
+            data={data}
+          />
+        </div>
+      </div>
+
+      <div className="w-full space-y-3">
+        <H2>Streaks Text Tooltip</H2>
+        <div className="rounded-md border">
+          <DataTable
+            columns={streaksTextTooltipFactory("text-left", "justify-start")}
+            data={data}
+          />
+        </div>
+        <div className="rounded-md border">
+          <DataTable
+            columns={streaksTextTooltipFactory("text-center", "justify-center")}
+            data={data}
+          />
+        </div>
+        <div className="rounded-md border">
+          <DataTable
+            columns={streaksTextTooltipFactory("text-right", "justify-end")}
+            data={data}
+          />
+        </div>
+      </div>
+
+      <div className="w-full space-y-3">
+        <H2>Streaks Text Hovercard</H2>
+        <div className="rounded-md border">
+          <DataTable
+            columns={streaksTextHoverCardFactory("text-left", "justify-start")}
+            data={data}
+          />
+        </div>
+        <div className="rounded-md border">
+          <DataTable
+            columns={streaksTextHoverCardFactory(
+              "text-center",
+              "justify-center",
+            )}
+            data={data}
+          />
+        </div>
+        <div className="rounded-md border">
+          <DataTable
+            columns={streaksTextHoverCardFactory("text-right", "justify-end")}
             data={data}
           />
         </div>
