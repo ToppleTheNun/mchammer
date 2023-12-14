@@ -14,12 +14,12 @@ import {
   TableRow,
 } from "~/components/ui/table.tsx";
 
-interface DataTableProps<TData, TValue> {
+interface DataTableProps<TData, TValue = unknown> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
-export function DataTable<TData, TValue>({
+export function DataTable<TData, TValue = unknown>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {

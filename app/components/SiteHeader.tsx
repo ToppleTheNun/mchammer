@@ -29,7 +29,7 @@ export function SiteHeader({ theme }: { theme: Theme | null }) {
               <div
                 className={cn(buttonVariants({ variant: "ghost" }), "w-9 px-0")}
               >
-                <Icon name="github-logo" className="h-4 w-4">
+                <Icon name="github-logo" size="sm">
                   <span className="sr-only">GitHub</span>
                 </Icon>
               </div>

@@ -55,7 +55,7 @@ export function DataTablePagination<TData>({
             disabled={!table.getCanPreviousPage()}
           >
             <span className="sr-only">Go to first page</span>
-            <Icon name="double-arrow-left" className="h-4 w-4" />
+            <Icon name="double-arrow-left" size="sm" />
           </Button>
           <Button
             variant="outline"
@@ -64,7 +64,7 @@ export function DataTablePagination<TData>({
             disabled={!table.getCanPreviousPage()}
           >
             <span className="sr-only">Go to previous page</span>
-            <Icon name="caret-left" className="h-4 w-4" />
+            <Icon name="caret-left" size="sm" />
           </Button>
           <Button
             variant="outline"
@@ -73,7 +73,7 @@ export function DataTablePagination<TData>({
             disabled={!table.getCanNextPage()}
           >
             <span className="sr-only">Go to next page</span>
-            <Icon name="caret-right" className="h-4 w-4" />
+            <Icon name="caret-right" size="sm" />
           </Button>
           <Button
             variant="outline"
@@ -82,7 +82,7 @@ export function DataTablePagination<TData>({
             disabled={!table.getCanNextPage()}
           >
             <span className="sr-only">Go to last page</span>
-            <Icon name="double-arrow-right" className="h-4 w-4" />
+            <Icon name="double-arrow-right" size="sm" />
           </Button>
         </div>
       </div>

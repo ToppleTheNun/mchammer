@@ -114,7 +114,8 @@ export function SeasonSwitcher({ className }: SeasonSwitcherProps) {
           {selectedSeason?.label ?? "No Season Selected"}
           <Icon
             name="caret-sort"
-            className="ml-auto h-4 w-4 shrink-0 opacity-50"
+            className="ml-auto shrink-0 opacity-50"
+            size="sm"
           />
         </Button>
       </PopoverTrigger>
@@ -147,11 +148,12 @@ export function SeasonSwitcher({ className }: SeasonSwitcherProps) {
                     <Icon
                       name="check"
                       className={cn(
-                        "ml-auto h-4 w-4",
+                        "ml-auto",
                         selectedSeason?.value === season.value
                           ? "opacity-100"
                           : "opacity-0",
                       )}
+                      size="sm"
                     />
                   </CommandItem>
                 ))}

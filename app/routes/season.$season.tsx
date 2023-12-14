@@ -8,11 +8,11 @@ import {
   PageHeaderHeading,
 } from "~/components/PageHeader.tsx";
 import { PageLayout } from "~/components/PageLayout.tsx";
-import { Lead } from "~/components/typography.tsx";
 import { serverTiming } from "~/constants.ts";
 import { combineHeaders, invariantResponse } from "~/lib/misc.ts";
 import { makeTimings } from "~/lib/timing.server.ts";
 import { type Season, findSeasonByName } from "~/seasons.ts";
+import { StreaksDataTable } from "~/components/streaks/data-table.tsx";
 
 export function loader({ params }: DataFunctionArgs) {
   invariantResponse(
@@ -50,15 +50,7 @@ function SeasonRoute() {
 
   return (
     <PageLayout pageHeader={<Header season={season} />}>
-      <section className="hidden md:block">
-        <div className="overflow-hidden rounded-lg border bg-background px-4 shadow">
-          <div className="flex h-[50vh] flex-col items-center justify-center gap-2">
-            <Lead>
-              Hey, we&apos;re building here. Mind looking somewhere else?
-            </Lead>
-          </div>
-        </div>
-      </section>
+      <StreaksDataTable />
     </PageLayout>
   );
 }
