@@ -37,6 +37,7 @@ import type { Theme } from "~/lib/theme.server.ts";
 import { getTheme } from "~/lib/theme.server.ts";
 import { makeTimings } from "~/lib/timing.server.ts";
 import { isPresent } from "~/typeGuards.ts";
+import { TooltipProvider } from "~/components/ui/tooltip.tsx";
 
 export const links: LinksFunction = () => {
   return [
@@ -140,7 +141,7 @@ function Document({
   env?: Record<string, string>;
 }) {
   return (
-    <html className={`${theme} h-full overflow-x-hidden`} lang="en" dir="auto">
+    <html className={theme} lang="en" dir="auto">
       <head>
         <ClientHintCheck nonce={nonce} />
         <Meta />
@@ -148,7 +149,7 @@ function Document({
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <Links />
       </head>
-      <body className="bg-background text-foreground font-sans">
+      <body className="min-h-screen bg-background font-sans antialiased">
         {children}
         <script
           nonce={nonce}
@@ -185,13 +186,15 @@ function App() {
 
   return (
     <Document nonce={nonce} theme={theme} env={data.ENV}>
-      <div className="relative flex min-h-screen flex-col">
-        <SiteHeader theme={data.requestInfo.userPrefs.theme} />
-        <div className="flex-1">
-          <Outlet />
+      <TooltipProvider>
+        <div className="relative flex min-h-screen flex-col">
+          <SiteHeader theme={data.requestInfo.userPrefs.theme} />
+          <div className="flex-1">
+            <Outlet />
+          </div>
+          <SiteFooter />
         </div>
-        <SiteFooter />
-      </div>
+      </TooltipProvider>
     </Document>
   );
 }
