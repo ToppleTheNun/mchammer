@@ -1,18 +1,15 @@
 import type { DataFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+import { invariantResponse } from "@epic-web/invariant";
 
-import {
-  PageHeader,
-  PageHeaderDescription,
-  PageHeaderHeading,
-} from "~/components/PageHeader.tsx";
 import { PageLayout } from "~/components/PageLayout.tsx";
 import { serverTiming } from "~/constants.ts";
-import { combineHeaders, invariantResponse } from "~/lib/misc.ts";
+import { combineHeaders } from "~/lib/misc.ts";
 import { makeTimings } from "~/lib/timing.server.ts";
 import { type Season, findSeasonByName } from "~/seasons.ts";
 import { StreaksDataTable } from "~/components/streaks/data-table.tsx";
+import { H1, Lead } from "~/components/typography.tsx";
 
 export function loader({ params }: DataFunctionArgs) {
   invariantResponse(
@@ -35,13 +32,13 @@ export function loader({ params }: DataFunctionArgs) {
 
 function Header({ season }: { season: Season }) {
   return (
-    <PageHeader className="pb-8">
-      <PageHeaderHeading>Can&apos;t touch this.</PageHeaderHeading>
-      <PageHeaderDescription>
+    <div className="pb-8 space-y-2">
+      <H1>Can&apos;t touch this.</H1>
+      <Lead>
         Consecutive parry, dodge, and miss leaderboard for instanced World of
         Warcraft content in {season.name}.
-      </PageHeaderDescription>
-    </PageHeader>
+      </Lead>
+    </div>
   );
 }
 
@@ -49,9 +46,13 @@ function SeasonRoute() {
   const { season } = useLoaderData<typeof loader>();
 
   return (
-    <PageLayout pageHeader={<Header season={season} />}>
-      <StreaksDataTable />
-    </PageLayout>
+    <div className="border-b">
+      <div className="container flex-1 items-start">
+        <PageLayout pageHeader={<Header season={season} />}>
+          <StreaksDataTable />
+        </PageLayout>
+      </div>
+    </div>
   );
 }
 

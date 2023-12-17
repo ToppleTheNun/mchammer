@@ -19,6 +19,7 @@ const schema = z.object({
   REDIS_URL: z.string().url(),
   WARCRAFT_LOGS_CLIENT_ID: z.string(),
   WARCRAFT_LOGS_CLIENT_SECRET: z.string(),
+  SESSION_SECRET: z.string(),
 });
 
 declare global {

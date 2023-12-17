@@ -1,33 +1,31 @@
 import { isRouteErrorResponse } from "@remix-run/react";
 import type { ReactNode } from "react";
-
-import {
-  PageHeader,
-  PageHeaderDescription,
-  PageHeaderHeading,
-} from "~/components/PageHeader.tsx";
 import { PageLayout } from "~/components/PageLayout.tsx";
 import { SiteFooter } from "~/components/SiteFooter.tsx";
 import { SiteHeader } from "~/components/SiteHeader.tsx";
-import { H2, Lead } from "~/components/typography.tsx";
+import { H1, H2, Lead } from "~/components/typography.tsx";
 
 function Header() {
   return (
-    <PageHeader className="pb-8">
-      <PageHeaderHeading>Apparently, you could touch this.</PageHeaderHeading>
-      <PageHeaderDescription>
+    <div className="pb-8 space-y-2">
+      <H1>Apparently, you could touch this.</H1>
+      <Lead>
         We were only able to dodge, parry, or make you miss for so long.
-      </PageHeaderDescription>
-    </PageHeader>
+      </Lead>
+    </div>
   );
 }
 
 function ErrorLayout({ children }: { children: ReactNode }) {
   return (
     <div className="relative flex min-h-screen flex-col">
-      <SiteHeader theme={null} />
+      <SiteHeader />
       <div className="flex-1">
-        <PageLayout pageHeader={<Header />}>{children}</PageLayout>
+        <div className="border-b">
+          <div className="container flex-1 items-start">
+            <PageLayout pageHeader={<Header />}>{children}</PageLayout>
+          </div>
+        </div>
       </div>
       <SiteFooter />
     </div>

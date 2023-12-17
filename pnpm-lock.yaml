@@ -22,6 +22,9 @@ dependencies:
   "@epic-web/client-hints":
     specifier: 1.2.2
     version: 1.2.2
+  "@epic-web/invariant":
+    specifier: 1.0.0
+    version: 1.0.0
   "@epic-web/remember":
     specifier: 1.0.2
     version: 1.0.2
@@ -145,6 +148,9 @@ dependencies:
   redis:
     specifier: 4.6.11
     version: 4.6.11
+  remix-themes:
+    specifier: 1.2.2
+    version: 1.2.2(@remix-run/react@2.3.1)(@remix-run/server-runtime@2.3.1)
   tailwind-merge:
     specifier: 2.1.0
     version: 2.1.0
@@ -1381,6 +1387,13 @@ packages:
     resolution:
       {
         integrity: sha512-36ei/PACvvi/nh/7uKbITnZd8EP39UzYdmofrk5lqJLaPRpBt4pMeDf1bgOp0DXpuiWSVd02tcQgpu0H7blB2A==,
+      }
+    dev: false
+
+  /@epic-web/invariant@1.0.0:
+    resolution:
+      {
+        integrity: sha512-lrTPqgvfFQtR/eY/qkIzp98OGdNJu0m5ji3q/nJI8v3SXkRKEnWiOxMmbvcSoAIzv/cGiuvRy57k4suKQSAdwA==,
       }
     dev: false
 
@@ -15506,6 +15519,19 @@ packages:
         integrity: sha512-/62tYiOe6DzS5BqVsNpH/nkGlX45C/Sp6V+NtiN6JQNS1Viay7cWkazmRkrQrdFj2eshDe96SIQNIoMxqhzBOg==,
       }
     dev: true
+
+  /remix-themes@1.2.2(@remix-run/react@2.3.1)(@remix-run/server-runtime@2.3.1):
+    resolution:
+      {
+        integrity: sha512-G+1e2I62PI8JUR9xkkhByHljw73CIO42dEQMXo2UI+d+ZZwO+v/xwLAW++FkHA3rVXWuo4vu+DiAy2nCZMk70g==,
+      }
+    peerDependencies:
+      "@remix-run/react": ">= 1"
+      "@remix-run/server-runtime": ">= 1"
+    dependencies:
+      "@remix-run/react": 2.3.1(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3)
+      "@remix-run/server-runtime": 2.3.1(typescript@5.3.3)
+    dev: false
 
   /remove-trailing-separator@1.1.0:
     resolution:

@@ -1,8 +1,9 @@
 import { redirect } from "@remix-run/node";
 import { Outlet } from "@remix-run/react";
+import { invariantResponse } from "@epic-web/invariant";
 
 import { serverTiming } from "~/constants.ts";
-import { combineHeaders, invariantResponse } from "~/lib/misc.ts";
+import { combineHeaders } from "~/lib/misc.ts";
 import { makeTimings, time } from "~/lib/timing.server.ts";
 import { findSeasonByName } from "~/seasons.ts";
 

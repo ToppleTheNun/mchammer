@@ -20,6 +20,12 @@ import {
 } from "@remix-run/react";
 import { captureRemixErrorBoundaryError, withSentry } from "@sentry/remix";
 import type { ReactNode } from "react";
+import {
+  PreventFlashOnWrongTheme,
+  type Theme,
+  ThemeProvider,
+  useTheme,
+} from "remix-themes";
 
 import { AppErrorBoundary } from "~/components/AppErrorBoundary.tsx";
 import { SiteFooter } from "~/components/SiteFooter.tsx";
@@ -28,16 +34,15 @@ import { TailwindIndicator } from "~/components/TailwindIndicator.tsx";
 import { href as iconsHref } from "~/components/ui/icon.tsx";
 import { siteConfig } from "~/config/site.ts";
 import { serverTiming } from "~/constants.ts";
-import { useTheme } from "~/hooks/useTheme.ts";
 import { ClientHintCheck, getHints } from "~/lib/client-hints.tsx";
 import { getEnv } from "~/lib/env.server.ts";
 import { combineHeaders, getDomainUrl } from "~/lib/misc.ts";
 import { useNonce } from "~/lib/nonce-provider.ts";
-import type { Theme } from "~/lib/theme.server.ts";
-import { getTheme } from "~/lib/theme.server.ts";
 import { makeTimings } from "~/lib/timing.server.ts";
 import { isPresent } from "~/typeGuards.ts";
 import { TooltipProvider } from "~/components/ui/tooltip.tsx";
+import { themeSessionResolver } from "~/sessions.server.ts";
+import { cn } from "~/lib/utils.ts";
 
 export const links: LinksFunction = () => {
   return [
@@ -104,8 +109,9 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export function loader({ request }: DataFunctionArgs) {
+export async function loader({ request }: DataFunctionArgs) {
   const timings = makeTimings("root loader");
+  const { getTheme } = await themeSessionResolver(request);
 
   return json(
     {
@@ -114,10 +120,9 @@ export function loader({ request }: DataFunctionArgs) {
         hints: getHints(request),
         origin: getDomainUrl(request),
         path: new URL(request.url).pathname,
-        userPrefs: {
-          theme: getTheme(request),
-        },
+        userPrefs: {},
       },
+      theme: getTheme(),
     },
     { headers: combineHeaders({ [serverTiming]: timings.toString() }) },
   );
@@ -137,16 +142,17 @@ function Document({
 }: {
   children: ReactNode;
   nonce: string;
-  theme?: Theme;
+  theme: Theme | null;
   env?: Record<string, string>;
 }) {
   return (
-    <html className={theme} lang="en" dir="auto">
+    <html className={cn(theme)} lang="en" dir="auto">
       <head>
         <ClientHintCheck nonce={nonce} />
-        <Meta />
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <Meta />
+        <PreventFlashOnWrongTheme ssrTheme={Boolean(theme)} />
         <Links />
       </head>
       <body className="min-h-screen bg-background font-sans antialiased">
@@ -173,30 +179,42 @@ export function ErrorBoundary() {
   captureRemixErrorBoundaryError(error);
 
   return (
-    <Document nonce={nonce}>
-      <AppErrorBoundary error={error} />
-    </Document>
+    <ThemeProvider specifiedTheme={null} themeAction="/action/set-theme">
+      <Document nonce={nonce} theme={null}>
+        <AppErrorBoundary error={error} />
+      </Document>
+    </ThemeProvider>
   );
 }
 
 function App() {
   const data = useLoaderData<typeof loader>();
   const nonce = useNonce();
-  const theme = useTheme();
+  const [theme] = useTheme();
 
   return (
-    <Document nonce={nonce} theme={theme} env={data.ENV}>
-      <TooltipProvider>
-        <div className="relative flex min-h-screen flex-col">
-          <SiteHeader theme={data.requestInfo.userPrefs.theme} />
-          <div className="flex-1">
-            <Outlet />
-          </div>
-          <SiteFooter />
+    <Document nonce={nonce} env={data.ENV} theme={theme}>
+      <div className="relative flex min-h-screen flex-col">
+        <SiteHeader />
+        <div className="flex-1">
+          <Outlet />
         </div>
-      </TooltipProvider>
+        <SiteFooter />
+      </div>
     </Document>
   );
 }
 
-export default withSentry(App);
+function AppWithProviders() {
+  const data = useLoaderData<typeof loader>();
+
+  return (
+    <ThemeProvider specifiedTheme={data.theme} themeAction="/action/set-theme">
+      <TooltipProvider>
+        <App />
+      </TooltipProvider>
+    </ThemeProvider>
+  );
+}
+
+export default withSentry(AppWithProviders);

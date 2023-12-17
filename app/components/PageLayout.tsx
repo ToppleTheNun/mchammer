@@ -8,7 +8,7 @@ export function PageLayout({
   pageHeader?: ReactNode;
 }) {
   return (
-    <main className="container relative">
+    <main className="relative py-6 lg:gap-10 lg:py-8">
       {pageHeader}
       {children}
     </main>

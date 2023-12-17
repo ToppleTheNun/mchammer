@@ -1,5 +1,4 @@
-import { useFetcher } from "@remix-run/react";
-
+import { Theme, useTheme } from "remix-themes";
 import { Button } from "~/components/ui/button.tsx";
 import {
   DropdownMenu,
@@ -8,22 +7,9 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu.tsx";
 import { Icon } from "~/components/ui/icon.tsx";
-import { useOptimisticThemeMode } from "~/hooks/useTheme.ts";
-import type { Theme } from "~/lib/theme.server.ts";
-import type { action } from "~/routes/actions.theme.ts";
 
-export function ModeToggle({
-  userPreference,
-}: {
-  userPreference?: Theme | null;
-}) {
-  const fetcher = useFetcher<typeof action>();
-
-  const optimisticMode = useOptimisticThemeMode();
-  const mode = optimisticMode ?? userPreference ?? "system";
-  const changeTheme = (theme: typeof mode) => {
-    fetcher.submit({ theme }, { action: "/actions/theme", method: "POST" });
-  };
+export function ModeToggle() {
+  const [, setTheme] = useTheme();
 
   return (
     <DropdownMenu>
@@ -41,14 +27,11 @@ export function ModeToggle({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => changeTheme("light")}>
+        <DropdownMenuItem onClick={() => setTheme(Theme.LIGHT)}>
           Light
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => changeTheme("dark")}>
+        <DropdownMenuItem onClick={() => setTheme(Theme.DARK)}>
           Dark
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => changeTheme("system")}>
-          System
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

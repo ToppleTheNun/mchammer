@@ -7,10 +7,9 @@ import { SeasonSwitcher } from "~/components/SeasonSwitcher.tsx";
 import { buttonVariants } from "~/components/ui/button.tsx";
 import { Icon } from "~/components/ui/icon.tsx";
 import { siteConfig } from "~/config/site.ts";
-import type { Theme } from "~/lib/theme.server.ts";
 import { cn } from "~/lib/utils.ts";
 
-export function SiteHeader({ theme }: { theme: Theme | null }) {
+export function SiteHeader() {
   return (
     <header className="supports-backdrop-blur:bg-background/60 sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
       <div className="container flex h-14 items-center">
@@ -34,7 +33,7 @@ export function SiteHeader({ theme }: { theme: Theme | null }) {
                 </Icon>
               </div>
             </NavLink>
-            <ModeToggle userPreference={theme} />
+            <ModeToggle />
           </nav>
         </div>
       </div>
