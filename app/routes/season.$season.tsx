@@ -8,7 +8,7 @@ import { combineHeaders } from "~/lib/misc.ts";
 import { makeTimings } from "~/lib/timing.server.ts";
 import { type Season, findSeasonByName } from "~/seasons.ts";
 import { StreaksDataTable } from "~/components/streaks/data-table.tsx";
-import { H1, Lead } from "~/components/typography.tsx";
+import { H1, H2, Lead } from "~/components/typography.tsx";
 import { AppLayout } from "~/components/layouts/AppLayout.tsx";
 import { SeasonSwitcher } from "~/components/SeasonSwitcher.tsx";
 
@@ -43,7 +43,34 @@ function Header({ season }: { season: Season }) {
   );
 }
 
-function SeasonRoute() {
+export function ErrorBoundary() {
+  return (
+    <AppLayout
+      siteHeaderChildren={
+        <div className="w-full flex-1 md:w-auto md:flex-none">
+          <SeasonSwitcher />
+        </div>
+      }
+    >
+      <div className="pb-8 space-y-2">
+        <H1>Apparently, you could touch this.</H1>
+        <Lead>
+          We were only able to dodge, parry, or make you miss for so long.
+        </Lead>
+      </div>
+      <section className="hidden md:block">
+        <div className="overflow-hidden rounded-lg border bg-background px-4 shadow">
+          <div className="flex h-[50vh] flex-col items-center justify-center gap-2">
+            <H2>404</H2>
+            <Lead>Unable to find season</Lead>
+          </div>
+        </div>
+      </section>
+    </AppLayout>
+  );
+}
+
+export default function SeasonRoute() {
   const { season } = useLoaderData<typeof loader>();
 
   return (
@@ -59,5 +86,3 @@ function SeasonRoute() {
     </AppLayout>
   );
 }
-
-export default SeasonRoute;

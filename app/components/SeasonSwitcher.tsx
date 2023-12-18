@@ -111,7 +111,7 @@ export function SeasonSwitcher({ className }: SeasonSwitcherProps) {
             />
             <AvatarFallback>{selectedSeason?.fallback ?? "WoW"}</AvatarFallback>
           </Avatar>
-          {selectedSeason?.label ?? "No Season Selected"}
+          {selectedSeason?.label ?? "Select a Season"}
           <Icon
             name="caret-sort"
             className="ml-auto shrink-0 opacity-50"
