@@ -28,8 +28,6 @@ import {
 } from "remix-themes";
 
 import { AppErrorBoundary } from "~/components/AppErrorBoundary.tsx";
-import { SiteFooter } from "~/components/SiteFooter.tsx";
-import { SiteHeader } from "~/components/SiteHeader.tsx";
 import { TailwindIndicator } from "~/components/TailwindIndicator.tsx";
 import { href as iconsHref } from "~/components/ui/icon.tsx";
 import { siteConfig } from "~/config/site.ts";
@@ -180,9 +178,11 @@ export function ErrorBoundary() {
 
   return (
     <ThemeProvider specifiedTheme={null} themeAction="/action/set-theme">
-      <Document nonce={nonce} theme={null}>
-        <AppErrorBoundary error={error} />
-      </Document>
+      <TooltipProvider>
+        <Document nonce={nonce} theme={null}>
+          <AppErrorBoundary error={error} />
+        </Document>
+      </TooltipProvider>
     </ThemeProvider>
   );
 }
@@ -194,13 +194,7 @@ function App() {
 
   return (
     <Document nonce={nonce} env={data.ENV} theme={theme}>
-      <div className="relative flex min-h-screen flex-col">
-        <SiteHeader />
-        <div className="flex-1">
-          <Outlet />
-        </div>
-        <SiteFooter />
-      </div>
+      <Outlet />
     </Document>
   );
 }

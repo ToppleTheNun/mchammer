@@ -1,9 +1,7 @@
 import { isRouteErrorResponse } from "@remix-run/react";
 import type { ReactNode } from "react";
-import { PageLayout } from "~/components/PageLayout.tsx";
-import { SiteFooter } from "~/components/SiteFooter.tsx";
-import { SiteHeader } from "~/components/SiteHeader.tsx";
 import { H1, H2, Lead } from "~/components/typography.tsx";
+import { AppLayout } from "~/components/layouts/AppLayout.tsx";
 
 function Header() {
   return (
@@ -18,17 +16,10 @@ function Header() {
 
 function ErrorLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="relative flex min-h-screen flex-col">
-      <SiteHeader />
-      <div className="flex-1">
-        <div className="border-b">
-          <div className="container flex-1 items-start">
-            <PageLayout pageHeader={<Header />}>{children}</PageLayout>
-          </div>
-        </div>
-      </div>
-      <SiteFooter />
-    </div>
+    <AppLayout>
+      <Header />
+      {children}
+    </AppLayout>
   );
 }
 

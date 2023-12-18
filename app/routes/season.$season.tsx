@@ -3,13 +3,14 @@ import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { invariantResponse } from "@epic-web/invariant";
 
-import { PageLayout } from "~/components/PageLayout.tsx";
 import { serverTiming } from "~/constants.ts";
 import { combineHeaders } from "~/lib/misc.ts";
 import { makeTimings } from "~/lib/timing.server.ts";
 import { type Season, findSeasonByName } from "~/seasons.ts";
 import { StreaksDataTable } from "~/components/streaks/data-table.tsx";
 import { H1, Lead } from "~/components/typography.tsx";
+import { AppLayout } from "~/components/layouts/AppLayout.tsx";
+import { SeasonSwitcher } from "~/components/SeasonSwitcher.tsx";
 
 export function loader({ params }: DataFunctionArgs) {
   invariantResponse(
@@ -46,13 +47,16 @@ function SeasonRoute() {
   const { season } = useLoaderData<typeof loader>();
 
   return (
-    <div className="border-b">
-      <div className="container flex-1 items-start">
-        <PageLayout pageHeader={<Header season={season} />}>
-          <StreaksDataTable />
-        </PageLayout>
-      </div>
-    </div>
+    <AppLayout
+      siteHeaderChildren={
+        <div className="w-full flex-1 md:w-auto md:flex-none">
+          <SeasonSwitcher />
+        </div>
+      }
+    >
+      <Header season={season} />
+      <StreaksDataTable />
+    </AppLayout>
   );
 }
 
