@@ -92,7 +92,7 @@
     "@graphql-codegen/cli": "5.0.0",
     "@graphql-codegen/introspection": "4.0.0",
     "@graphql-codegen/typescript": "4.0.1",
-    "@graphql-codegen/typescript-graphql-request": "6.0.1",
+    "@graphql-codegen/typescript-graphql-request": "6.1.0",
     "@graphql-codegen/typescript-operations": "4.0.1",
     "@sentry/vite-plugin": "2.10.2",
     "@sly-cli/sly": "1.5.0",
