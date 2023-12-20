@@ -81,7 +81,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-wrap-balancer": "1.1.0",
-    "redis": "4.6.11",
+    "redis": "4.6.12",
     "remix-themes": "1.2.2",
     "tailwind-merge": "2.1.0",
     "zod": "3.22.4"
