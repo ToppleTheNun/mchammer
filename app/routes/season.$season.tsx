@@ -1,9 +1,17 @@
-import type { DataFunctionArgs } from "@remix-run/node";
+import type { HeadersFunction, LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { invariantResponse } from "@epic-web/invariant";
 
-import { serverTiming } from "~/constants.ts";
+import { nanoid } from "nanoid";
+import {
+  cacheControl,
+  eTag,
+  expires,
+  lastModified,
+  serverTiming,
+  setCookie,
+} from "~/constants.ts";
 import { combineHeaders } from "~/lib/misc.ts";
 import { makeTimings } from "~/lib/timing.server.ts";
 import { type Season, findSeasonByName } from "~/seasons.ts";
@@ -11,8 +19,76 @@ import { StreaksDataTable } from "~/components/streaks/data-table.tsx";
 import { H1, H2, Lead } from "~/components/typography.tsx";
 import { AppLayout } from "~/components/layouts/AppLayout.tsx";
 import { SeasonSwitcher } from "~/components/SeasonSwitcher.tsx";
+import type { DodgeParryMissStreak } from "~/components/streaks/columns.tsx";
 
-export function loader({ params }: DataFunctionArgs) {
+export const headers: HeadersFunction = ({ loaderHeaders }) => {
+  const loaderCache = loaderHeaders.get(cacheControl);
+
+  const headers: HeadersInit = {
+    [cacheControl]: loaderCache ?? "public",
+  };
+
+  const expiresDate = loaderHeaders.get(expires);
+
+  if (expiresDate) {
+    // gets overwritten by cacheControl if present anyways
+    headers.Expires = expiresDate;
+  }
+
+  const lastModifiedDate = loaderHeaders.get(lastModified);
+
+  if (lastModifiedDate) {
+    headers[lastModified] = lastModifiedDate;
+  }
+
+  const maybeETag = loaderHeaders.get(eTag);
+
+  if (maybeETag) {
+    headers[eTag] = maybeETag;
+  }
+
+  const maybeSetCookie = loaderHeaders.get(setCookie);
+
+  if (maybeSetCookie) {
+    headers[setCookie] = maybeSetCookie;
+  }
+
+  const serverTimings = loaderHeaders.get(serverTiming);
+
+  if (serverTimings) {
+    headers[serverTiming] = serverTimings;
+  }
+
+  return headers;
+};
+
+const generateStreak = () => {
+  const characters = "DPM";
+  const length = Math.ceil(Math.random() * 10);
+  return Array.from({ length })
+    .fill("")
+    .map(() => characters.charAt(Math.floor(Math.random() * characters.length)))
+    .join("");
+};
+
+const generateDodgeParryMissStreak = (): DodgeParryMissStreak => {
+  const streak = generateStreak();
+  const dodge = (streak.match(/D/g) || []).length;
+  const parry = (streak.match(/P/g) || []).length;
+  const miss = (streak.match(/M/g) || []).length;
+  return {
+    id: nanoid(),
+    region: "us",
+    realm: "Area 52",
+    character: "Toppledh",
+    dodge,
+    parry,
+    miss,
+    streak,
+  };
+};
+
+export function loader({ params }: LoaderFunctionArgs) {
   invariantResponse(
     "season" in params && params.season,
     "Missing season parameter",
@@ -23,8 +99,17 @@ export function loader({ params }: DataFunctionArgs) {
 
   const timings = makeTimings(`${season.name} loader`);
 
+  const enhancedSeason = {
+    ...season,
+    streaks: [
+      generateDodgeParryMissStreak(),
+      generateDodgeParryMissStreak(),
+      generateDodgeParryMissStreak(),
+    ],
+  };
+
   return json(
-    { season },
+    { season: enhancedSeason },
     {
       headers: combineHeaders({ [serverTiming]: timings.toString() }),
     },
@@ -82,7 +167,7 @@ export default function SeasonRoute() {
       }
     >
       <Header season={season} />
-      <StreaksDataTable />
+      <StreaksDataTable data={season.streaks} />
     </AppLayout>
   );
 }
