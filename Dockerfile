@@ -20,7 +20,7 @@ FROM base
 ENV NODE_ENV production
 
 COPY --from=prod-deps /app/node_modules /app/node_modules
-COPY --from=build /app/build /app/build
-COPY --from=build /app/public/build /app/public/build
+COPY --from=build /app/build/server /app/build/server
+COPY --from=build /app/build/client /app/build/client
 
 CMD ["pnpm", "start"]
