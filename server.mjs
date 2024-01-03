@@ -1,11 +1,11 @@
+import crypto from "node:crypto";
 import process from "node:process";
 
 import prom from "@isaacs/express-prometheus-middleware";
-import { unstable_viteServerBuildModuleId } from "@remix-run/dev";
 import { createRequestHandler } from "@remix-run/express";
 import { installGlobals } from "@remix-run/node";
 import express from "express";
-import { wrapExpressCreateRequestHandler } from "@sentry/remix";
+import { Handlers, wrapExpressCreateRequestHandler } from "@sentry/remix";
 import { pino } from "pino";
 import { pinoHttp } from "pino-http";
 
@@ -25,6 +25,11 @@ const metricsApp = express();
 
 // http logging
 if (process.env.NODE_ENV === "production") app.use(pinoHttp());
+
+app.use((_, res, next) => {
+  res.locals.cspNonce = crypto.randomBytes(16).toString("hex");
+  next();
+});
 
 app.use(
   prom({ metricsPath: "/metrics", collectDefaultMetrics: true, metricsApp }),
@@ -87,7 +92,7 @@ const createHandler = vite
   ? createRequestHandler
   : wrapExpressCreateRequestHandler(createRequestHandler);
 const handlerBuild = vite
-  ? () => vite.ssrLoadModule(unstable_viteServerBuildModuleId)
+  ? () => vite.ssrLoadModule("virtual:remix/server-build")
   : await import("./build/index.js");
 
 // handle SSR requests
@@ -99,6 +104,9 @@ app.all(
 );
 
 app.disable("x-powered-by");
+
+app.use(Handlers.requestHandler());
+app.use(Handlers.tracingHandler());
 
 const port = process.env.PORT ?? 3000;
 app.listen(port, () => logger.info(`app ready: http://localhost:${port}`));

@@ -13,7 +13,7 @@
     "build": "nr build:generate-env && nr build:icons && nr build:remix",
     "build:generate-env": "tsx other/generate-env.ts",
     "build:icons": "tsx other/build-icons.ts",
-    "build:remix": "vite build && vite build --ssr",
+    "build:remix": "remix vite:build",
     "clean": "rimraf build public/build",
     "dev": "nr build:generate-env && nr build:icons && nr dev:remix",
     "dev:remix": "nr with-env node ./server.mjs | pino-pretty",
