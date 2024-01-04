@@ -1,4 +1,5 @@
 import process from "node:process";
+import { prisma } from "~/lib/storage.server.ts";
 
 const seed = async () => {};
 

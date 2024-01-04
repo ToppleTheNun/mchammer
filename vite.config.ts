@@ -1,8 +1,10 @@
 import { unstable_vitePlugin as remix } from "@remix-run/dev";
+import { installGlobals } from "@remix-run/node";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
-import Unfonts from "unplugin-fonts/vite";
 import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
+
+installGlobals();
 
 export default defineConfig({
   build: {
@@ -14,11 +16,6 @@ export default defineConfig({
       serverModuleFormat: "esm",
     }),
     tsconfigPaths(),
-    Unfonts({
-      fontsource: {
-        families: ["Inter Variable"],
-      },
-    }),
     sentryVitePlugin({
       org: "topplethenun",
       project: "mchammer",

@@ -2,8 +2,6 @@ import { getCachedSdk } from "~/wcl/client.server.ts";
 import type {
   GetCombatantInfoEventsQuery,
   GetCombatantInfoEventsQueryVariables,
-  GetFightsByIdQuery,
-  GetFightsByIdQueryVariables,
   GetFightsQuery,
   GetFightsQueryVariables,
   GetPhysicalDamageTakenEventsQuery,
@@ -18,14 +16,6 @@ export async function getFights(
   const sdk = await getCachedSdk();
 
   return sdk.getFights(params);
-}
-
-export async function getFightsById(
-  params: GetFightsByIdQueryVariables,
-): Promise<GetFightsByIdQuery> {
-  const sdk = await getCachedSdk();
-
-  return sdk.getFightsById(params);
 }
 
 export async function getPlayerDetails(

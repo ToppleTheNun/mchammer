@@ -1,11 +1,9 @@
-import type { DataFunctionArgs } from "@remix-run/node";
+import type { LoaderFunctionArgs } from "@remix-run/node";
 
-import { getLogger } from "~/lib/logger.server.ts";
 import { prisma } from "~/lib/storage.server.ts";
+import { error } from "~/lib/log.server.ts";
 
-const logger = getLogger(["resources", "healthcheck"]);
-
-export async function loader({ request }: DataFunctionArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const host =
     request.headers.get("X-Forwarded-Host") ?? request.headers.get("host");
 
@@ -20,8 +18,8 @@ export async function loader({ request }: DataFunctionArgs) {
       }),
     ]);
     return new Response("OK");
-  } catch (error: unknown) {
-    logger.error({ err: error }, "healthcheck ❌");
+  } catch (err: unknown) {
+    error("healthcheck ❌", err);
     return new Response("ERROR", { status: 500 });
   }
 }

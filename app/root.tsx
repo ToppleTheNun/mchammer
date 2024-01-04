@@ -2,9 +2,9 @@ import "unfonts.css";
 import "~/tailwind.css";
 
 import type {
-  DataFunctionArgs,
-  HeadersFunction,
+  HeadersArgs,
   LinksFunction,
+  LoaderFunctionArgs,
   MetaFunction,
 } from "@remix-run/node";
 import { json } from "@remix-run/node";
@@ -107,7 +107,7 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export async function loader({ request }: DataFunctionArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const timings = makeTimings("root loader");
   const { getTheme } = await themeSessionResolver(request);
 
@@ -126,11 +126,11 @@ export async function loader({ request }: DataFunctionArgs) {
   );
 }
 
-export const headers: HeadersFunction = ({ loaderHeaders }) => {
+export function headers({ loaderHeaders }: HeadersArgs) {
   return {
     "Server-Timing": loaderHeaders.get("Server-Timing") ?? "",
   };
-};
+}
 
 function Document({
   children,
