@@ -5,6 +5,7 @@ import type { IntrospectionQuery } from "graphql";
 import { buildClientSchema, getIntrospectionQuery, printSchema } from "graphql";
 
 import { getGqlClient } from "~/wcl/client.server.ts";
+import { redis } from "~/lib/storage.server.ts";
 
 async function loadSchema() {
   const client = await getGqlClient();
@@ -21,4 +22,8 @@ async function loadSchema() {
   console.log("wcl gql schema loaded");
 }
 
-loadSchema().catch(console.error);
+loadSchema()
+  .catch(console.error)
+  .finally(() => {
+    redis.disconnect();
+  });

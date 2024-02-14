@@ -22,10 +22,6 @@ export default {
     },
   },
   hooks: {
-    afterOneFileWrite: [
-      "tsx other/fix-graphql-request-import.ts",
-      "eslint --fix",
-      "prettier --write",
-    ],
+    afterOneFileWrite: ["eslint --fix", "prettier --write"],
   },
 } satisfies CodegenConfig;

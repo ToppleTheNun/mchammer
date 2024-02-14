@@ -11,11 +11,11 @@ export default defineConfig({
     sourcemap: true,
   },
   plugins: [
+    tsconfigPaths(),
     remix({
       ignoredRouteFiles: ["**/.*"],
       serverModuleFormat: "esm",
     }),
-    tsconfigPaths(),
     sentryVitePlugin({
       org: "topplethenun",
       project: "mchammer",

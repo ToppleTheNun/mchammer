@@ -2170,6 +2170,11 @@ type Report {
   Whether this report has been archived. Events, tables, and graphs for archived reports are inaccessible unless the retrieving user has a subscription including archive access.
   """
   archiveStatus: ReportArchiveStatus
+
+  """
+  Phase information for all boss encounters observed in this report. This requires loading fight data, but does not double-charge API points if you load fights and phases.
+  """
+  phases: [EncounterPhases!]
 }
 
 """
@@ -2467,6 +2472,16 @@ type ReportFight {
   name: String!
 
   """
+  Some boss fights may be converted to trash fights (encounterID = 0). When this occurs, `originalEncounterID` contains the original ID of the encounter.
+  """
+  originalEncounterID: Int
+
+  """
+  List of observed phase transitions during the fight.
+  """
+  phaseTransitions: [PhaseTransition!]
+
+  """
   The official Blizzard rating for a completed Mythic+ dungeon or Torghast run.
   """
   rating: Int
@@ -2670,6 +2685,21 @@ type GameZone {
   The localized name of the zone. Will be null if no localization information exists for the zone.
   """
   name: String
+}
+
+"""
+A spartan representation of phase transitions during a fight.
+"""
+type PhaseTransition {
+  """
+  The 1-indexed id of the phase. Phase IDs are absolute within a fight: phases with the same ID correspond to the same semantic phase.
+  """
+  id: Int!
+
+  """
+  The report-relative timestamp of the transition into the phase. The phase ends at the beginning of the next phase, or at the end of the fight.
+  """
+  startTime: Int!
 }
 
 """
@@ -3065,6 +3095,36 @@ type ReportArchiveStatus {
   The date on which the report was archived (if it has been archived).
   """
   archiveDate: Int
+}
+
+type EncounterPhases {
+  encounterID: Int!
+
+  """
+  Whether the phases can be used to separate wipes in the report UI.
+  """
+  separatesWipes: Boolean
+
+  """
+  Phase metadata for all phases in this encounter.
+  """
+  phases: [PhaseMetadata!]
+}
+
+"""
+Information about a phase from a boss encounter.
+"""
+type PhaseMetadata {
+  """
+  Phase ID. 1-indexed
+  """
+  id: Int!
+  name: String!
+
+  """
+  Whether this phase represents an intermission.
+  """
+  isIntermission: Boolean
 }
 
 """
@@ -4233,6 +4293,7 @@ type ArchonViewModels {
   game: JSON
   translations(keys: [String]): JSON
   header(gameSlug: String): JSON
+  headerTitle: JSON
   footer: JSON
   indexPage: JSON
   gamePage: JSON
@@ -4260,6 +4321,24 @@ type ArchonViewModels {
     encounterSlug: String
     affixesSlug: String
   ): JSON
+  buildsClassesAndSpecsPage(gameSlug: String): JSON
+  ability(id: Int): JSON
+  articleCategory(articleCategorySlug: String): JSON
+  articleCategories: JSON
+  articleSlugs(articleCategorySlug: String, siteName: String): JSON
+  article(
+    articleSlug: String
+    articleCategorySlug: String
+    siteName: String
+  ): JSON
+  cmsNavigation(currentSlug: String): JSON
+  pageOfArticlePreviews(
+    articleCategorySlug: String
+    pageNumber: Int
+    siteName: String
+  ): JSON
+  snippets(snippetSlugs: [String]): JSON
+  articleIndexPage: JSON
 }
 
 """
@@ -4304,49 +4383,4 @@ enum SubscriptionStatus {
     @deprecated(
       reason: "Legacy Platinum subscriptions are not available for new users."
     )
-}
-
-type ViewModels {
-  googleAnalytics: JSON
-  game: JSON
-  translations(keys: [String]): JSON
-  header: JSON
-  headerTitle: JSON
-  articleCategory(articleCategorySlug: String): JSON
-  articleCategories: JSON
-  articleSlugs(articleCategorySlug: String, siteName: String): JSON
-  article(
-    articleSlug: String
-    articleCategorySlug: String
-    siteName: String
-  ): JSON
-  cmsNavigation(currentSlug: String): JSON
-  pageOfArticlePreviews(
-    articleCategorySlug: String
-    pageNumber: Int
-    siteName: String
-  ): JSON
-  snippets(snippetSlugs: [String]): JSON
-  articleIndexPage: JSON
-  buildsZonePageSlugs: JSON
-  buildsZonePage(
-    gameSlug: String
-    rankingsSlug: String
-    zoneTypeSlug: String
-    difficultySlug: String
-    encounterSlug: String
-    affixesSlug: String
-  ): JSON
-  buildsSpecPageSlugs: JSON
-  buildsSpecPage(
-    gameSlug: String
-    classSlug: String
-    specSlug: String
-    zoneTypeSlug: String
-    categorySlug: String
-    difficultySlug: String
-    encounterSlug: String
-    affixesSlug: String
-  ): JSON
-  footer: JSON
 }

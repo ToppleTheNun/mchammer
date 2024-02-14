@@ -1,6 +1,5 @@
 import type { GraphQLClient, RequestOptions } from "graphql-request";
 import gql from "graphql-tag";
-type GraphQLClientRequestHeaders = RequestOptions["requestHeaders"];
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -21,6 +20,7 @@ export type Incremental<T> =
   | {
       [P in keyof T]?: P extends " $fragmentName" | "__typename" ? T[P] : never;
     };
+type GraphQLClientRequestHeaders = RequestOptions["requestHeaders"];
 /** All built-in and custom scalars, mapped to their actual values */
 export interface Scalars {
   ID: { input: string; output: string };
@@ -33,12 +33,20 @@ export interface Scalars {
 
 export interface ArchonViewModels {
   __typename?: "ArchonViewModels";
+  ability?: Maybe<Scalars["JSON"]["output"]>;
   aboutPage?: Maybe<Scalars["JSON"]["output"]>;
   announcementPage?: Maybe<Scalars["JSON"]["output"]>;
+  article?: Maybe<Scalars["JSON"]["output"]>;
+  articleCategories?: Maybe<Scalars["JSON"]["output"]>;
+  articleCategory?: Maybe<Scalars["JSON"]["output"]>;
+  articleIndexPage?: Maybe<Scalars["JSON"]["output"]>;
+  articleSlugs?: Maybe<Scalars["JSON"]["output"]>;
+  buildsClassesAndSpecsPage?: Maybe<Scalars["JSON"]["output"]>;
   buildsSpecPage?: Maybe<Scalars["JSON"]["output"]>;
   buildsSpecPageSlugs?: Maybe<Scalars["JSON"]["output"]>;
   buildsZonePage?: Maybe<Scalars["JSON"]["output"]>;
   buildsZonePageSlugs?: Maybe<Scalars["JSON"]["output"]>;
+  cmsNavigation?: Maybe<Scalars["JSON"]["output"]>;
   contactPage?: Maybe<Scalars["JSON"]["output"]>;
   footer?: Maybe<Scalars["JSON"]["output"]>;
   game?: Maybe<Scalars["JSON"]["output"]>;
@@ -46,8 +54,34 @@ export interface ArchonViewModels {
   gameSlugs?: Maybe<Scalars["JSON"]["output"]>;
   googleAnalytics?: Maybe<Scalars["JSON"]["output"]>;
   header?: Maybe<Scalars["JSON"]["output"]>;
+  headerTitle?: Maybe<Scalars["JSON"]["output"]>;
   indexPage?: Maybe<Scalars["JSON"]["output"]>;
+  pageOfArticlePreviews?: Maybe<Scalars["JSON"]["output"]>;
+  snippets?: Maybe<Scalars["JSON"]["output"]>;
   translations?: Maybe<Scalars["JSON"]["output"]>;
+}
+
+export interface ArchonViewModelsAbilityArgs {
+  id?: InputMaybe<Scalars["Int"]["input"]>;
+}
+
+export interface ArchonViewModelsArticleArgs {
+  articleCategorySlug?: InputMaybe<Scalars["String"]["input"]>;
+  articleSlug?: InputMaybe<Scalars["String"]["input"]>;
+  siteName?: InputMaybe<Scalars["String"]["input"]>;
+}
+
+export interface ArchonViewModelsArticleCategoryArgs {
+  articleCategorySlug?: InputMaybe<Scalars["String"]["input"]>;
+}
+
+export interface ArchonViewModelsArticleSlugsArgs {
+  articleCategorySlug?: InputMaybe<Scalars["String"]["input"]>;
+  siteName?: InputMaybe<Scalars["String"]["input"]>;
+}
+
+export interface ArchonViewModelsBuildsClassesAndSpecsPageArgs {
+  gameSlug?: InputMaybe<Scalars["String"]["input"]>;
 }
 
 export interface ArchonViewModelsBuildsSpecPageArgs {
@@ -70,8 +104,22 @@ export interface ArchonViewModelsBuildsZonePageArgs {
   zoneTypeSlug?: InputMaybe<Scalars["String"]["input"]>;
 }
 
+export interface ArchonViewModelsCmsNavigationArgs {
+  currentSlug?: InputMaybe<Scalars["String"]["input"]>;
+}
+
 export interface ArchonViewModelsHeaderArgs {
   gameSlug?: InputMaybe<Scalars["String"]["input"]>;
+}
+
+export interface ArchonViewModelsPageOfArticlePreviewsArgs {
+  articleCategorySlug?: InputMaybe<Scalars["String"]["input"]>;
+  pageNumber?: InputMaybe<Scalars["Int"]["input"]>;
+  siteName?: InputMaybe<Scalars["String"]["input"]>;
+}
+
+export interface ArchonViewModelsSnippetsArgs {
+  snippetSlugs?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
 }
 
 export interface ArchonViewModelsTranslationsArgs {
@@ -343,6 +391,15 @@ export interface EncounterFightRankingsArgs {
   serverRegion?: InputMaybe<Scalars["String"]["input"]>;
   serverSlug?: InputMaybe<Scalars["String"]["input"]>;
   size?: InputMaybe<Scalars["Int"]["input"]>;
+}
+
+export interface EncounterPhases {
+  __typename?: "EncounterPhases";
+  encounterID: Scalars["Int"]["output"];
+  /** Phase metadata for all phases in this encounter. */
+  phases?: Maybe<Array<PhaseMetadata>>;
+  /** Whether the phases can be used to separate wipes in the report UI. */
+  separatesWipes?: Maybe<Scalars["Boolean"]["output"]>;
 }
 
 /** The type of events or tables to examine. */
@@ -1122,6 +1179,25 @@ export interface Partition {
   name: Scalars["String"]["output"];
 }
 
+/** Information about a phase from a boss encounter. */
+export interface PhaseMetadata {
+  __typename?: "PhaseMetadata";
+  /** Phase ID. 1-indexed */
+  id: Scalars["Int"]["output"];
+  /** Whether this phase represents an intermission. */
+  isIntermission?: Maybe<Scalars["Boolean"]["output"]>;
+  name: Scalars["String"]["output"];
+}
+
+/** A spartan representation of phase transitions during a fight. */
+export interface PhaseTransition {
+  __typename?: "PhaseTransition";
+  /** The 1-indexed id of the phase. Phase IDs are absolute within a fight: phases with the same ID correspond to the same semantic phase. */
+  id: Scalars["Int"]["output"];
+  /** The report-relative timestamp of the transition into the phase. The phase ends at the beginning of the next phase, or at the end of the fight. */
+  startTime: Scalars["Int"]["output"];
+}
+
 /** Attendance for a specific player on a specific raid night. */
 export interface PlayerAttendance {
   __typename?: "PlayerAttendance";
@@ -1272,6 +1348,8 @@ export interface Report {
   masterData?: Maybe<ReportMasterData>;
   /** The user that uploaded the report. */
   owner?: Maybe<User>;
+  /** Phase information for all boss encounters observed in this report. This requires loading fight data, but does not double-charge API points if you load fights and phases. */
+  phases?: Maybe<Array<EncounterPhases>>;
   /** A table of information for the players of a report, including their specs, talents, gear, etc. This data is not considered frozen, and it can change without notice. Use at your own risk. */
   playerDetails?: Maybe<Scalars["JSON"]["output"]>;
   /** A list of all characters that ranked on kills in the report. */
@@ -1614,6 +1692,10 @@ export interface ReportFight {
   maps?: Maybe<Array<Maybe<ReportMap>>>;
   /** The name of the fight. */
   name: Scalars["String"]["output"];
+  /** Some boss fights may be converted to trash fights (encounterID = 0). When this occurs, `originalEncounterID` contains the original ID of the encounter. */
+  originalEncounterID?: Maybe<Scalars["Int"]["output"]>;
+  /** List of observed phase transitions during the fight. */
+  phaseTransitions?: Maybe<Array<PhaseTransition>>;
   /** The official Blizzard rating for a completed Mythic+ dungeon or Torghast run. */
   rating?: Maybe<Scalars["Int"]["output"]>;
   /** The group size for the raid, dungeon, or arena. Null for trash. */
@@ -1903,81 +1985,6 @@ export interface UserDataUserArgs {
   id?: InputMaybe<Scalars["Int"]["input"]>;
 }
 
-export interface ViewModels {
-  __typename?: "ViewModels";
-  article?: Maybe<Scalars["JSON"]["output"]>;
-  articleCategories?: Maybe<Scalars["JSON"]["output"]>;
-  articleCategory?: Maybe<Scalars["JSON"]["output"]>;
-  articleIndexPage?: Maybe<Scalars["JSON"]["output"]>;
-  articleSlugs?: Maybe<Scalars["JSON"]["output"]>;
-  buildsSpecPage?: Maybe<Scalars["JSON"]["output"]>;
-  buildsSpecPageSlugs?: Maybe<Scalars["JSON"]["output"]>;
-  buildsZonePage?: Maybe<Scalars["JSON"]["output"]>;
-  buildsZonePageSlugs?: Maybe<Scalars["JSON"]["output"]>;
-  cmsNavigation?: Maybe<Scalars["JSON"]["output"]>;
-  footer?: Maybe<Scalars["JSON"]["output"]>;
-  game?: Maybe<Scalars["JSON"]["output"]>;
-  googleAnalytics?: Maybe<Scalars["JSON"]["output"]>;
-  header?: Maybe<Scalars["JSON"]["output"]>;
-  headerTitle?: Maybe<Scalars["JSON"]["output"]>;
-  pageOfArticlePreviews?: Maybe<Scalars["JSON"]["output"]>;
-  snippets?: Maybe<Scalars["JSON"]["output"]>;
-  translations?: Maybe<Scalars["JSON"]["output"]>;
-}
-
-export interface ViewModelsArticleArgs {
-  articleCategorySlug?: InputMaybe<Scalars["String"]["input"]>;
-  articleSlug?: InputMaybe<Scalars["String"]["input"]>;
-  siteName?: InputMaybe<Scalars["String"]["input"]>;
-}
-
-export interface ViewModelsArticleCategoryArgs {
-  articleCategorySlug?: InputMaybe<Scalars["String"]["input"]>;
-}
-
-export interface ViewModelsArticleSlugsArgs {
-  articleCategorySlug?: InputMaybe<Scalars["String"]["input"]>;
-  siteName?: InputMaybe<Scalars["String"]["input"]>;
-}
-
-export interface ViewModelsBuildsSpecPageArgs {
-  affixesSlug?: InputMaybe<Scalars["String"]["input"]>;
-  categorySlug?: InputMaybe<Scalars["String"]["input"]>;
-  classSlug?: InputMaybe<Scalars["String"]["input"]>;
-  difficultySlug?: InputMaybe<Scalars["String"]["input"]>;
-  encounterSlug?: InputMaybe<Scalars["String"]["input"]>;
-  gameSlug?: InputMaybe<Scalars["String"]["input"]>;
-  specSlug?: InputMaybe<Scalars["String"]["input"]>;
-  zoneTypeSlug?: InputMaybe<Scalars["String"]["input"]>;
-}
-
-export interface ViewModelsBuildsZonePageArgs {
-  affixesSlug?: InputMaybe<Scalars["String"]["input"]>;
-  difficultySlug?: InputMaybe<Scalars["String"]["input"]>;
-  encounterSlug?: InputMaybe<Scalars["String"]["input"]>;
-  gameSlug?: InputMaybe<Scalars["String"]["input"]>;
-  rankingsSlug?: InputMaybe<Scalars["String"]["input"]>;
-  zoneTypeSlug?: InputMaybe<Scalars["String"]["input"]>;
-}
-
-export interface ViewModelsCmsNavigationArgs {
-  currentSlug?: InputMaybe<Scalars["String"]["input"]>;
-}
-
-export interface ViewModelsPageOfArticlePreviewsArgs {
-  articleCategorySlug?: InputMaybe<Scalars["String"]["input"]>;
-  pageNumber?: InputMaybe<Scalars["Int"]["input"]>;
-  siteName?: InputMaybe<Scalars["String"]["input"]>;
-}
-
-export interface ViewModelsSnippetsArgs {
-  snippetSlugs?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
-}
-
-export interface ViewModelsTranslationsArgs {
-  keys?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>;
-}
-
 /** Whether the view is by source, target, or ability. */
 export enum ViewType {
   /** View by ability. */
@@ -2256,12 +2263,14 @@ export type SdkFunctionWrapper = <T>(
   action: (requestHeaders?: Record<string, string>) => Promise<T>,
   operationName: string,
   operationType?: string,
+  variables?: any,
 ) => Promise<T>;
 
 const defaultWrapper: SdkFunctionWrapper = (
   action,
   _operationName,
   _operationType,
+  _variables,
 ) => action();
 
 export function getSdk(
@@ -2281,6 +2290,7 @@ export function getSdk(
           }),
         "getFights",
         "query",
+        variables,
       );
     },
     getCombatantInfoEvents(
@@ -2296,6 +2306,7 @@ export function getSdk(
           ),
         "getCombatantInfoEvents",
         "query",
+        variables,
       );
     },
     getPlayerDetails(
@@ -2311,6 +2322,7 @@ export function getSdk(
           ),
         "getPlayerDetails",
         "query",
+        variables,
       );
     },
     getPhysicalDamageTakenEvents(
@@ -2326,6 +2338,7 @@ export function getSdk(
           ),
         "getPhysicalDamageTakenEvents",
         "query",
+        variables,
       );
     },
   };

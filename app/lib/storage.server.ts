@@ -4,11 +4,13 @@ import { remember } from "@epic-web/remember";
 import { PrismaClient } from "@prisma/client";
 import { createClient } from "redis";
 
-export const redis = remember("redis", () =>
-  createClient({
+export const redis = remember("redis", () => {
+  const client = createClient({
     url: process.env.REDIS_URL,
-  }),
-);
+  });
+  client.connect();
+  return client;
+});
 
 export const prisma = remember("prisma", () => {
   const { DATABASE_URL } = process.env;

@@ -8,12 +8,14 @@ export async function setWCLAuthentication({
   access_token,
   expires_in,
 }: WCLOAuthResponse): Promise<void> {
-  await redis.hSet("wcl-auth-token", "token", access_token);
-  await redis.hSet(
-    "wcl-auth-token",
-    "expiresAt",
-    Math.round(Date.now() / 1000) + expires_in,
-  );
+  await Promise.all([
+    redis.hSet("wcl-auth-token", "token", access_token),
+    redis.hSet(
+      "wcl-auth-token",
+      "expiresAt",
+      Math.round(Date.now() / 1000) + expires_in,
+    ),
+  ]);
 }
 
 export async function getWCLAuthentication(): Promise<WCLAuth | null> {
@@ -25,5 +27,9 @@ export async function getWCLAuthentication(): Promise<WCLAuth | null> {
   }
 
   const result = await redis.hGetAll("wcl-auth-token");
-  return wclAuthSchema.parseAsync(result);
+  const parsed = await wclAuthSchema.safeParseAsync(result);
+  if (parsed.success) {
+    return parsed.data;
+  }
+  return null;
 }

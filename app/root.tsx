@@ -1,4 +1,3 @@
-import "unfonts.css";
 import "~/tailwind.css";
 
 import type {
@@ -10,7 +9,6 @@ import type {
 import { json } from "@remix-run/node";
 import {
   Links,
-  LiveReload,
   Meta,
   Outlet,
   Scripts,
@@ -163,7 +161,6 @@ function Document({
         />
         <ScrollRestoration nonce={nonce} />
         <TailwindIndicator />
-        <LiveReload nonce={nonce} />
         <Scripts nonce={nonce} />
       </body>
     </html>
