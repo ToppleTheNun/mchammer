@@ -87,8 +87,8 @@ dependencies:
     specifier: 0.7.0
     version: 0.7.0
   close-with-grace:
-    specifier: 1.2.0
-    version: 1.2.0
+    specifier: 1.3.0
+    version: 1.3.0
   clsx:
     specifier: 2.1.0
     version: 2.1.0
@@ -5838,8 +5838,8 @@ packages:
     engines: {node: '>=0.8'}
     dev: true
 
-  /close-with-grace@1.2.0:
-    resolution: {integrity: sha512-Xga0jyAb4fX98u5pZAgqlbqHP8cHuy5M3Wto0k0L/36aP2C25Cjp51XfPw3Hz7dNC2L2/hF/PK/KJhO275L+VA==}
+  /close-with-grace@1.3.0:
+    resolution: {integrity: sha512-lvm0rmLIR5bNz4CRKW6YvCfn9Wg5Wb9A8PJ3Bb+hjyikgC1RO1W3J4z9rBXQYw97mAte7dNSQI8BmUsxdlXQyw==}
     dev: false
 
   /clsx@2.0.0:
