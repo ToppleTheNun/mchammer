@@ -2,7 +2,7 @@
   "name": "@topplethenun/mchammer",
   "type": "module",
   "private": true,
-  "packageManager": "pnpm@8.15.2",
+  "packageManager": "pnpm@8.15.5",
   "author": "Richard Harrah",
   "license": "MIT",
   "sideEffects": false,
