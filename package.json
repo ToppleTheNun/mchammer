@@ -22,7 +22,6 @@
     "gql:introspection": "tsx other/wcl-introspection.ts",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
     "lint:fix": "eslint --fix .",
-    "prepare": "prisma generate",
     "prisma": "nr prisma:generate && nr prisma:migrate && nr prisma:seed",
     "prisma:deploy": "prisma migrate deploy",
     "prisma:generate": "prisma generate",
