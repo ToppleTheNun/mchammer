@@ -1,31 +1,29 @@
+/* eslint-disable @typescript-eslint/no-empty-interface */
 import process from "node:process";
 
-import { z } from "zod";
+import { type TypeOf, z } from "zod";
 
 import { generated } from "~/generated/env.ts";
 
 const schema = z.object({
-  // Client
+  NODE_ENV: z.enum(["production", "development", "test"] as const),
+  DATABASE_PATH: z.string(),
+  DATABASE_URL: z.string(),
+  SESSION_SECRET: z.string(),
+  CACHE_DATABASE_PATH: z.string(),
+  INTERNAL_COMMAND_TOKEN: z.string(),
+  SENTRY_DSN: z.string().optional(),
+  WARCRAFT_LOGS_CLIENT_ID: z.string(),
+  WARCRAFT_LOGS_CLIENT_SECRET: z.string(),
   BUILD_TIME: z.string(),
   BUILD_TIMESTAMP: z.string(),
   COMMIT_SHA: z.string(),
-  SENTRY_DSN: z.string().optional(),
-  // Server
-  NODE_ENV: z.enum(["development", "test", "production"]),
-  PINO_LOG_LEVEL: z
-    .enum(["fatal", "error", "warn", "info", "debug", "trace", "silent"])
-    .optional(),
-  DATABASE_URL: z.string(),
-  REDIS_URL: z.string().url(),
-  WARCRAFT_LOGS_CLIENT_ID: z.string(),
-  WARCRAFT_LOGS_CLIENT_SECRET: z.string(),
-  SESSION_SECRET: z.string(),
 });
 
 declare global {
-  // eslint-disable-next-line ts/no-namespace
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace NodeJS {
-    interface ProcessEnv extends z.infer<typeof schema> {}
+    interface ProcessEnv extends TypeOf<typeof schema> {}
   }
 }
 
@@ -64,7 +62,7 @@ export function getEnv() {
 type ENV = ReturnType<typeof getEnv>;
 
 declare global {
-  // eslint-disable-next-line no-var,vars-on-top
+  // eslint-disable-next-line no-var
   var ENV: ENV;
   interface Window {
     ENV: ENV;

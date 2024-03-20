@@ -1,9 +1,16 @@
 node_modules
+.DS_STORE
 
 /.cache
 /build
-/public/build
+/server-build
 .env
+.cache
+
+/prisma/data.db
+/prisma/data.db-journal
+
+/other/cache.db
 
 .idea
 

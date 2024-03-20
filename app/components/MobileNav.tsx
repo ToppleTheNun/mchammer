@@ -52,7 +52,7 @@ export function MobileNav() {
       <SheetContent side="left" className="pr-0">
         <MobileLink to="/" className="flex items-center" onOpenChange={setOpen}>
           <img
-            src="/logo.webp"
+            src="/img/logo.webp"
             alt="Logo"
             height="128"
             width="128"

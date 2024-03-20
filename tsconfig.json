@@ -30,5 +30,5 @@
       "~/*": ["./app/*"]
     }
   },
-  "include": ["env.d.ts", "reset.d.ts", "**/*.ts", "**/*.tsx", "**/*.js"]
+  "include": ["**/*.ts", "**/*.tsx", "**/*.js"]
 }

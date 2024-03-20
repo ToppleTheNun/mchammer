@@ -1,14 +1,19 @@
+import "dotenv/config";
+
 import { writeFileSync } from "node:fs";
 import { resolve } from "node:path";
+import process from "node:process";
 
 import type { IntrospectionQuery } from "graphql";
 import { buildClientSchema, getIntrospectionQuery, printSchema } from "graphql";
 
-import { getGqlClient } from "~/wcl/client.server.ts";
-import { redis } from "~/lib/storage.server.ts";
+import { error, info } from "~/lib/log.server.ts";
+import { makeTimings } from "~/lib/timing.server.ts";
+import { getGqlClient } from "~/lib/wcl/client.server.ts";
 
 async function loadSchema() {
-  const client = await getGqlClient();
+  const timings = makeTimings("wcl introspection");
+  const client = await getGqlClient({ timings });
 
   const response = await client.request<IntrospectionQuery>(
     getIntrospectionQuery(),
@@ -16,14 +21,13 @@ async function loadSchema() {
 
   const schema = printSchema(buildClientSchema(response));
 
-  const targetPath = resolve("app/wcl/gql/schema.graphql");
+  const targetPath = resolve("app/lib/wcl/gql/schema.graphql");
   writeFileSync(targetPath, schema);
 
-  console.log("wcl gql schema loaded");
+  info("wcl gql schema loaded");
 }
 
-loadSchema()
-  .catch(console.error)
-  .finally(() => {
-    redis.disconnect();
-  });
+loadSchema().catch((err: unknown) => {
+  error("Unable to load WCL GraphQL schema", err);
+  process.exit(1);
+});

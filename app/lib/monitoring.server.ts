@@ -1,11 +1,42 @@
+import { nodeProfilingIntegration } from "@sentry/profiling-node";
 import * as Sentry from "@sentry/remix";
 
-import { prisma } from "~/lib/storage.server.ts";
+import { prisma } from "~/lib/db.server.ts";
 
 export function init() {
   Sentry.init({
     dsn: ENV.SENTRY_DSN,
     tracesSampleRate: ENV.MODE === "production" ? 0.2 : 1.0,
-    integrations: [new Sentry.Integrations.Prisma({ client: prisma })],
+    denyUrls: [
+      /\/resources\/healthcheck/,
+      // TODO: be smarter about the public assets...
+      /\/build\//,
+      /\/favicons\//,
+      /\/img\//,
+      /\/fonts\//,
+      /\/favicon.ico/,
+      /\/site\.webmanifest/,
+    ],
+    integrations: [
+      new Sentry.Integrations.Http({ tracing: true }),
+      new Sentry.Integrations.Prisma({ client: prisma }),
+      nodeProfilingIntegration(),
+    ],
+    tracesSampler(samplingContext) {
+      // ignore healthcheck transactions by other services (consul, etc.)
+      if (samplingContext.request?.url?.includes("/resources/healthcheck")) {
+        return 0;
+      }
+      return 1;
+    },
+    beforeSendTransaction(event) {
+      // ignore all healthcheck related transactions
+      //  note that name of header here is case-sensitive
+      if (event.request?.headers?.["x-healthcheck"] === "true") {
+        return null;
+      }
+
+      return event;
+    },
   });
 }

@@ -2,9 +2,10 @@ import type { HTMLAttributes } from "react";
 
 import { cn } from "~/lib/utils.ts";
 
-interface HeadingProps extends HTMLAttributes<HTMLHeadingElement> {}
+type HeadingProps = HTMLAttributes<HTMLHeadingElement>;
 export function H1({ className, ...props }: HeadingProps) {
   return (
+    // eslint-disable-next-line jsx-a11y/heading-has-content
     <h1
       {...props}
       className={cn(
@@ -17,6 +18,7 @@ export function H1({ className, ...props }: HeadingProps) {
 
 export function H2({ className, ...props }: HeadingProps) {
   return (
+    // eslint-disable-next-line jsx-a11y/heading-has-content
     <h2
       {...props}
       className={cn(
@@ -29,6 +31,7 @@ export function H2({ className, ...props }: HeadingProps) {
 
 export function H3({ className, ...props }: HeadingProps) {
   return (
+    // eslint-disable-next-line jsx-a11y/heading-has-content
     <h3
       {...props}
       className={cn(
@@ -41,6 +44,7 @@ export function H3({ className, ...props }: HeadingProps) {
 
 export function H4({ className, ...props }: HeadingProps) {
   return (
+    // eslint-disable-next-line jsx-a11y/heading-has-content
     <h4
       {...props}
       className={cn(
@@ -51,7 +55,7 @@ export function H4({ className, ...props }: HeadingProps) {
   );
 }
 
-interface ParagraphProps extends HTMLAttributes<HTMLParagraphElement> {}
+type ParagraphProps = HTMLAttributes<HTMLParagraphElement>;
 
 export function Paragraph({ className, ...props }: ParagraphProps) {
   return (

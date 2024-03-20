@@ -1,5 +1,4 @@
 import { useNavigate, useParams } from "@remix-run/react";
-import type { ComponentPropsWithoutRef } from "react";
 import { useEffect, useState } from "react";
 
 import {
@@ -22,9 +21,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "~/components/ui/popover.tsx";
+import { seasons } from "~/data/seasons.ts";
+import { isPresent } from "~/lib/typeGuards.ts";
 import { cn } from "~/lib/utils.ts";
-import { seasons } from "~/seasons.ts";
-import { isPresent } from "~/typeGuards.ts";
 
 interface Season {
   label: string;
@@ -71,10 +70,7 @@ function findMatchingSeason(name: string | undefined): Season | undefined {
     .find((season) => season.value === name);
 }
 
-type PopoverTriggerProps = ComponentPropsWithoutRef<typeof PopoverTrigger>;
-
-interface SeasonSwitcherProps extends PopoverTriggerProps {}
-export function SeasonSwitcher({ className }: SeasonSwitcherProps) {
+export function SeasonSwitcher() {
   const navigate = useNavigate();
   const params = useParams();
   const [open, setOpen] = useState(false);
@@ -91,7 +87,9 @@ export function SeasonSwitcher({ className }: SeasonSwitcherProps) {
     };
 
     document.addEventListener("keydown", down);
-    return () => document.removeEventListener("keydown", down);
+    return () => {
+      document.removeEventListener("keydown", down);
+    };
   }, []);
 
   return (
@@ -102,7 +100,7 @@ export function SeasonSwitcher({ className }: SeasonSwitcherProps) {
           role="combobox"
           aria-expanded={open}
           aria-label="Select a team"
-          className={cn("w-[200px] justify-between", className)}
+          className={cn("w-[200px] justify-between")}
         >
           <Avatar className="mr-2 h-5 w-5">
             <AvatarImage

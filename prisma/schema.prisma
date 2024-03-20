@@ -1,95 +1,72 @@
 generator client {
   provider = "prisma-client-js"
-  previewFeatures = ["relationJoins"]
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
-model DodgeParryMissEvent {
-  id String @id @default(cuid())
+model Region {
+  id String @id
 
-  report                       String
-  reportFightId                Int
-  reportFightRelativeTimestamp Int
-
-  avoidance Avoidance
-
-  sourceID       Int
-  sourceInstance Int?
-
-  streak   DodgeParryMissEventStreak @relation(fields: [streakId], references: [id])
-  streakId String
+  characters WclCharacter[]
+  reports    WclReport[]
 }
 
-model DodgeParryMissEventStreak {
-  id String @id @default(cuid())
+model WclReport {
+  id String @id
 
-  report                   String
-  reportFightId            Int
-  reportFightRelativeStart Int    @default(-1)
-  reportFightRelativeEnd   Int    @default(-1)
+  startTimestamp BigInt
+  endTimestamp   BigInt?
+  regionId       String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
-  dodge  Int
-  parry  Int
-  miss   Int
-  streak Int
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  character   Character @relation(fields: [characterId], references: [id])
-  characterId Int
-  fight       Fight     @relation(fields: [fightId], references: [id])
-  fightId     String
-
-  streaks DodgeParryMissEvent[]
+  region Region     @relation(fields: [regionId], references: [id])
+  fights WclFight[]
 }
 
-model Character {
+model WclFight {
+  id String @id @default(cuid())
+
+  fightNumber            Int
+  relativeStartTimestamp BigInt
+  relativeEndTimestamp   BigInt
+  difficulty             Int
+  encounterId            Int
+  // colon separated list of ints
+  friendlyPlayers        String
+  reportId               String
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  report            WclReport             @relation(fields: [reportId], references: [id])
+  damageTakenEvents WclDamageTakenEvent[]
+}
+
+model WclDamageTakenEvent {
+  id String @id @default(cuid())
+
+  relativeTimestamp BigInt
+  fightId           String
+  characterId       Int
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  character WclCharacter @relation(fields: [characterId], references: [id])
+  fight     WclFight     @relation(fields: [fightId], references: [id])
+}
+
+model WclCharacter {
   id Int @id
 
-  name   String
-  server String
-  region Regions
-
+  name      String
+  server    String
+  regionId  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  dodgeParryMissEventStreaks DodgeParryMissEventStreak[]
-}
-
-model Fight {
-  id String @id @default(cuid())
-
-  report          String
-  startTime       DateTime
-  endTime         DateTime
-  difficulty      Int
-  encounterId     Int
-  // colon separated list of ints
-  friendlyPlayers String
-  region          Regions
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  dodgeParryMissEventStreaks DodgeParryMissEventStreak[]
-
-  @@unique([startTime, endTime, encounterId, friendlyPlayers, region])
-}
-
-enum Regions {
-  eu
-  kr
-  tw
-  us
-}
-
-enum Avoidance {
-  dodge
-  parry
-  miss
+  region            Region                @relation(fields: [regionId], references: [id])
+  damageTakenEvents WclDamageTakenEvent[]
 }

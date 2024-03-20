@@ -7,7 +7,7 @@ export function MainNav() {
     <div className="mr-4 hidden md:flex">
       <Link to="/" className="mr-6 flex items-center space-x-2">
         <img
-          src="/logo.webp"
+          src="/img/logo.webp"
           alt="Logo"
           height="128"
           width="128"

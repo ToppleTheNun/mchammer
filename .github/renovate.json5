@@ -8,4 +8,5 @@
     ":automergeBranch",
     ":automergeMinor",
   ],
+  baseBranches: ["dev"],
 }
