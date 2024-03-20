@@ -6,26 +6,8 @@
 
 ### Environment Variables
 
-Install Vercel CLI globally:
+Copy `.env.example` to `.env` and fill in your WCL client ID and client secret.
 
-```shell
-$ pnpm i -g vercel@latest
-```
+### Everything else
 
-Log into the CLI:
-
-```shell
-$ vercel login
-```
-
-Link your repo to `topplethenun/mchammer`:
-
-```shell
-$ vercel link
-```
-
-Pull environment variables:
-
-```shell
-$ vercel env pull .env
-```
+Run `pnpm run setup` after cloning the repo.
