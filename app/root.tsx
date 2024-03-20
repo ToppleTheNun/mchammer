@@ -289,19 +289,22 @@ function ThemeSwitch() {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem
-            onClick={() =>
-              { fetcher.submit(
+            onClick={() => {
+              fetcher.submit(
                 { theme: "light" },
                 { action: "/", method: "post" },
-              ); }
-            }
+              );
+            }}
           >
             Light
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={() =>
-              { fetcher.submit({ theme: "dark" }, { action: "/", method: "post" }); }
-            }
+            onClick={() => {
+              fetcher.submit(
+                { theme: "dark" },
+                { action: "/", method: "post" },
+              );
+            }}
           >
             Dark
           </DropdownMenuItem>
@@ -318,7 +321,7 @@ function App() {
   const matches = useMatches();
   useToast(data.toast);
 
-  const isOnSeasonPage = matches.find((m) => m.id === "routes/season/$season");
+  const isOnSeasonPage = matches.find((m) => m.id === "routes/season+/$season");
   const seasonSwitcher = isOnSeasonPage ? <SeasonSwitcher /> : null;
 
   return (
