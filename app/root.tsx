@@ -402,7 +402,7 @@ function App() {
           </div>
         </footer>
       </div>
-      <Toaster />
+      <Toaster closeButton position="top-center" theme={theme} />
       <ProgressBar />
     </Document>
   );
