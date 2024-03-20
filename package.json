@@ -11,7 +11,7 @@
   "scripts": {
     "build": "pnpm run build:generate-env && pnpm run build:icons && pnpm run build:remix && pnpm run build:server",
     "build:generate-env": "tsx ./other/generate-env.ts",
-    "build:icons": "tsx other/build-icons.ts",
+    "build:icons": "tsx ./other/build-icons.ts",
     "build:remix": "remix vite:build --sourcemapClient --sourcemapServer",
     "build:server": "tsx ./other/build-server.ts",
     "dev": "pnpm run build:icons && node ./server/dev-server.js",
