@@ -20,7 +20,7 @@ FROM base as deps
 WORKDIR /myapp
 
 ADD package.json pnpm-lock.yaml .npmrc ./
-RUN pnpm install && ls -la /myapp/node_modules/.bin
+RUN pnpm install --prod false
 
 # Setup production node_modules
 FROM base as production-deps
@@ -53,7 +53,6 @@ RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN \
     export SENTRY_AUTH_TOKEN=$(cat /run/secrets/SENTRY_AUTH_TOKEN) && \
     export SENTRY_ORG=$(cat /run/secrets/SENTRY_ORG) && \
     export SENTRY_PROJECT=$(cat /run/secrets/SENTRY_PROJECT) && \
-    ls -la /myapp/node_modules/.bin && \
     pnpm run build
 
 # Finally, build the production image with minimal footprint
