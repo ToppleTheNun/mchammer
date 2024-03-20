@@ -30,6 +30,7 @@
     "prisma:push": "prisma db push",
     "prisma:seed": "prisma db seed",
     "prisma:studio": "prisma studio",
+    "setup": "nr build && prisma generate && prisma migrate deploy && prisma db seed",
     "test": "vitest --passWithNoTests",
     "typecheck": "tsc"
   },
