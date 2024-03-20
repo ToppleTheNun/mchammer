@@ -157,9 +157,6 @@ dependencies:
     version: 3.22.4
 
 devDependencies:
-  "@antfu/ni":
-    specifier: 0.21.12
-    version: 0.21.12
   "@eslint/eslintrc":
     specifier: 3.0.2
     version: 3.0.2
@@ -361,14 +358,6 @@ packages:
     dependencies:
       "@jridgewell/gen-mapping": 0.3.3
       "@jridgewell/trace-mapping": 0.3.22
-    dev: true
-
-  /@antfu/ni@0.21.12:
-    resolution:
-      {
-        integrity: sha512-2aDL3WUv8hMJb2L3r/PIQWsTLyq7RQr3v9xD16fiz6O8ys1xEyLhhTOv8gxtZvJiTzjTF5pHoArvRdesGL1DMQ==,
-      }
-    hasBin: true
     dev: true
 
   /@ardatan/relay-compiler@12.0.0(graphql@16.8.1):
