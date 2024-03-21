@@ -124,7 +124,7 @@ jobs:
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
 
       - name: Read app name
-        uses: SebRollen/toml-action@v1.2.0
+        uses: SebRollen/toml-action@b1b3628f55fc3a28208d4203ada8b737e9687876 # v1.2.0
         id: app_name
         with:
           file: "fly.toml"
@@ -136,7 +136,7 @@ jobs:
           mv ./other/.dockerignore ./.dockerignore
 
       - name: Setup Fly
-        uses: superfly/flyctl-actions/setup-flyctl@v1
+        uses: superfly/flyctl-actions/setup-flyctl@fc53c09e1bc3be6f54706524e3b82c4f462f77be # v1
         with:
           version: 0.2.22
 
