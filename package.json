@@ -30,6 +30,7 @@
     "prisma:seed": "prisma db seed",
     "prisma:studio": "prisma studio",
     "setup": "pnpm run build && prisma generate && prisma migrate deploy && prisma db seed",
+    "start": "cross-env NODE_ENV=production node .",
     "test": "vitest --passWithNoTests",
     "typecheck": "tsc"
   },
