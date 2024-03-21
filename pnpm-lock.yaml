@@ -295,6 +295,9 @@ devDependencies:
   prettier-plugin-pkg:
     specifier: 0.18.1
     version: 0.18.1(prettier@3.2.5)
+  prettier-plugin-toml:
+    specifier: 2.0.1
+    version: 2.0.1(prettier@3.2.5)
   prisma:
     specifier: 5.11.0
     version: 5.11.0
@@ -5057,6 +5060,22 @@ packages:
       zod: 3.22.4
     transitivePeerDependencies:
       - typescript
+    dev: true
+
+  /@taplo/core@0.1.1:
+    resolution:
+      {
+        integrity: sha512-BG/zLGf5wiNXGEVPvUAAX/4ilB3PwDUY2o0MV0y47mZbDZ9ad9UK/cIQsILat3bqbPJsALVbU6k3cskNZ3vAQg==,
+      }
+    dev: true
+
+  /@taplo/lib@0.4.0-alpha.2:
+    resolution:
+      {
+        integrity: sha512-DV/Re3DPVY+BhBtLZ3dmP4mP6YMLSsgq9qGLXwOV38lvNF/fBlgvQswzlXmzCEefL/3q2eMoefZpOI/+GLuCNA==,
+      }
+    dependencies:
+      "@taplo/core": 0.1.1
     dev: true
 
   /@total-typescript/ts-reset@0.5.1:
@@ -12822,6 +12841,19 @@ packages:
     peerDependencies:
       prettier: ^3.0.3
     dependencies:
+      prettier: 3.2.5
+    dev: true
+
+  /prettier-plugin-toml@2.0.1(prettier@3.2.5):
+    resolution:
+      {
+        integrity: sha512-99z1YOkViECHtXQjGIigd3talI/ybUI1zB3yniAwUrlWBXupNXThB1hM6bwSMUEj2/+tomTlMtT98F5t4s8IWA==,
+      }
+    engines: { node: ">=16.0.0" }
+    peerDependencies:
+      prettier: ^3.0.3
+    dependencies:
+      "@taplo/lib": 0.4.0-alpha.2
       prettier: 3.2.5
     dev: true
 
