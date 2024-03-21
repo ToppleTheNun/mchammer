@@ -196,12 +196,11 @@ app.use((req, res, next) => {
 });
 
 async function getBuild() {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const build = viteDevServer
     ? viteDevServer.ssrLoadModule("virtual:remix/server-build")
     : // @ts-expect-error this should exist before running the server
       // but it may not exist just yet.
-      await import("#build/server/index.js");
+      await import("../build/server/index.js");
   // not sure how to make this happy 🤷‍♂️
   return build as unknown as ServerBuild;
 }
