@@ -19,8 +19,8 @@ FROM base as deps
 
 WORKDIR /myapp
 
-ADD package.json pnpm-lock.yaml .npmrc prisma ./
-RUN pnpm install --prod false && pnpx prisma generate
+ADD package.json pnpm-lock.yaml .npmrc ./
+RUN pnpm install --prod false
 
 # Setup production node_modules
 FROM base as production-deps
@@ -28,7 +28,7 @@ FROM base as production-deps
 WORKDIR /myapp
 
 COPY --from=deps /myapp/node_modules /myapp/node_modules
-ADD package.json pnpm-lock.yaml .npmrc prisma ./
+ADD package.json pnpm-lock.yaml .npmrc ./
 RUN pnpm prune --prod
 
 # Build the app
@@ -77,7 +77,7 @@ RUN echo "#!/bin/sh\nset -x\nsqlite3 \$DATABASE_URL" > /usr/local/bin/database-c
 WORKDIR /myapp
 
 COPY --from=production-deps /myapp/node_modules /myapp/node_modules
-#COPY --from=build /myapp/node_modules/.prisma /myapp/node_modules/.prisma
+COPY --from=build /myapp/node_modules/.prisma /myapp/node_modules/.prisma
 
 COPY --from=build /myapp/server-build /myapp/server-build
 COPY --from=build /myapp/build /myapp/build
