@@ -28,7 +28,7 @@ FROM base as production-deps
 WORKDIR /myapp
 
 COPY --from=deps /myapp/node_modules /myapp/node_modules
-ADD package.json pnpm-lock.yaml .npmrc ./
+ADD package.json pnpm-lock.yaml .npmrc prisma ./
 RUN pnpm prune --prod
 
 # Build the app
@@ -41,8 +41,8 @@ WORKDIR /myapp
 
 COPY --from=deps /myapp/node_modules /myapp/node_modules
 
-#ADD prisma .
-#RUN pnpx prisma generate
+ADD prisma .
+RUN pnpx prisma generate
 
 ADD . .
 
