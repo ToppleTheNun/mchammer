@@ -3,7 +3,6 @@ query getFights($reportID: String!) {
     report(code: $reportID) {
       title
       startTime
-      endTime
 
       region {
         slug

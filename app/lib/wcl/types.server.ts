@@ -2106,7 +2106,6 @@ export interface GetFightsQuery {
       __typename?: "Report";
       title: string;
       startTime: number;
-      endTime: number;
       region?: { __typename?: "Region"; slug: string } | null;
       fights?:
         | ({
@@ -2198,7 +2197,6 @@ export const GetFightsDocument = gql`
       report(code: $reportID) {
         title
         startTime
-        endTime
         region {
           slug
         }

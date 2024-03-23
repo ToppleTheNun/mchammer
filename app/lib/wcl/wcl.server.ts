@@ -1,4 +1,4 @@
-import type { Timings } from "~/lib/timing.server.ts";
+import type { Timeable } from "~/lib/query/types.server.ts";
 import { getCachedSdk } from "~/lib/wcl/client.server.ts";
 import type {
   GetCombatantInfoEventsQuery,
@@ -11,38 +11,38 @@ import type {
   GetPlayerDetailsQueryVariables,
 } from "~/lib/wcl/types.server.ts";
 
-export async function getFights(
+export async function getWclFights(
   params: GetFightsQueryVariables,
-  { timings }: { timings: Timings },
+  timeable: Timeable,
 ): Promise<GetFightsQuery> {
-  const sdk = await getCachedSdk({ timings });
+  const sdk = await getCachedSdk(timeable);
 
   return sdk.getFights(params);
 }
 
 export async function getPlayerDetails(
   params: GetPlayerDetailsQueryVariables,
-  { timings }: { timings: Timings },
+  timeable: Timeable,
 ): Promise<GetPlayerDetailsQuery> {
-  const sdk = await getCachedSdk({ timings });
+  const sdk = await getCachedSdk(timeable);
 
   return sdk.getPlayerDetails(params);
 }
 
 export async function getCombatantInfoEvents(
   params: GetCombatantInfoEventsQueryVariables,
-  { timings }: { timings: Timings },
+  timeable: Timeable,
 ): Promise<GetCombatantInfoEventsQuery> {
-  const sdk = await getCachedSdk({ timings });
+  const sdk = await getCachedSdk(timeable);
 
   return sdk.getCombatantInfoEvents(params);
 }
 
 export async function getPhysicalDamageTakenEvents(
   params: GetPhysicalDamageTakenEventsQueryVariables,
-  { timings }: { timings: Timings },
+  timeable: Timeable,
 ): Promise<GetPhysicalDamageTakenEventsQuery> {
-  const sdk = await getCachedSdk({ timings });
+  const sdk = await getCachedSdk(timeable);
 
   return sdk.getPhysicalDamageTakenEvents(params);
 }

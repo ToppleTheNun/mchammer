@@ -3,7 +3,10 @@ import process from "node:process";
 import { GraphQLClient } from "graphql-request";
 
 import { cache, cachified } from "~/lib/cache.server.ts";
-import type { Timings } from "~/lib/timing.server.ts";
+import type {
+  CacheableQueryOptions,
+  Timeable,
+} from "~/lib/query/types.server.ts";
 import type { Sdk } from "~/lib/wcl/types.server.ts";
 import { getSdk } from "~/lib/wcl/types.server.ts";
 import {
@@ -26,11 +29,7 @@ const wclClientCache: WclClientCache = {
   pending: false,
 };
 
-export async function getCachedSdk({
-  timings,
-}: {
-  timings: Timings;
-}): Promise<Sdk> {
+export async function getCachedSdk({ timings }: Timeable): Promise<Sdk> {
   if (wclClientCache.sdk) {
     return wclClientCache.sdk;
   }
@@ -75,10 +74,7 @@ async function retrieveWclAuthToken() {
 async function getWclAuthorization({
   forceFresh,
   timings,
-}: {
-  forceFresh?: boolean;
-  timings: Timings;
-}) {
+}: CacheableQueryOptions) {
   return await cachified({
     key: "wcl:authorization",
     cache,
@@ -102,9 +98,7 @@ async function getWclAuthorization({
 
 export async function getGqlClient({
   timings,
-}: {
-  timings: Timings;
-}): Promise<GraphQLClient> {
+}: Timeable): Promise<GraphQLClient> {
   if (
     // in test, `getWCLAuthentication` returns mock data
     process.env.NODE_ENV !== "test" &&
