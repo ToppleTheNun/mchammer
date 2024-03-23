@@ -1,3 +1,4 @@
+import { resolve } from "node:path";
 import process from "node:process";
 import { PassThrough } from "node:stream";
 
@@ -10,11 +11,16 @@ import type {
 import { createReadableStreamFromReadable } from "@remix-run/node";
 import { RemixServer } from "@remix-run/react";
 import * as Sentry from "@sentry/remix";
+import { createInstance } from "i18next";
+import FSBackend from "i18next-fs-backend";
 import { isbot } from "isbot";
 import { renderToPipeableStream } from "react-dom/server";
+import { I18nextProvider, initReactI18next } from "react-i18next";
 
 import { serverTiming } from "~/lib/constants.ts";
 import { getEnv, init } from "~/lib/env.server.ts";
+import { i18n } from "~/lib/i18n.ts";
+import { i18next } from "~/lib/i18next.server.ts";
 import { getInstanceInfo } from "~/lib/litefs.server.ts";
 import { NonceProvider } from "~/lib/nonce-provider.ts";
 import { makeTimings } from "~/lib/timing.server.ts";
@@ -47,6 +53,26 @@ export default async function handleRequest(
     ? "onAllReady"
     : "onShellReady";
 
+  // First, we create a new instance of i18next so every request will have a
+  // completely unique instance and not share any state
+  const i18nInstance = createInstance();
+  // Then we could detect locale from the request
+  const lng = await i18next.getLocale(request);
+  // And here we detect what namespaces the routes about to render want to use
+  const ns = i18next.getRouteNamespaces(remixContext);
+
+  await i18nInstance
+    .use(initReactI18next)
+    .use(FSBackend)
+    .init({
+      ...i18n,
+      lng,
+      ns,
+      backend: {
+        loadPath: resolve("./public/locales/{{lng}}/{{ns}}.json"),
+      },
+    });
+
   const nonce = String(loadContext.cspNonce);
   return new Promise((resolve, reject) => {
     let didError = false;
@@ -56,13 +82,15 @@ export default async function handleRequest(
 
     const { pipe, abort } = renderToPipeableStream(
       <NonceProvider value={nonce}>
-        <RemixServer context={remixContext} url={request.url} />
+        <I18nextProvider i18n={i18nInstance}>
+          <RemixServer context={remixContext} url={request.url} />
+        </I18nextProvider>
       </NonceProvider>,
       {
         [callbackName]: () => {
           const body = new PassThrough();
           responseHeaders.set("Content-Type", "text/html");
-           
+
           // eslint-disable-next-line @typescript-eslint/no-base-to-string
           responseHeaders.append(serverTiming, timings.toString());
           resolve(

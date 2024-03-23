@@ -23,6 +23,7 @@ import {
 } from "@remix-run/react";
 import { withSentry } from "@sentry/remix";
 import type { ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 import { GeneralErrorBoundary } from "~/components/GeneralErrorBoundary.tsx";
@@ -45,6 +46,8 @@ import { siteConfig } from "~/config/site.ts";
 import { ClientHintCheck, getHints, useHints } from "~/lib/client-hints.tsx";
 import { serverTiming, setCookie } from "~/lib/constants.ts";
 import { getEnv } from "~/lib/env.server.ts";
+import { i18n, useChangeLanguage } from "~/lib/i18n.ts";
+import { i18next } from "~/lib/i18next.server.ts";
 import { combineHeaders, getDomainUrl } from "~/lib/misc.ts";
 import { useNonce } from "~/lib/nonce-provider.ts";
 import { useRequestInfo } from "~/lib/request-info.ts";
@@ -125,6 +128,7 @@ export const meta: MetaFunction = () => {
 export async function loader({ request }: LoaderFunctionArgs) {
   const timings = makeTimings("root loader");
   const { toast, headers: toastHeaders } = await getToast(request);
+  const locale = await i18next.getLocale(request);
 
   return json(
     {
@@ -133,6 +137,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
         hints: getHints(request),
         origin: getDomainUrl(request),
         path: new URL(request.url).pathname,
+        locale,
         userPrefs: {
           theme: getTheme(request),
         },
@@ -148,6 +153,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
     },
   );
 }
+
+export const handle = {
+  // In the handle export, we can add a i18n key with namespaces our route
+  // will need to load. This key can be a single string or an array of strings.
+  // TIP: In most cases, you should set this to your defaultNS from your i18n config
+  // or if you did not set one, set it to the i18next default namespace "translation"
+  i18n: "common",
+};
 
 export function headers({ loaderHeaders }: HeadersArgs) {
   return {
@@ -178,16 +191,20 @@ export async function action({ request }: ActionFunctionArgs) {
 function Document({
   children,
   nonce,
+  dir = "auto",
   theme = "light",
+  locale = i18n.fallbackLng,
   env = {},
 }: {
   children: ReactNode;
   nonce: string;
+  dir?: "ltr" | "rtl" | "auto";
   theme?: Theme | null;
+  locale?: string;
   env?: Record<string, string>;
 }) {
   return (
-    <html className={cn(theme)} lang="en" dir="auto">
+    <html className={cn(theme)} lang={locale} dir={dir}>
       <head>
         <ClientHintCheck nonce={nonce} />
         <Meta />
@@ -319,13 +336,15 @@ function App() {
   const nonce = useNonce();
   const theme = useTheme();
   const matches = useMatches();
+  const { i18n } = useTranslation();
   useToast(data.toast);
+  useChangeLanguage(data.requestInfo.locale);
 
   const isOnSeasonPage = matches.find((m) => m.id === "routes/season+/$season");
   const seasonSwitcher = isOnSeasonPage ? <SeasonSwitcher /> : null;
 
   return (
-    <Document nonce={nonce} env={data.ENV} theme={theme}>
+    <Document nonce={nonce} env={data.ENV} theme={theme} dir={i18n.dir()}>
       <div className="relative flex min-h-screen flex-col">
         <header className="supports-backdrop-blur:bg-background/60 sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
           <div className="container flex h-14 items-center">

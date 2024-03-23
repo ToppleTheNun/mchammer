@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 import { Skeleton } from "~/components/ui/skeleton.tsx";
 import type { ReportFight } from "~/lib/query/report.server.ts";
 
@@ -14,28 +16,39 @@ export function FightListSkeleton() {
   );
 }
 
+interface FightListItemProps {
+  fight: ReportFight;
+}
+export function FightListItem({ fight }: FightListItemProps) {
+  const { t } = useTranslation();
+
+  return (
+    <div
+      className="flex items-center rounded-md border p-4"
+      key={fight.fightID}
+    >
+      <div className="space-y-1">
+        <p className="text-sm font-medium leading-none">
+          {t(`difficulty.${String(fight.difficulty)}`)}{" "}
+          {t(`encounter.${String(fight.encounterID)}`)}
+        </p>
+        <p className="text-sm text-muted-foreground">
+          {String(fight.difficulty)}
+        </p>
+      </div>
+    </div>
+  );
+}
+
 interface FightListProps {
   fights: ReportFight[];
 }
 
 export function FightList({ fights }: FightListProps) {
-  console.log("Rendering FightList", fights);
   return (
     <div className="space-y-8">
       {fights.map((fight) => (
-        <div
-          className="flex items-center rounded-md border p-4"
-          key={fight.fightID}
-        >
-          <div className="space-y-1">
-            <p className="text-sm font-medium leading-none">
-              {fight.encounterID}
-            </p>
-            <p className="text-sm text-muted-foreground">
-              {String(fight.difficulty)}
-            </p>
-          </div>
-        </div>
+        <FightListItem key={fight.fightID} fight={fight} />
       ))}
     </div>
   );
