@@ -1,11 +1,18 @@
 import { invariantResponse } from "@epic-web/invariant";
 import { defer, type LoaderFunctionArgs } from "@remix-run/node";
-import { Await, useLoaderData, useParams } from "@remix-run/react";
+import { Await, Link, useLoaderData } from "@remix-run/react";
 import { Suspense } from "react";
+import { useTranslation } from "react-i18next";
 
-import { FightList } from "~/components/FightList.tsx";
+import { FightList, FightListSkeleton } from "~/components/FightList.tsx";
 import { GeneralErrorBoundary } from "~/components/GeneralErrorBoundary.tsx";
-import { H1, H2, Lead } from "~/components/typography.tsx";
+import { H1, Lead } from "~/components/typography.tsx";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbList,
+  BreadcrumbSeparator,
+} from "~/components/ui/breadcrumb.tsx";
 import { getCachedFights } from "~/lib/query/report.server.ts";
 import { makeTimings } from "~/lib/timing.server.ts";
 
@@ -24,33 +31,47 @@ export function loader({ params }: LoaderFunctionArgs) {
   return defer({ reportFights });
 }
 
-function ReportSkeleton() {
-  return (
-    <div className="overflow-hidden rounded-lg border bg-background px-4 shadow">
-      <div className="flex h-[50vh] flex-col items-center justify-center gap-2">
-        <H2>Eligible fights go here</H2>
-        <Lead>Fights will eventually go here. It&apos;ll be neat.</Lead>
-      </div>
-    </div>
-  );
-}
-
 export function ErrorBoundary() {
   return <GeneralErrorBoundary />;
 }
 
 export default function ReportRoute() {
-  const { reportCode } = useParams();
   const { reportFights } = useLoaderData<typeof loader>();
+  const { t } = useTranslation();
 
   return (
     <>
-      <div className="pb-8 space-y-2">
-        <H1>Can&apos;t touch this.</H1>
-        <Lead>Select a fight below from report with code {reportCode}.</Lead>
+      <div className="pb-8 space-y-4">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <Link to="/">{t("breadcrumbs.home")}</Link>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <Suspense
+              fallback={
+                <BreadcrumbItem>
+                  {t("breadcrumbs.selection.report")}
+                </BreadcrumbItem>
+              }
+            >
+              <Await resolve={reportFights}>
+                {(resolved) => (
+                  <BreadcrumbItem>{resolved.title}</BreadcrumbItem>
+                )}
+              </Await>
+            </Suspense>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>{t("breadcrumbs.selection.fight")}</BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+        <div className="space-y-2">
+          <H1>{t("reports.selection.fight.heading")}</H1>
+          <Lead>{t("reports.selection.fight.description")}</Lead>
+        </div>
       </div>
       <section>
-        <Suspense fallback={<ReportSkeleton />}>
+        <Suspense fallback={<FightListSkeleton />}>
           <Await resolve={reportFights}>
             {(resolved) => <FightList fights={resolved.fights} />}
           </Await>

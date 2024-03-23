@@ -2,9 +2,9 @@ import { invariant } from "@epic-web/invariant";
 import { z } from "zod";
 
 import { isRegion, RegionSchema } from "~/data/regions.ts";
+import { findSeasonByTimestamp } from "~/data/seasons.ts";
 import { cache, cachified } from "~/lib/cache.server.ts";
 import { prisma } from "~/lib/db.server.ts";
-import { info } from "~/lib/log.server.ts";
 import type {
   CacheableQueryOptions,
   Timeable,
@@ -23,10 +23,15 @@ export const ReportFightSchema = z.object({
   fightID: z.number(),
   startTime: z.number(),
   endTime: z.number(),
-  encounterID: z.number(),
+  encounter: z.object({
+    id: z.number(),
+    icon: z.string(),
+  }),
   difficulty: z.number(),
   region: RegionSchema,
   friendlyPlayerIds: z.number().array(),
+  kill: z.boolean(),
+  percentage: z.number(),
 });
 export type ReportFight = z.infer<typeof ReportFightSchema>;
 
@@ -56,9 +61,7 @@ async function getFights(
     rawFightData.reportData.report.region?.slug.toUpperCase();
   const reportStartTime = rawFightData.reportData.report.startTime;
   const title = rawFightData.reportData.report.title;
-
-  info("regions", regions);
-  info("reportRegion", reportRegion);
+  const season = findSeasonByTimestamp(reportStartTime);
 
   invariant(reportRegion, "reportRegion is not present in report");
   invariant(
@@ -70,25 +73,38 @@ async function getFights(
     "reportRegion is not in region constants list",
   );
   invariant(isPresent(fights), "no fights present in report");
+  invariant(season, "no season found for report");
 
-  info("fights", fights);
+  const seasonEncounterIds = season.encounters.map((encounter) => encounter.id);
 
   const reportFights = fights
     .filter(isPresent)
     // filter out fights where there is no difficulty
     .filter((fight) => fight.difficulty)
-    .map<ReportFight>((fight) => ({
-      reportCode: params.reportID,
-      fightID: fight.id,
-      startTime: reportStartTime + fight.startTime,
-      endTime: reportStartTime + fight.endTime,
-      encounterID: fight.encounterID,
-      difficulty: fight.difficulty ?? 0,
-      region: reportRegion,
-      friendlyPlayerIds: isPresent(fight.friendlyPlayers)
-        ? fight.friendlyPlayers.filter(isPresent)
-        : [],
-    }));
+    .filter((fight) => seasonEncounterIds.includes(fight.encounterID))
+    .map((fight) => {
+      const encounter = season.encounters.find(
+        (encounter) => encounter.id === fight.encounterID,
+      );
+      if (!encounter) {
+        return null;
+      }
+      return {
+        reportCode: params.reportID,
+        fightID: fight.id,
+        startTime: reportStartTime + fight.startTime,
+        endTime: reportStartTime + fight.endTime,
+        encounter: encounter,
+        difficulty: fight.difficulty ?? 0,
+        region: reportRegion,
+        friendlyPlayerIds: isPresent(fight.friendlyPlayers)
+          ? fight.friendlyPlayers.filter(isPresent)
+          : [],
+        kill: fight.kill ?? false,
+        percentage: fight.kill ? 100 : fight.fightPercentage ?? 0,
+      } satisfies ReportFight;
+    })
+    .filter(isPresent);
 
   return {
     reportCode: params.reportID,

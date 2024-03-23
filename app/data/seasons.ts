@@ -2,6 +2,10 @@ import type { Region } from "~/data/regions.ts";
 
 const UNKNOWN_SEASON_START_OR_ENDING = null;
 
+export interface Encounter {
+  id: number;
+  icon: string;
+}
 export interface Season {
   name: string;
   shortName: string;
@@ -9,7 +13,7 @@ export interface Season {
   startDates: Record<Region, number | null>;
   endDates: Record<Region, number | null>;
   seasonIcon: string;
-  encounterIds: readonly number[];
+  encounters: readonly Encounter[];
   ptr: boolean;
 }
 
@@ -44,25 +48,93 @@ export const seasons: readonly Season[] = [
       KR: UNKNOWN_SEASON_START_OR_ENDING,
       TW: UNKNOWN_SEASON_START_OR_ENDING,
     },
-    seasonIcon: "/img/INV_Misc_Head_Dragon_01.png",
-    encounterIds: [
-      2728, // Council of Dreams
-      2677, // Fyrakk, the Blazing
-      2820, // Gnarlroot
-      2709, // Igira the Cruel
-      2731, // Larodar, Keeper of the Flame
-      2708, // Nymue, Weaver of the Cycle
-      2824, // Smolderon
-      2786, // Tindral Sageswift, Seer of Flame
-      2737, // Volcoross
-      61763, // Atal'Dazar
-      61501, // Black Rook Hold
-      61466, // Darkheart Thicket
-      61279, // Everbloom
-      12579, // Dawn of the Infinites: Galakrond's Fall
-      12580, // Dawn of the Infinites: Murozond's Rise
-      10643, // Throne of the Tides
-      61862, // Waycrest Manor
+    seasonIcon: "/img/seasons/dragonflight/season3/logo.png",
+    encounters: [
+      // Council of Dreams
+      {
+        id: 2728,
+        icon: "/img/seasons/dragonflight/season3/encounters/CouncilOfDreams.jpg",
+      },
+      // Fyrakk, the Blazing
+      {
+        id: 2677,
+        icon: "/img/seasons/dragonflight/season3/encounters/Fyrakk.jpg",
+      },
+      // Gnarlroot
+      {
+        id: 2820,
+        icon: "/img/seasons/dragonflight/season3/encounters/Gnarlroot.jpg",
+      },
+      // Igira the Cruel
+      {
+        id: 2709,
+        icon: "/img/seasons/dragonflight/season3/encounters/Igira.jpg",
+      },
+      // Larodar, Keeper of the Flame
+      {
+        id: 2731,
+        icon: "/img/seasons/dragonflight/season3/encounters/Larodar.jpg",
+      },
+      // Nymue, Weaver of the Cycle
+      {
+        id: 2708,
+        icon: "/img/seasons/dragonflight/season3/encounters/Nymue.jpg",
+      },
+      // Smolderon
+      {
+        id: 2824,
+        icon: "/img/seasons/dragonflight/season3/encounters/Smolderon.jpg",
+      },
+      // Tindral Sageswift, Seer of Flame
+      {
+        id: 2786,
+        icon: "/img/seasons/dragonflight/season3/encounters/Tindral.jpg",
+      },
+      // Volcoross
+      {
+        id: 2737,
+        icon: "/img/seasons/dragonflight/season3/encounters/Volcoross.jpg",
+      },
+      // Atal'Dazar
+      {
+        id: 61763,
+        icon: "/img/seasons/dragonflight/season3/encounters/AtalDazar.jpg",
+      },
+      // Black Rook Hold
+      {
+        id: 61501,
+        icon: "/img/seasons/dragonflight/season3/encounters/BlackRookHold.jpg",
+      },
+      // Darkheart Thicket
+      {
+        id: 61466,
+        icon: "/img/seasons/dragonflight/season3/encounters/DarkheartThicket.jpg",
+      },
+      // Everbloom
+      {
+        id: 61279,
+        icon: "/img/seasons/dragonflight/season3/encounters/Everbloom.jpg",
+      },
+      // Dawn of the Infinites: Galakrond's Fall
+      {
+        id: 12579,
+        icon: "/img/seasons/dragonflight/season3/encounters/GalakrondsFall.jpg",
+      },
+      // Dawn of the Infinites: Murozond's Rise
+      {
+        id: 12580,
+        icon: "/img/seasons/dragonflight/season3/encounters/MurozondsRise.jpg",
+      },
+      // Throne of the Tides
+      {
+        id: 10643,
+        icon: "/img/seasons/dragonflight/season3/encounters/ThroneOfTheTides.jpg",
+      },
+      // Waycrest Manor
+      {
+        id: 61862,
+        icon: "/img/seasons/dragonflight/season3/encounters/WaycrestManor.jpg",
+      },
     ],
     ptr: false,
   },

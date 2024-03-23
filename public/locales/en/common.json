@@ -1,4 +1,11 @@
 {
+  "breadcrumbs": {
+    "home": "Home",
+    "selection": {
+      "report": "Report",
+      "fight": "Fight selection"
+    }
+  },
   "difficulty": {
     "1": "LFR",
     "3": "Normal",
@@ -24,5 +31,13 @@
     "12580": "Dawn of the Infinites: Murozond's Rise",
     "10643": "Throne of the Tides",
     "61862": "Waycrest Manor"
+  },
+  "reports": {
+    "selection": {
+      "fight": {
+        "heading": "Fight selection",
+        "description": "Select the fight that you want to analyze below."
+      }
+    }
   }
 }

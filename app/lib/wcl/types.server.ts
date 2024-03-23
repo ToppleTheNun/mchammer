@@ -2116,6 +2116,8 @@ export interface GetFightsQuery {
             difficulty?: number | null;
             encounterID: number;
             friendlyPlayers?: (number | null)[] | null;
+            kill?: boolean | null;
+            fightPercentage?: number | null;
           } | null)[]
         | null;
     } | null;
@@ -2207,6 +2209,8 @@ export const GetFightsDocument = gql`
           difficulty
           encounterID
           friendlyPlayers
+          kill
+          fightPercentage
         }
       }
     }

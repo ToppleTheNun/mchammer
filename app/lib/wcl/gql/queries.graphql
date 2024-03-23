@@ -16,6 +16,9 @@ query getFights($reportID: String!) {
         difficulty
         encounterID
         friendlyPlayers
+
+        kill
+        fightPercentage
       }
     }
   }
