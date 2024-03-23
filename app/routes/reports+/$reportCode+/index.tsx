@@ -45,7 +45,9 @@ export default function ReportRoute() {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <Link to="/">{t("breadcrumbs.home")}</Link>
+              <Link to="/" className="hover:text-foreground">
+                {t("breadcrumbs.home")}
+              </Link>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <Suspense
