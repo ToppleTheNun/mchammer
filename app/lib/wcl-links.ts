@@ -24,19 +24,57 @@ export const allowedWarcraftLogsHostnames = [
   "cn.warcraftlogs.com",
 ] as const;
 
-export const ReportLinkUrlSchema = z.object({
+export const CharacterLinkUrlSchema = z.object({
+  type: z.literal("character"),
   url: z
     .string()
     .url()
     .transform((val) => new URL(val))
     .refine((url) => allowedWarcraftLogsHostnames.includes(url.hostname), {
-      message: "URL must be a valid Warcraft Logs URL",
+      message: "URL must be a valid WarcraftLogs URL",
+    })
+    .refine((url) => url.pathname.startsWith("/character/id/"), {
+      message: "URL must be to a WarcraftLogs character",
+    }),
+});
+export type CharacterLinkUrl = z.infer<typeof CharacterLinkUrlSchema>;
+
+export const GuildLinkUrlSchema = z.object({
+  type: z.literal("guild"),
+  url: z
+    .string()
+    .url()
+    .transform((val) => new URL(val))
+    .refine((url) => allowedWarcraftLogsHostnames.includes(url.hostname), {
+      message: "URL must be a valid WarcraftLogs URL",
+    })
+    .refine((url) => url.pathname.startsWith("/guild/id/"), {
+      message: "URL must be to a WarcraftLogs guild",
+    }),
+});
+export type GuildLinkUrl = z.infer<typeof GuildLinkUrlSchema>;
+
+export const ReportLinkUrlSchema = z.object({
+  type: z.literal("report"),
+  url: z
+    .string()
+    .url()
+    .transform((val) => new URL(val))
+    .refine((url) => allowedWarcraftLogsHostnames.includes(url.hostname), {
+      message: "URL must be a valid WarcraftLogs URL",
     })
     .refine((url) => url.pathname.startsWith("/reports/"), {
-      message: "URL must be to a Warcraft Logs report",
+      message: "URL must be to a WarcraftLogs report",
     }),
 });
 export type ReportLinkUrl = z.infer<typeof ReportLinkUrlSchema>;
+
+export const WarcraftLogsLinkUrlSchema = z.discriminatedUnion("type", [
+  CharacterLinkUrlSchema,
+  GuildLinkUrlSchema,
+  ReportLinkUrlSchema,
+]);
+export type WarcraftLogsLinkUrl = z.infer<typeof WarcraftLogsLinkUrlSchema>;
 
 export function getReportCode(input: string) {
   const match = input
@@ -74,7 +112,7 @@ export function getReportLinkData(
 
   invariant(
     reportCode,
-    "Unable to determine report code from Warcraft Logs URL",
+    "Unable to determine report code from WarcraftLogs URL",
   );
 
   return {

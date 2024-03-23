@@ -355,15 +355,9 @@ function App() {
             </div>
           </div>
         </header>
-        <div className="flex-1">
-          <div className="border-b">
-            <div className="container flex-1 items-start">
-              <main className="relative py-6 lg:gap-10 lg:py-8">
-                <Outlet />
-              </main>
-            </div>
-          </div>
-        </div>
+        <main className="container flex-1 items-start relative py-6 lg:gap-10 lg:py-8">
+          <Outlet />
+        </main>
         <footer className="space-y-2 py-6 md:px-8 md:py-0">
           <div className="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
             <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
