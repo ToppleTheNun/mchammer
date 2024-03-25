@@ -171,8 +171,8 @@ dependencies:
     specifier: 6.0.1
     version: 6.0.1(@remix-run/node@2.8.1)(@remix-run/react@2.8.1)(i18next@23.10.1)(react-i18next@14.1.0)(react@18.2.0)
   sonner:
-    specifier: 1.4.32
-    version: 1.4.32(react-dom@18.2.0)(react@18.2.0)
+    specifier: 1.4.41
+    version: 1.4.41(react-dom@18.2.0)(react@18.2.0)
   source-map-support:
     specifier: 0.5.21
     version: 0.5.21
@@ -10506,8 +10506,8 @@ packages:
       tslib: 2.6.2
     dev: true
 
-  /sonner@1.4.32(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-MYdvJgx2wM8a7fnzZr7KWZJY2ukSoqh7fsshZYEVljTSuJKNesMgfQ95+kyduGh6t500wxvLm6jjffxB4M58ZA==}
+  /sonner@1.4.41(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-uG511ggnnsw6gcn/X+YKkWPo5ep9il9wYi3QJxHsYe7yTZ4+cOd1wuodOUmOpFuXL+/RE3R04LczdNCDygTDgQ==}
     peerDependencies:
       react: ^18.0.0
       react-dom: ^18.0.0
