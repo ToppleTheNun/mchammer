@@ -221,8 +221,8 @@ devDependencies:
     specifier: 2.16.0
     version: 2.16.0
   '@sly-cli/sly':
-    specifier: 1.8.0
-    version: 1.8.0(typescript@5.4.2)
+    specifier: 1.10.0
+    version: 1.10.0(typescript@5.4.2)
   '@total-typescript/ts-reset':
     specifier: 0.5.1
     version: 0.5.1
@@ -1134,7 +1134,6 @@ packages:
 
   /@epic-web/cachified@5.1.2:
     resolution: {integrity: sha512-8Q1J/jF0bOKUN+XPTSUo+z34WJHMBLkuDv+HkPPS9ufs+cHvInWrLOLi3qIljhe03Xq777pwEDBKnMafetnPhA==}
-    dev: false
 
   /@epic-web/client-hints@1.3.0:
     resolution: {integrity: sha512-beusFnt4S8cowIDGBewBdsiCDgtsrPx6ZW5XL7VQGPcoYqJT0WPu1nNyheqLeX1YHHJKPIjnIMQRrx9pC8o/vg==}
@@ -4065,11 +4064,11 @@ packages:
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
     dev: true
 
-  /@sly-cli/sly@1.8.0(typescript@5.4.2):
-    resolution: {integrity: sha512-q9er54mzrFiYmSSO5qAOswnhVXaboDcCDp/PkpMkxdA9CbtFPd8v+o01065xlW6PkjA0WJnbxY7fUwBN5meQGA==}
+  /@sly-cli/sly@1.10.0(typescript@5.4.2):
+    resolution: {integrity: sha512-keX8aUj4tpDGrfup/QvLttH61ARd0wxU7m9YEwGkpHohvnyIG8lXltbzpZdE9AGmQJLFYs0s++rFRmqpSKoqfQ==}
     hasBin: true
     dependencies:
-      cachified: 3.5.4
+      '@epic-web/cachified': 5.1.2
       chalk: 5.3.0
       commander: 11.1.0
       compare-versions: 6.1.0
@@ -5242,10 +5241,6 @@ packages:
       ssri: 10.0.5
       tar: 6.2.0
       unique-filename: 3.0.0
-    dev: true
-
-  /cachified@3.5.4:
-    resolution: {integrity: sha512-RO7jQl7vL1qulRvr+o++iVVduFlKb2pJUYxY48LULusyqmGUFaRESERu1Z7UI895JNtTB4yvfErNv64OsayK8g==}
     dev: true
 
   /call-bind@1.0.5:
