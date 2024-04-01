@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@conform-to/dom':
-    specifier: 1.0.4
-    version: 1.0.4
+    specifier: 1.0.6
+    version: 1.0.6
   '@conform-to/react':
     specifier: 1.0.4
     version: 1.0.4(react@18.2.0)
@@ -1108,6 +1108,10 @@ packages:
 
   /@conform-to/dom@1.0.4:
     resolution: {integrity: sha512-XT5RxFvNxZZ9LAljslVDfic8pG47j6Kh0JNgBMqwOiaURKZXKRD9L0PPAmsMS8JOYmP6yI42eqfLbRPPoufhAQ==}
+    dev: false
+
+  /@conform-to/dom@1.0.6:
+    resolution: {integrity: sha512-24teTftuAfcjv+SiaFYb9msjdQA7Kq8Yk9QkMPrkF8LETl80+i5fpCaIG8V91KyTitBeBcc80gg9HuPuuq3dqQ==}
     dev: false
 
   /@conform-to/react@1.0.4(react@18.2.0):
