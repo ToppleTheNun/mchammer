@@ -50,6 +50,67 @@ export const seasons: readonly Season[] = [
     },
     seasonIcon: "/img/seasons/dragonflight/season4/logo.png",
     encounters: [
+      // Broodkeeper Diurna
+      {
+        id: 2614,
+        icon: "/img/seasons/dragonflight/season2/encounters/BroodkeeperDiurna.jpg",
+      },
+      // Dathea
+      {
+        id: 2635,
+        icon: "/img/seasons/dragonflight/season2/encounters/Dathea.jpg",
+      },
+      // Eranog
+      {
+        id: 2587,
+        icon: "/img/seasons/dragonflight/season2/encounters/Eranog.jpg",
+      },
+      // Kurog Grimtotem
+      {
+        id: 2605,
+        icon: "/img/seasons/dragonflight/season2/encounters/KurogGrimtotem.jpg",
+      },
+      // Primal Council
+      {
+        id: 2590,
+        icon: "/img/seasons/dragonflight/season2/encounters/PrimalCouncil.jpg",
+      },
+      // Raszageth
+      {
+        id: 2607,
+        icon: "/img/seasons/dragonflight/season2/encounters/Raszageth.jpg",
+      },
+      // Sennarth
+      {
+        id: 2592,
+        icon: "/img/seasons/dragonflight/season2/encounters/Sennarth.jpg",
+      },
+      // Terros
+      {
+        id: 2639,
+        icon: "/img/seasons/dragonflight/season2/encounters/Terros.jpg",
+      },
+      // Algeth'ar Academy
+      {
+        id: 62526,
+        icon: "/img/seasons/dragonflight/season2/encounters/AlgetharAcademy.jpg",
+      },
+      // Azure Vault
+      {
+        id: 62515,
+        icon: "/img/seasons/dragonflight/season2/encounters/AzureVault.jpg",
+      },
+      // Nokhud Offensive
+      {
+        id: 62516,
+        icon: "/img/seasons/dragonflight/season2/encounters/NokhudOffensive.jpg",
+      },
+      // Ruby Life Pools
+      {
+        id: 62521,
+        icon: "/img/seasons/dragonflight/season2/encounters/RubyLifePools.jpg",
+      },
+
       // Amalgamation Chamber
       {
         id: 2687,
