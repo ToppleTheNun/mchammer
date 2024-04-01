@@ -3,7 +3,8 @@
     "home": "Home",
     "selection": {
       "report": "Report",
-      "fight": "Fight selection"
+      "fight": "Fight selection",
+      "player": "Player selection"
     }
   },
   "difficulty": {
@@ -37,6 +38,10 @@
       "fight": {
         "heading": "Fight selection",
         "description": "Select the fight that you want to analyze below."
+      },
+      "player": {
+        "heading": "Player selection",
+        "description": "Select the player that you want to analyze below."
       }
     }
   }
