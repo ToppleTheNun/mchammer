@@ -1,3 +1,4 @@
+import { Link } from "@remix-run/react";
 import { useTranslation } from "react-i18next";
 
 import {
@@ -36,9 +37,9 @@ export function FightListItem({ fight }: FightListItemProps) {
   const { t } = useTranslation();
 
   return (
-    <div
+    <Link
       className="flex items-center rounded-md border p-4"
-      key={fight.fightID}
+      to={`/reports/${fight.reportCode}/${String(fight.fightID)}`}
     >
       <Avatar className="h-9 w-9">
         <AvatarImage src={fight.encounter.icon} alt="Avatar" />
@@ -53,7 +54,7 @@ export function FightListItem({ fight }: FightListItemProps) {
         </p>
         <Progress value={fight.percentage} />
       </div>
-    </div>
+    </Link>
   );
 }
 

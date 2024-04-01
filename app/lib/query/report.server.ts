@@ -117,7 +117,7 @@ export async function getCachedFights(
   params: GetFightsQueryVariables,
   cacheOptions: CacheableQueryOptions,
 ) {
-  return await cachified<Report>({
+  return cachified<Report>({
     key: `getFights:${params.reportID}`,
     cache,
     getFreshValue: () => getFights(params, { timings: cacheOptions.timings }),
@@ -129,4 +129,15 @@ export async function getCachedFights(
     staleWhileRevalidate: 1000 * 60 * 60 * 24 * 5,
     ...cacheOptions,
   });
+}
+
+export async function getCachedFight(
+  fightID: number,
+  params: GetFightsQueryVariables,
+  cacheOptions: CacheableQueryOptions,
+) {
+  const fights = await getCachedFights(params, cacheOptions);
+  const fight = fights.fights.find((it) => it.fightID === fightID);
+  invariant(fight, "Unable to find a fight with matching ID in report");
+  return fight;
 }

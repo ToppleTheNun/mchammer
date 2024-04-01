@@ -1,6 +1,4 @@
-import { invariantResponse } from "@epic-web/invariant";
-import { defer, type LoaderFunctionArgs } from "@remix-run/node";
-import { Await, Link, useLoaderData } from "@remix-run/react";
+import { Await, Link } from "@remix-run/react";
 import { Suspense } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -13,30 +11,31 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "~/components/ui/breadcrumb.tsx";
-import { getCachedFights } from "~/lib/query/report.server.ts";
-import { makeTimings } from "~/lib/timing.server.ts";
-
-export function loader({ params }: LoaderFunctionArgs) {
-  const timings = makeTimings("report code action");
-
-  const { reportCode } = params;
-  invariantResponse(reportCode, "reportCode parameter is required");
-  invariantResponse(
-    reportCode.length === 16,
-    "reportCode must be 16 characters long",
-  );
-
-  const reportFights = getCachedFights({ reportID: reportCode }, { timings });
-
-  return defer({ reportFights });
-}
+import { useReportCodeLoaderData } from "~/routes/reports+/$reportCode+/_layout.tsx";
 
 export function ErrorBoundary() {
   return <GeneralErrorBoundary />;
 }
 
+function ReportNameBreadcrumbItem() {
+  const { reportFights } = useReportCodeLoaderData();
+  const { t } = useTranslation();
+
+  return (
+    <Suspense
+      fallback={
+        <BreadcrumbItem>{t("breadcrumbs.selection.report")}</BreadcrumbItem>
+      }
+    >
+      <Await resolve={reportFights}>
+        {(resolved) => <BreadcrumbItem>{resolved.title}</BreadcrumbItem>}
+      </Await>
+    </Suspense>
+  );
+}
+
 export default function ReportRoute() {
-  const { reportFights } = useLoaderData<typeof loader>();
+  const { reportFights } = useReportCodeLoaderData();
   const { t } = useTranslation();
 
   return (
@@ -50,19 +49,7 @@ export default function ReportRoute() {
               </Link>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
-            <Suspense
-              fallback={
-                <BreadcrumbItem>
-                  {t("breadcrumbs.selection.report")}
-                </BreadcrumbItem>
-              }
-            >
-              <Await resolve={reportFights}>
-                {(resolved) => (
-                  <BreadcrumbItem>{resolved.title}</BreadcrumbItem>
-                )}
-              </Await>
-            </Suspense>
+            <ReportNameBreadcrumbItem />
             <BreadcrumbSeparator />
             <BreadcrumbItem>{t("breadcrumbs.selection.fight")}</BreadcrumbItem>
           </BreadcrumbList>
