@@ -33,8 +33,140 @@ function offsetByRegion(timestamp: number, region: Region): number {
 
 export const seasons: readonly Season[] = [
   {
+    name: "DF S4",
+    shortName: "D4",
+    slug: "df-season-4",
+    startDates: {
+      US: UNKNOWN_SEASON_START_OR_ENDING,
+      EU: UNKNOWN_SEASON_START_OR_ENDING,
+      KR: UNKNOWN_SEASON_START_OR_ENDING,
+      TW: UNKNOWN_SEASON_START_OR_ENDING,
+    },
+    endDates: {
+      US: UNKNOWN_SEASON_START_OR_ENDING,
+      EU: UNKNOWN_SEASON_START_OR_ENDING,
+      KR: UNKNOWN_SEASON_START_OR_ENDING,
+      TW: UNKNOWN_SEASON_START_OR_ENDING,
+    },
+    seasonIcon: "/img/seasons/dragonflight/season4/logo.png",
+    encounters: [
+      // Amalgamation Chamber
+      {
+        id: 2687,
+        icon: "/img/seasons/dragonflight/season2/encounters/AmalgamationChamber.jpg",
+      },
+      // Assault of the Zaqali
+      {
+        id: 2682,
+        icon: "/img/seasons/dragonflight/season2/encounters/AssaultOfTheZaqali.jpg",
+      },
+      // Echo of Neltharion
+      {
+        id: 2684,
+        icon: "/img/seasons/dragonflight/season2/encounters/EchoOfNeltharion.jpg",
+      },
+      // Forgotten Experiments
+      {
+        id: 2693,
+        icon: "/img/seasons/dragonflight/season2/encounters/ForgottenExperiments.jpg",
+      },
+      // Kazzara
+      {
+        id: 2688,
+        icon: "/img/seasons/dragonflight/season2/encounters/Kazzara.jpg",
+      },
+      // Magmorax
+      {
+        id: 2683,
+        icon: "/img/seasons/dragonflight/season2/encounters/Magmorax.jpg",
+      },
+      // Rashok
+      {
+        id: 2680,
+        icon: "/img/seasons/dragonflight/season2/encounters/Rashok.jpg",
+      },
+      // Sarkareth
+      {
+        id: 2685,
+        icon: "/img/seasons/dragonflight/season2/encounters/Sarkareth.jpg",
+      },
+      // Zskarn
+      {
+        id: 2689,
+        icon: "/img/seasons/dragonflight/season2/encounters/Zskarn.jpg",
+      },
+      // Brackenhide Hollow
+      {
+        id: 62520,
+        icon: "/img/seasons/dragonflight/season2/encounters/BrackenhideHollow.jpg",
+      },
+      // Halls of Infusion
+      {
+        id: 62527,
+        icon: "/img/seasons/dragonflight/season2/encounters/HallsOfInfusion.jpg",
+      },
+      // Neltharus
+      {
+        id: 62519,
+        icon: "/img/seasons/dragonflight/season2/encounters/Neltharus.jpg",
+      },
+      // Uldaman
+      {
+        id: 62451,
+        icon: "/img/seasons/dragonflight/season2/encounters/Uldaman.jpg",
+      },
+
+      // Council of Dreams
+      {
+        id: 2728,
+        icon: "/img/seasons/dragonflight/season3/encounters/CouncilOfDreams.jpg",
+      },
+      // Fyrakk, the Blazing
+      {
+        id: 2677,
+        icon: "/img/seasons/dragonflight/season3/encounters/Fyrakk.jpg",
+      },
+      // Gnarlroot
+      {
+        id: 2820,
+        icon: "/img/seasons/dragonflight/season3/encounters/Gnarlroot.jpg",
+      },
+      // Igira the Cruel
+      {
+        id: 2709,
+        icon: "/img/seasons/dragonflight/season3/encounters/Igira.jpg",
+      },
+      // Larodar, Keeper of the Flame
+      {
+        id: 2731,
+        icon: "/img/seasons/dragonflight/season3/encounters/Larodar.jpg",
+      },
+      // Nymue, Weaver of the Cycle
+      {
+        id: 2708,
+        icon: "/img/seasons/dragonflight/season3/encounters/Nymue.jpg",
+      },
+      // Smolderon
+      {
+        id: 2824,
+        icon: "/img/seasons/dragonflight/season3/encounters/Smolderon.jpg",
+      },
+      // Tindral Sageswift, Seer of Flame
+      {
+        id: 2786,
+        icon: "/img/seasons/dragonflight/season3/encounters/Tindral.jpg",
+      },
+      // Volcoross
+      {
+        id: 2737,
+        icon: "/img/seasons/dragonflight/season3/encounters/Volcoross.jpg",
+      },
+    ],
+    ptr: true,
+  },
+  {
     name: "DF S3",
-    shortName: "S3",
+    shortName: "D3",
     slug: "df-season-3",
     startDates: {
       US: offsetByRegion(1_699_974_000_000, "US"),
