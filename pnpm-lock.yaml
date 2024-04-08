@@ -194,8 +194,8 @@ devDependencies:
     specifier: 8.57.0
     version: 8.57.0
   '@flydotio/dockerfile':
-    specifier: 0.5.3
-    version: 0.5.3
+    specifier: 0.5.4
+    version: 0.5.4
   '@graphql-codegen/add':
     specifier: 5.0.2
     version: 5.0.2(graphql@16.8.1)
@@ -1851,8 +1851,8 @@ packages:
     resolution: {integrity: sha512-9TANp6GPoMtYzQdt54kfAyMmz1+osLlXdg2ENroU7zzrtflTLrrC/lgrIfaSe+Wu0b89GKccT7vxXA0MoAIO+Q==}
     dev: false
 
-  /@flydotio/dockerfile@0.5.3:
-    resolution: {integrity: sha512-HvPMYkvgAJm9564M8QB8rxy8kuXV4JbUjvfvaUbO3Ogw4SDWLUphEDGThf2IPB+lI4NN4w7zOHzV+GM0mBZw9g==}
+  /@flydotio/dockerfile@0.5.4:
+    resolution: {integrity: sha512-pglzQeVXVjCk/UCoY+g/jtr4i0zN+1BRTR35rFB4mNWZx/4cxBVa70zH1+N80TvOQ9y3ydB1M8258flr0bM/CQ==}
     engines: {node: '>=16.0.0'}
     hasBin: true
     dependencies:
