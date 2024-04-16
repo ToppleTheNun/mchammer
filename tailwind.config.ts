@@ -47,6 +47,28 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        wow: {
+          class: {
+            deathknight: "#C41E3A",
+            demonhunter: "#A330C9",
+            druid: "#FF7C0A",
+            evoker: "#33937F",
+            hunter: "#AAD372",
+            mage: "#3FC7EB",
+            monk: "#00FF98",
+            paladin: "#F48CBA",
+            priest: "#FFFFFF",
+            rogue: "#FFF468",
+            shaman: "#0070DD",
+            warlock: "#8788EE",
+            warrior: "#C69B6D",
+          },
+          role: {
+            tank: "#002B80",
+            healer: "#014A00",
+            dps: "#D84141",
+          },
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

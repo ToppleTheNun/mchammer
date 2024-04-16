@@ -9,10 +9,15 @@ import type {
   CacheableQueryOptions,
   Timeable,
 } from "~/lib/query/types.server.ts";
+import { time } from "~/lib/timing.server.ts";
 import { isPresent } from "~/lib/typeGuards.ts";
-import type { GetFightsQueryVariables } from "~/lib/wcl/types.server.ts";
-import { getWclFights } from "~/lib/wcl/wcl.server.ts";
+import type {
+  GetFightsQueryVariables,
+  GetPlayerDetailsQueryVariables,
+} from "~/lib/wcl/types.server.ts";
+import { getWclFights, getWclPlayerDetails } from "~/lib/wcl/wcl.server.ts";
 
+// region Fights
 const ReportCodeSchema = z
   .string()
   .min(16)
@@ -42,7 +47,7 @@ export const ReportSchema = z.object({
 });
 export type Report = z.infer<typeof ReportSchema>;
 
-async function getFights(
+async function getReport(
   params: GetFightsQueryVariables,
   timeable: Timeable,
 ): Promise<Report> {
@@ -113,14 +118,14 @@ async function getFights(
   };
 }
 
-export async function getCachedFights(
+export async function getCachedReport(
   params: GetFightsQueryVariables,
   cacheOptions: CacheableQueryOptions,
 ) {
   return cachified<Report>({
     key: `getFights:${params.reportID}`,
     cache,
-    getFreshValue: () => getFights(params, { timings: cacheOptions.timings }),
+    getFreshValue: () => getReport(params, { timings: cacheOptions.timings }),
     checkValue: ReportSchema,
     // Time To Live (ttl) in milliseconds: the cached value is considered valid for 24 hours
     ttl: 1000 * 60 * 60 * 24,
@@ -130,14 +135,117 @@ export async function getCachedFights(
     ...cacheOptions,
   });
 }
+// endregion
 
-export async function getCachedFight(
-  fightID: number,
-  params: GetFightsQueryVariables,
+// region Player Details
+export const PlayerDetailSpecSchema = z.object({
+  spec: z.string(),
+  count: z.number(),
+});
+export type PlayerDetailSpec = z.infer<typeof PlayerDetailSpecSchema>;
+
+export const PlayerDetailTypeSchema = z.enum([
+  "DeathKnight",
+  "DemonHunter",
+  "Druid",
+  "Evoker",
+  "Hunter",
+  "Mage",
+  "Monk",
+  "Paladin",
+  "Priest",
+  "Rogue",
+  "Shaman",
+  "Warlock",
+  "Warrior",
+]);
+export type PlayerDetailType = z.infer<typeof PlayerDetailTypeSchema>;
+
+export const PlayerDetailSchema = z.object({
+  name: z.string(),
+  id: z.number(),
+  guid: z.number(),
+  type: PlayerDetailTypeSchema,
+  server: z.string(),
+  specs: z.array(PlayerDetailSpecSchema),
+});
+export type PlayerDetail = z.infer<typeof PlayerDetailSchema>;
+
+const RoleSchema = z.enum(["tank", "healer", "dps"]);
+export type Role = z.infer<typeof RoleSchema>;
+
+export const PlayerDetailWithRoleSchema = PlayerDetailSchema.extend({
+  role: RoleSchema,
+});
+export type PlayerDetailWithRole = z.infer<typeof PlayerDetailWithRoleSchema>;
+
+export const PlayerDetailsSchema = z.object({
+  dps: z.array(PlayerDetailSchema).default([]),
+  healers: z.array(PlayerDetailSchema).default([]),
+  tanks: z.array(PlayerDetailSchema).default([]),
+});
+export type PlayerDetails = z.infer<typeof PlayerDetailsSchema>;
+
+const PlayerDetailsDataSchema = z.object({
+  data: z.object({
+    playerDetails: PlayerDetailsSchema,
+  }),
+});
+
+function toPlayerDetailWithRole(
+  playerDetail: PlayerDetail,
+  role: Role,
+): PlayerDetailWithRole {
+  return { ...playerDetail, role };
+}
+
+async function getPlayerDetails(
+  params: GetPlayerDetailsQueryVariables,
+  timeable: Timeable,
+): Promise<PlayerDetailWithRole[]> {
+  const response = await getWclPlayerDetails(params, timeable);
+  invariant(response.reportData, "reportData is not present in response");
+  invariant(response.reportData.report, "report is not present in reportData");
+
+  const rawPlayerDetails: unknown = response.reportData.report.playerDetails;
+  const playerDetailsDpsHealerTank = await time(
+    () => PlayerDetailsDataSchema.parseAsync(rawPlayerDetails),
+    { timings: timeable.timings, type: "player details parse" },
+  );
+
+  return [
+    ...playerDetailsDpsHealerTank.data.playerDetails.tanks.map((it) =>
+      toPlayerDetailWithRole(it, "tank"),
+    ),
+    ...playerDetailsDpsHealerTank.data.playerDetails.healers.map((it) =>
+      toPlayerDetailWithRole(it, "healer"),
+    ),
+    ...playerDetailsDpsHealerTank.data.playerDetails.dps.map((it) =>
+      toPlayerDetailWithRole(it, "dps"),
+    ),
+  ];
+}
+
+export async function getCachedPlayerDetails(
+  params: GetPlayerDetailsQueryVariables,
   cacheOptions: CacheableQueryOptions,
 ) {
-  const fights = await getCachedFights(params, cacheOptions);
-  const fight = fights.fights.find((it) => it.fightID === fightID);
-  invariant(fight, "Unable to find a fight with matching ID in report");
-  return fight;
+  const fightIds = Array.isArray(params.fightIDs)
+    ? params.fightIDs
+    : [params.fightIDs];
+
+  return cachified<PlayerDetailWithRole[]>({
+    key: `getPlayerDetails:${params.reportID}:[${fightIds.join(",")}]`,
+    cache,
+    getFreshValue: () =>
+      getPlayerDetails(params, { timings: cacheOptions.timings }),
+    checkValue: PlayerDetailWithRoleSchema.array(),
+    // Time To Live (ttl) in milliseconds: the cached value is considered valid for 24 hours
+    ttl: 1000 * 60 * 60 * 24,
+    // Stale While Revalidate (swr) in milliseconds: if the cached value is less than 5 days
+    // expired, return it while fetching a fresh value in the background
+    staleWhileRevalidate: 1000 * 60 * 60 * 24 * 5,
+    ...cacheOptions,
+  });
 }
+// endregion

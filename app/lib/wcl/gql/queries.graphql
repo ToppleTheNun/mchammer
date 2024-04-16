@@ -24,36 +24,9 @@ query getFights($reportID: String!) {
   }
 }
 
-query getCombatantInfoEvents($reportID: String!, $fightIDs: [Int]!) {
-  reportData {
-    report(code: $reportID) {
-      title
-      startTime
-      endTime
-
-      region {
-        slug
-      }
-
-      events(dataType: CombatantInfo, fightIDs: $fightIDs) {
-        data
-        nextPageTimestamp
-      }
-    }
-  }
-}
-
 query getPlayerDetails($reportID: String!, $fightIDs: [Int]!) {
   reportData {
     report(code: $reportID) {
-      title
-      startTime
-      endTime
-
-      region {
-        slug
-      }
-
       playerDetails(fightIDs: $fightIDs)
     }
   }

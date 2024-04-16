@@ -2124,32 +2124,6 @@ export interface GetFightsQuery {
   } | null;
 }
 
-export type GetCombatantInfoEventsQueryVariables = Exact<{
-  reportID: Scalars["String"]["input"];
-  fightIDs:
-    | InputMaybe<Scalars["Int"]["input"]>[]
-    | InputMaybe<Scalars["Int"]["input"]>;
-}>;
-
-export interface GetCombatantInfoEventsQuery {
-  __typename?: "Query";
-  reportData?: {
-    __typename?: "ReportData";
-    report?: {
-      __typename?: "Report";
-      title: string;
-      startTime: number;
-      endTime: number;
-      region?: { __typename?: "Region"; slug: string } | null;
-      events?: {
-        __typename?: "ReportEventPaginator";
-        data?: any | null;
-        nextPageTimestamp?: number | null;
-      } | null;
-    } | null;
-  } | null;
-}
-
 export type GetPlayerDetailsQueryVariables = Exact<{
   reportID: Scalars["String"]["input"];
   fightIDs:
@@ -2161,14 +2135,7 @@ export interface GetPlayerDetailsQuery {
   __typename?: "Query";
   reportData?: {
     __typename?: "ReportData";
-    report?: {
-      __typename?: "Report";
-      title: string;
-      startTime: number;
-      endTime: number;
-      playerDetails?: any | null;
-      region?: { __typename?: "Region"; slug: string } | null;
-    } | null;
+    report?: { __typename?: "Report"; playerDetails?: any | null } | null;
   } | null;
 }
 
@@ -2216,34 +2183,10 @@ export const GetFightsDocument = gql`
     }
   }
 `;
-export const GetCombatantInfoEventsDocument = gql`
-  query getCombatantInfoEvents($reportID: String!, $fightIDs: [Int]!) {
-    reportData {
-      report(code: $reportID) {
-        title
-        startTime
-        endTime
-        region {
-          slug
-        }
-        events(dataType: CombatantInfo, fightIDs: $fightIDs) {
-          data
-          nextPageTimestamp
-        }
-      }
-    }
-  }
-`;
 export const GetPlayerDetailsDocument = gql`
   query getPlayerDetails($reportID: String!, $fightIDs: [Int]!) {
     reportData {
       report(code: $reportID) {
-        title
-        startTime
-        endTime
-        region {
-          slug
-        }
         playerDetails(fightIDs: $fightIDs)
       }
     }
@@ -2301,22 +2244,6 @@ export function getSdk(
             ...wrappedRequestHeaders,
           }),
         "getFights",
-        "query",
-        variables,
-      );
-    },
-    getCombatantInfoEvents(
-      variables: GetCombatantInfoEventsQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<GetCombatantInfoEventsQuery> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<GetCombatantInfoEventsQuery>(
-            GetCombatantInfoEventsDocument,
-            variables,
-            { ...requestHeaders, ...wrappedRequestHeaders },
-          ),
-        "getCombatantInfoEvents",
         "query",
         variables,
       );

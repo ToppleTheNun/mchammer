@@ -43,6 +43,100 @@
         "heading": "Player selection",
         "description": "Select the player that you want to analyze below."
       }
+    },
+    "details": {}
+  },
+  "placeholders": {
+    "players": {
+      "title": "Eligible players go here",
+      "description": "Players will eventually go here. It'll be neat."
+    },
+    "streaks": {
+      "title": "Eligible dodge, parry, and miss streaks go here",
+      "description": "Streaks will eventually go here. It'll be neat."
     }
+  },
+  "specs": {
+    "deathknight": {
+      "DEFAULT": "Death Knight",
+      "blood": "Blood Death Knight",
+      "frost": "Frost Death Knight",
+      "unholy": "Unholy Death Knight"
+    },
+    "demonhunter": {
+      "DEFAULT": "Demon Hunter",
+      "havoc": "Havoc Demon Hunter",
+      "vengeance": "Vengeance Demon Hunter"
+    },
+    "druid": {
+      "DEFAULT": "Druid",
+      "balance": "Balance Druid",
+      "feral": "Feral Druid",
+      "guardian": "Guardian Druid",
+      "restoration": "Restoration Druid"
+    },
+    "evoker": {
+      "DEFAULT": "Evoker",
+      "augmentation": "Augmentation Evoker",
+      "devastation": "Devastation Evoker",
+      "preservation": "Preservation Evoker"
+    },
+    "hunter": {
+      "DEFAULT": "Hunter",
+      "beastmastery": "Beast Mastery Hunter",
+      "marksmanship": "Marksmanship Hunter",
+      "survival": "Survival Hunter"
+    },
+    "mage": {
+      "DEFAULT": "Mage",
+      "arcane": "Arcane Mage",
+      "fire": "Fire Mage",
+      "frost": "Frost Mage"
+    },
+    "monk": {
+      "DEFAULT": "Monk",
+      "brewmaster": "Brewmaster Monk",
+      "mistweaver": "Mistweaver Monk",
+      "windwalker": "Windwalker Monk"
+    },
+    "paladin": {
+      "DEFAULT": "Paladin",
+      "holy": "Holy Paladin",
+      "protection": "Protection Paladin",
+      "retribution": "Retribution Paladin"
+    },
+    "priest": {
+      "DEFAULT": "Priest",
+      "discipline": "Discipline Priest",
+      "holy": "Holy Priest",
+      "shadow": "Shadow Priest"
+    },
+    "rogue": {
+      "DEFAULT": "Rogue",
+      "assassination": "Assassination Rogue",
+      "outlaw": "Outlaw Rogue",
+      "subtlety": "Subtlety Rogue"
+    },
+    "shaman": {
+      "DEFAULT": "Shaman",
+      "elemental": "Elemental Shaman",
+      "enhancement": "Enhancement Shaman",
+      "restoration": "Restoration Shaman"
+    },
+    "warlock": {
+      "DEFAULT": "Warlock",
+      "affliction": "Affliction Warlock",
+      "demonology": "Demonology Warlock",
+      "destruction": "Destruction Warlock"
+    },
+    "warrior": {
+      "DEFAULT": "Warrior",
+      "arms": "Arms Warrior",
+      "fury": "Fury Warrior",
+      "protection": "Protection Warrior"
+    }
+  },
+  "errors": {
+    "unknown-player": "Unknown player"
   }
 }

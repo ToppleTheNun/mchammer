@@ -1,9 +1,10 @@
 import { Await, Link } from "@remix-run/react";
-import { Suspense } from "react";
+import { Suspense, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { GeneralErrorBoundary } from "~/components/GeneralErrorBoundary.tsx";
-import { H1, H2, Lead } from "~/components/typography.tsx";
+import { PlayerList, PlayerListSkeleton } from "~/components/PlayerList.tsx";
+import { H1, Lead } from "~/components/typography.tsx";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -64,7 +65,13 @@ export function ErrorBoundary() {
 }
 
 export default function ReportRoute() {
+  const { reportFight, fightPlayers } = useReportCodeFightLoaderData();
   const { t } = useTranslation();
+
+  const allData = useMemo(
+    () => Promise.all([reportFight, fightPlayers]),
+    [fightPlayers, reportFight],
+  );
 
   return (
     <>
@@ -87,13 +94,14 @@ export default function ReportRoute() {
           <Lead>{t("reports.selection.player.description")}</Lead>
         </div>
       </div>
-      <section className="hidden md:block">
-        <div className="overflow-hidden rounded-lg border bg-background px-4 shadow">
-          <div className="flex h-[50vh] flex-col items-center justify-center gap-2">
-            <H2>Eligible players go here</H2>
-            <Lead>Players will eventually go here. It&apos;ll be neat.</Lead>
-          </div>
-        </div>
+      <section>
+        <Suspense fallback={<PlayerListSkeleton />}>
+          <Await resolve={allData}>
+            {([fight, players]) => (
+              <PlayerList fight={fight} players={players} />
+            )}
+          </Await>
+        </Suspense>
       </section>
     </>
   );

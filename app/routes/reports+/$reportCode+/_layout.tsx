@@ -3,7 +3,7 @@ import { defer, type LoaderFunctionArgs } from "@remix-run/node";
 import { useRouteLoaderData } from "@remix-run/react";
 import { z } from "zod";
 
-import { getCachedFights } from "~/lib/query/report.server.ts";
+import { getCachedReport } from "~/lib/query/report.server.ts";
 import { makeTimings } from "~/lib/timing.server.ts";
 
 export const ReportCodeSchema = z
@@ -24,7 +24,7 @@ export function loader({ params }: LoaderFunctionArgs) {
     "reportCode must be 16 characters long",
   );
 
-  const reportFights = getCachedFights({ reportID: reportCode }, { timings });
+  const reportFights = getCachedReport({ reportID: reportCode }, { timings });
 
   return defer({ reportFights });
 }
