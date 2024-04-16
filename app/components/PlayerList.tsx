@@ -1,7 +1,11 @@
 import { Link, useAsyncError } from "@remix-run/react";
 import { useTranslation } from "react-i18next";
 
-import { Avatar, AvatarFallback } from "~/components/ui/avatar.tsx";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "~/components/ui/avatar.tsx";
 import { Skeleton } from "~/components/ui/skeleton.tsx";
 import type {
   EnhancedFight,
@@ -74,11 +78,13 @@ export function PlayerListItem({ fight, player }: PlayerListItemProps) {
       to={`/reports/${fight.reportCode}/${String(fight.fightID)}/${String(player.id)}`}
     >
       <Avatar className="h-9 w-9">
-        {/*<AvatarImage src={fight.encounter.icon} alt="Avatar" />*/}
-        <AvatarFallback>
-          {/*{t(`encounter.${String(fight.encounter.id)}`).substring(0, 1)}*/}
-          {player.name}
-        </AvatarFallback>
+        {spec ? (
+          <AvatarImage
+            src={`/img/specs/${player.type.toLowerCase()}/${spec.toLowerCase()}.png`}
+            alt="Avatar"
+          />
+        ) : null}
+        <AvatarFallback>{player.name.substring(0, 1)}</AvatarFallback>
       </Avatar>
       <div className="ml-4 space-y-1">
         <p className="text-sm font-medium leading-none">{player.name}</p>
