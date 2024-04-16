@@ -1,12 +1,12 @@
-import { Link } from "@remix-run/react";
+import { Link, useAsyncError } from "@remix-run/react";
 import { useTranslation } from "react-i18next";
 
 import { Avatar, AvatarFallback } from "~/components/ui/avatar.tsx";
 import { Skeleton } from "~/components/ui/skeleton.tsx";
 import type {
+  EnhancedFight,
   PlayerDetailType,
   PlayerDetailWithRole,
-  ReportFight,
   Role,
 } from "~/lib/query/report.server.ts";
 import { cn } from "~/lib/utils.ts";
@@ -31,6 +31,10 @@ export function PlayerListSkeleton() {
   );
 }
 
+export function PlayerListError() {
+  throw useAsyncError();
+}
+
 export const specToTextClassNameMap: Record<PlayerDetailType, string> = {
   DeathKnight: "text-wow-class-deathknight",
   DemonHunter: "text-wow-class-demonhunter",
@@ -53,7 +57,7 @@ export const roleToBorderClassNameMap: Record<Role, string> = {
 };
 
 interface PlayerListItemProps {
-  fight: ReportFight;
+  fight: EnhancedFight;
   player: PlayerDetailWithRole;
 }
 export function PlayerListItem({ fight, player }: PlayerListItemProps) {
@@ -94,7 +98,7 @@ export function PlayerListItem({ fight, player }: PlayerListItemProps) {
 }
 
 interface PlayerListProps {
-  fight: ReportFight;
+  fight: EnhancedFight;
   players: PlayerDetailWithRole[];
 }
 

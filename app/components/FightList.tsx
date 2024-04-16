@@ -1,4 +1,4 @@
-import { Link } from "@remix-run/react";
+import { Link, useAsyncError } from "@remix-run/react";
 import { useTranslation } from "react-i18next";
 
 import {
@@ -30,9 +30,14 @@ export function FightListSkeleton() {
   );
 }
 
+export function FightListError() {
+  throw useAsyncError();
+}
+
 interface FightListItemProps {
   fight: ReportFight;
 }
+
 export function FightListItem({ fight }: FightListItemProps) {
   const { t } = useTranslation();
 

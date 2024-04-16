@@ -1,9 +1,15 @@
-import { Await, Link } from "@remix-run/react";
-import { Suspense, useMemo } from "react";
+import { defer, type LoaderFunctionArgs } from "@remix-run/node";
+import { Await, useLoaderData } from "@remix-run/react";
+import { Suspense } from "react";
 import { useTranslation } from "react-i18next";
+import { z } from "zod";
 
 import { GeneralErrorBoundary } from "~/components/GeneralErrorBoundary.tsx";
-import { PlayerList, PlayerListSkeleton } from "~/components/PlayerList.tsx";
+import {
+  PlayerList,
+  PlayerListError,
+  PlayerListSkeleton,
+} from "~/components/PlayerList.tsx";
 import { H1, Lead } from "~/components/typography.tsx";
 import {
   Breadcrumb,
@@ -12,11 +18,44 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "~/components/ui/breadcrumb.tsx";
-import { useReportCodeLoaderData } from "~/routes/reports+/$reportCode+/_layout.tsx";
-import { useReportCodeFightLoaderData } from "~/routes/reports+/$reportCode+/$fight+/_layout.tsx";
+import { getCachedFight, getCachedReport } from "~/lib/query/report.server.ts";
+import { PositiveIntegerSchema, ReportCodeSchema } from "~/lib/schemas.ts";
+import { makeTimings, time } from "~/lib/timing.server.ts";
 
+// region Loader
+const ParamsSchema = z.object({
+  reportCode: ReportCodeSchema,
+  fight: PositiveIntegerSchema,
+});
+export async function loader({ params }: LoaderFunctionArgs) {
+  const timings = makeTimings("reports/$reportCode/$fight loader");
+
+  const { reportCode, fight: selectedFight } = await time(
+    () => ParamsSchema.parseAsync(params),
+    {
+      timings,
+      type: "params parse",
+    },
+  );
+
+  const cachedReport = getCachedReport({ reportID: reportCode }, { timings });
+  const cachedSelectedFight = cachedReport.then((report) => {
+    return getCachedFight(report, selectedFight, { timings });
+  });
+
+  return defer({
+    report: cachedReport.then((report) => ({
+      title: report.title,
+      reportCode: report.reportCode,
+    })),
+    fight: cachedSelectedFight,
+  });
+}
+// endregion
+
+// region Components
 function ReportNameBreadcrumbItem() {
-  const { reportFights } = useReportCodeLoaderData();
+  const { report } = useLoaderData<typeof loader>();
   const { t } = useTranslation();
 
   return (
@@ -25,7 +64,12 @@ function ReportNameBreadcrumbItem() {
         <BreadcrumbItem>{t("breadcrumbs.selection.report")}</BreadcrumbItem>
       }
     >
-      <Await resolve={reportFights}>
+      <Await
+        resolve={report}
+        errorElement={
+          <BreadcrumbItem>{t("breadcrumbs.selection.report")}</BreadcrumbItem>
+        }
+      >
         {(resolved) => (
           <BreadcrumbItem>
             <BreadcrumbLink href={`/reports/${resolved.reportCode}`}>
@@ -38,40 +82,62 @@ function ReportNameBreadcrumbItem() {
   );
 }
 
-function ReportFightNameBreadcrumbItem() {
-  const { reportFight } = useReportCodeFightLoaderData();
+function FightNameBreadcrumbItem() {
+  const { fight } = useLoaderData<typeof loader>();
   const { t } = useTranslation();
 
   return (
     <Suspense
       fallback={
-        <BreadcrumbItem>{t("breadcrumbs.selection.fight")}</BreadcrumbItem>
+        <>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>{t("breadcrumbs.selection.fight")}</BreadcrumbItem>
+        </>
       }
     >
-      <Await resolve={reportFight}>
+      <Await
+        resolve={fight}
+        errorElement={
+          <>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>{t("breadcrumbs.selection.fight")}</BreadcrumbItem>
+          </>
+        }
+      >
         {(resolved) => (
-          <BreadcrumbItem>
-            {t(`difficulty.${String(resolved.difficulty)}`)}{" "}
-            {t(`encounter.${String(resolved.encounter.id)}`)}
-          </BreadcrumbItem>
+          <>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              {t(`difficulty.${String(resolved.difficulty)}`)}{" "}
+              {t(`encounter.${String(resolved.encounter.id)}`)}
+            </BreadcrumbItem>
+          </>
         )}
       </Await>
     </Suspense>
   );
 }
 
+function Header() {
+  const { t } = useTranslation();
+
+  return (
+    <div className="space-y-2">
+      <H1>{t("reports.selection.player.heading")}</H1>
+      <Lead>{t("reports.selection.player.description")}</Lead>
+    </div>
+  );
+}
+// endregion
+
+// region Route
 export function ErrorBoundary() {
   return <GeneralErrorBoundary />;
 }
 
-export default function ReportRoute() {
-  const { reportFight, fightPlayers } = useReportCodeFightLoaderData();
+export default function ReportsFightRoute() {
+  const { fight } = useLoaderData<typeof loader>();
   const { t } = useTranslation();
-
-  const allData = useMemo(
-    () => Promise.all([reportFight, fightPlayers]),
-    [fightPlayers, reportFight],
-  );
 
   return (
     <>
@@ -79,26 +145,20 @@ export default function ReportRoute() {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <Link to="/" className="hover:text-foreground">
-                {t("breadcrumbs.home")}
-              </Link>
+              <BreadcrumbLink href="/">{t("breadcrumbs.home")}</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <ReportNameBreadcrumbItem />
-            <BreadcrumbSeparator />
-            <ReportFightNameBreadcrumbItem />
+            <FightNameBreadcrumbItem />
           </BreadcrumbList>
         </Breadcrumb>
-        <div className="space-y-2">
-          <H1>{t("reports.selection.player.heading")}</H1>
-          <Lead>{t("reports.selection.player.description")}</Lead>
-        </div>
+        <Header />
       </div>
       <section>
         <Suspense fallback={<PlayerListSkeleton />}>
-          <Await resolve={allData}>
-            {([fight, players]) => (
-              <PlayerList fight={fight} players={players} />
+          <Await resolve={fight} errorElement={<PlayerListError />}>
+            {(resolved) => (
+              <PlayerList fight={resolved} players={resolved.players} />
             )}
           </Await>
         </Suspense>
@@ -106,3 +166,4 @@ export default function ReportRoute() {
     </>
   );
 }
+// endregion

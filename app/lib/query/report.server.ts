@@ -9,6 +9,7 @@ import type {
   CacheableQueryOptions,
   Timeable,
 } from "~/lib/query/types.server.ts";
+import { ReportCodeSchema } from "~/lib/schemas.ts";
 import { time } from "~/lib/timing.server.ts";
 import { isPresent } from "~/lib/typeGuards.ts";
 import type {
@@ -18,11 +19,6 @@ import type {
 import { getWclFights, getWclPlayerDetails } from "~/lib/wcl/wcl.server.ts";
 
 // region Fights
-const ReportCodeSchema = z
-  .string()
-  .min(16)
-  .max(16)
-  .regex(/^[a-z0-9]+$/i);
 export const ReportFightSchema = z.object({
   reportCode: ReportCodeSchema,
   fightID: z.number(),
@@ -123,7 +119,7 @@ export async function getCachedReport(
   cacheOptions: CacheableQueryOptions,
 ) {
   return cachified<Report>({
-    key: `getFights:${params.reportID}`,
+    key: `getReport:${params.reportID}`,
     cache,
     getFreshValue: () => getReport(params, { timings: cacheOptions.timings }),
     checkValue: ReportSchema,
@@ -199,10 +195,28 @@ function toPlayerDetailWithRole(
   return { ...playerDetail, role };
 }
 
-async function getPlayerDetails(
+export const EnhancedFightSchema = z.object({
+  reportCode: ReportCodeSchema,
+  fightID: z.number(),
+  startTime: z.number(),
+  endTime: z.number(),
+  encounter: z.object({
+    id: z.number(),
+    icon: z.string(),
+  }),
+  difficulty: z.number(),
+  region: RegionSchema,
+  players: z.array(PlayerDetailWithRoleSchema),
+  kill: z.boolean(),
+  percentage: z.number(),
+});
+export type EnhancedFight = z.infer<typeof EnhancedFightSchema>;
+
+async function getFight(
+  fight: ReportFight,
   params: GetPlayerDetailsQueryVariables,
   timeable: Timeable,
-): Promise<PlayerDetailWithRole[]> {
+): Promise<EnhancedFight> {
   const response = await getWclPlayerDetails(params, timeable);
   invariant(response.reportData, "reportData is not present in response");
   invariant(response.reportData.report, "report is not present in reportData");
@@ -213,7 +227,7 @@ async function getPlayerDetails(
     { timings: timeable.timings, type: "player details parse" },
   );
 
-  return [
+  const playerDetails = [
     ...playerDetailsDpsHealerTank.data.playerDetails.tanks.map((it) =>
       toPlayerDetailWithRole(it, "tank"),
     ),
@@ -224,22 +238,37 @@ async function getPlayerDetails(
       toPlayerDetailWithRole(it, "dps"),
     ),
   ];
+
+  const { friendlyPlayerIds, ...reportFight } = fight;
+
+  return {
+    ...reportFight,
+    players: friendlyPlayerIds
+      .map((playerId) =>
+        playerDetails.find((playerDetail) => playerDetail.id === playerId),
+      )
+      .filter(isPresent),
+  };
 }
 
-export async function getCachedPlayerDetails(
-  params: GetPlayerDetailsQueryVariables,
+export async function getCachedFight(
+  report: Report,
+  fightId: number,
   cacheOptions: CacheableQueryOptions,
 ) {
-  const fightIds = Array.isArray(params.fightIDs)
-    ? params.fightIDs
-    : [params.fightIDs];
+  const fight = report.fights.find((it) => it.fightID === fightId);
+  invariant(fight, "Unable to find fight with matching ID");
 
-  return cachified<PlayerDetailWithRole[]>({
-    key: `getPlayerDetails:${params.reportID}:[${fightIds.join(",")}]`,
+  return cachified<EnhancedFight>({
+    key: `getFight:${report.reportCode}:${String(fightId)}`,
     cache,
     getFreshValue: () =>
-      getPlayerDetails(params, { timings: cacheOptions.timings }),
-    checkValue: PlayerDetailWithRoleSchema.array(),
+      getFight(
+        fight,
+        { reportID: report.reportCode, fightIDs: [fightId] },
+        { timings: cacheOptions.timings },
+      ),
+    checkValue: EnhancedFightSchema,
     // Time To Live (ttl) in milliseconds: the cached value is considered valid for 24 hours
     ttl: 1000 * 60 * 60 * 24,
     // Stale While Revalidate (swr) in milliseconds: if the cached value is less than 5 days
