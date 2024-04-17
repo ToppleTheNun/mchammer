@@ -49,6 +49,24 @@ export async function loader({ params }: LoaderFunctionArgs) {
 }
 // endregion
 
+// region Utility function
+function groupByFight(fights: ReportFight[]) {
+  let last: ReportFight[] = [];
+  return fights.reduce<ReportFight[][]>((acc, fight) => {
+    const isDifferent =
+      last.length === 0 ||
+      last[0].encounter.id !== fight.encounter.id ||
+      last[0].difficulty !== fight.difficulty;
+    if (isDifferent) {
+      last = [];
+      acc.push(last);
+    }
+    last.push(fight);
+    return acc;
+  }, []);
+}
+// endregion
+
 // region Components
 function ReportNameBreadcrumbItem() {
   const { report } = useLoaderData<typeof loader>();
@@ -138,6 +156,40 @@ function FightList({ fights }: { fights: ReportFight[] }) {
   );
 }
 
+function FightLists({ fightsByFight }: { fightsByFight: ReportFight[][] }) {
+  const { t } = useTranslation();
+  return (
+    <div className="space-y-8">
+      {fightsByFight.map((fights) => {
+        const firstFight = fights[0];
+        return (
+          <div
+            key={firstFight.fightID}
+            className="flex flex-row items-start gap-2"
+          >
+            <Avatar className="h-20 w-20">
+              <AvatarImage src={firstFight.encounter.icon} alt="Avatar" />
+              <AvatarFallback>
+                {t(`encounter.${String(firstFight.encounter.id)}`).substring(
+                  0,
+                  1,
+                )}
+              </AvatarFallback>
+            </Avatar>
+            <div className="flex flex-col flex-1 gap-1">
+              <H2>
+                {t(`difficulty.${String(firstFight.difficulty)}`)}{" "}
+                {t(`encounter.${String(firstFight.encounter.id)}`)}
+              </H2>
+              <FightList fights={fights} />
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 function FightListError() {
   const error = useAsyncError();
   captureRemixErrorBoundaryError(error);
@@ -183,7 +235,9 @@ export default function ReportsReportCodeRoute() {
       <section>
         <Suspense fallback={<FightListSkeleton />}>
           <Await resolve={report} errorElement={<FightListError />}>
-            {(resolved) => <FightList fights={resolved.fights} />}
+            {(resolved) => (
+              <FightLists fightsByFight={groupByFight(resolved.fights)} />
+            )}
           </Await>
         </Suspense>
       </section>
