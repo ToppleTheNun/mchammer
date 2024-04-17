@@ -1,6 +1,7 @@
 import { invariant } from "@epic-web/invariant";
 import { defer, type LoaderFunctionArgs } from "@remix-run/node";
 import { Await, useAsyncError, useLoaderData } from "@remix-run/react";
+import { captureRemixErrorBoundaryError } from "@sentry/remix";
 import { Suspense, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
@@ -14,6 +15,7 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "~/components/ui/breadcrumb.tsx";
+import { getErrorMessage } from "~/lib/misc.ts";
 import {
   getCachedFight,
   getCachedReport,
@@ -146,10 +148,21 @@ function PlayerNameBreadcrumbItem() {
   return (
     <Suspense
       fallback={
-        <BreadcrumbItem>{t("breadcrumbs.selection.player")}</BreadcrumbItem>
+        <>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>{t("breadcrumbs.selection.player")}</BreadcrumbItem>
+        </>
       }
     >
-      <Await resolve={player}>
+      <Await
+        resolve={player}
+        errorElement={
+          <>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>{t("breadcrumbs.selection.player")}</BreadcrumbItem>
+          </>
+        }
+      >
         {(resolved) => (
           <>
             <BreadcrumbSeparator />
@@ -193,7 +206,20 @@ function ReportPlayerStreaks({
 }
 
 function PlayerErrorElement() {
-  throw useAsyncError();
+  const error = useAsyncError();
+  captureRemixErrorBoundaryError(error);
+
+  const message = getErrorMessage(error);
+  const { t } = useTranslation();
+
+  return (
+    <div className="overflow-hidden rounded-lg border bg-background px-4 shadow">
+      <div className="flex h-[50vh] flex-col items-center justify-center gap-2">
+        <H2>{t("errors.player.DEFAULT")}</H2>
+        <Lead>{message}</Lead>
+      </div>
+    </div>
+  );
 }
 // endregion
 

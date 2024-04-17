@@ -137,6 +137,15 @@
     }
   },
   "errors": {
-    "unknown-player": "Unknown player"
+    "unknown-player": "Unknown player",
+    "fight": {
+      "DEFAULT": "Unable to load fight"
+    },
+    "player": {
+      "DEFAULT": "Unable to load player"
+    },
+    "report": {
+      "DEFAULT": "Unable to load report"
+    }
   }
 }
