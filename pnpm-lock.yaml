@@ -81,8 +81,8 @@ importers:
         specifier: 7.110.1
         version: 7.110.1(@remix-run/node@2.8.1(typescript@5.4.5))(@remix-run/react@2.8.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.4.5))(react@18.2.0)
       address:
-        specifier: 2.0.2
-        version: 2.0.2
+        specifier: 2.0.3
+        version: 2.0.3
       better-sqlite3:
         specifier: 9.5.0
         version: 9.5.0
@@ -2515,8 +2515,8 @@ packages:
     engines: {node: '>=0.4.0'}
     hasBin: true
 
-  address@2.0.2:
-    resolution: {integrity: sha512-u6nFssvaX9RHQmjMSqgT7b7QJbf/5/U8+ntbTL8vgABfIiEmm02ZSM5MwljKjCrIrm7iIbgYEya2YW6AaRccVA==}
+  address@2.0.3:
+    resolution: {integrity: sha512-XNAb/a6TCqou+TufU8/u11HCu9x1gYvOoxLwtlXgIqmkrYQADVv6ljyW2zwiPhHz9R1gItAWpuDrdJMmrOBFEA==}
     engines: {node: '>= 16.0.0'}
 
   agent-base@6.0.2:
@@ -8898,7 +8898,7 @@ snapshots:
 
   acorn@8.11.3: {}
 
-  address@2.0.2: {}
+  address@2.0.3: {}
 
   agent-base@6.0.2:
     dependencies:
