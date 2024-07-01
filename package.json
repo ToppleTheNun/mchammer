@@ -59,7 +59,7 @@
     "@remix-run/react": "2.8.1",
     "@sentry/profiling-node": "7.110.1",
     "@sentry/remix": "7.110.1",
-    "address": "2.0.2",
+    "address": "2.0.3",
     "better-sqlite3": "9.5.0",
     "class-variance-authority": "0.7.0",
     "close-with-grace": "1.3.0",
