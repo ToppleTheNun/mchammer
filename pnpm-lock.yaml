@@ -15,8 +15,8 @@ importers:
         specifier: 1.1.0
         version: 1.1.0(react@18.2.0)
       '@conform-to/zod':
-        specifier: 1.1.0
-        version: 1.1.0(zod@3.22.4)
+        specifier: 1.1.5
+        version: 1.1.5(zod@3.22.4)
       '@epic-web/cachified':
         specifier: 5.1.2
         version: 5.1.2
@@ -720,8 +720,8 @@ packages:
     peerDependencies:
       react: '>=18'
 
-  '@conform-to/zod@1.1.0':
-    resolution: {integrity: sha512-0ukglFJ1gknFf81j9zB/mZq68fhhSu0s2bxZIkBqPocdGBA6LvHnV7ORyE+27WUNyJ36L2sjksNXVm9SDSUexw==}
+  '@conform-to/zod@1.1.5':
+    resolution: {integrity: sha512-ho/742wgfTWf2u5tKo4GT88xcKcvTOCDPOi4o1WEmePPmJNP5ezeMQSKSdKdS0rFinZl9ZTH8gV5FQUNPHAA7A==}
     peerDependencies:
       zod: ^3.21.0
 
@@ -6758,9 +6758,9 @@ snapshots:
       '@conform-to/dom': 1.1.0
       react: 18.2.0
 
-  '@conform-to/zod@1.1.0(zod@3.22.4)':
+  '@conform-to/zod@1.1.5(zod@3.22.4)':
     dependencies:
-      '@conform-to/dom': 1.1.0
+      '@conform-to/dom': 1.1.5
       zod: 3.22.4
 
   '@emotion/hash@0.9.1': {}
