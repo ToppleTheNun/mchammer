@@ -33,8 +33,8 @@ importers:
         specifier: 3.2.0
         version: 3.2.0(graphql@16.8.1)
       '@nasa-gcn/remix-seo':
-        specifier: 2.0.0
-        version: 2.0.0(@remix-run/react@2.8.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.4.5))(@remix-run/server-runtime@2.8.1(typescript@5.4.5))
+        specifier: 2.0.1
+        version: 2.0.1(@remix-run/react@2.8.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.4.5))(@remix-run/server-runtime@2.8.1(typescript@5.4.5))
       '@prisma/client':
         specifier: 5.12.1
         version: 5.12.1(prisma@5.12.1)
@@ -1495,8 +1495,8 @@ packages:
   '@mdx-js/mdx@2.3.0':
     resolution: {integrity: sha512-jLuwRlz8DQfQNiUCJR50Y09CGPq3fLtmtUQfVrj79E0JWu3dvsVcxVIcfhR5h0iXu+/z++zDrYeiJqifRynJkA==}
 
-  '@nasa-gcn/remix-seo@2.0.0':
-    resolution: {integrity: sha512-jawoxrjMMbFGgj20d61KblrQNkSFcW2yP7vWWQn2a+eK2J8uYYbw99j2GD7A4XbpQUxy7dg0yvRVsYYJ5uZnLQ==}
+  '@nasa-gcn/remix-seo@2.0.1':
+    resolution: {integrity: sha512-g9biDdYfsdFBnOU7lM+7vPGEXSEMRnWmfVLDQ98pT0PnTT/O3pFuA+s3DA0Mj9IwnAq9IcLs2Wee/aL6fvEA+A==}
     peerDependencies:
       '@remix-run/react': ^1.0.0 || ^2.0.0
       '@remix-run/server-runtime': ^1.0.0 || ^2.0.0
@@ -7621,7 +7621,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@nasa-gcn/remix-seo@2.0.0(@remix-run/react@2.8.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.4.5))(@remix-run/server-runtime@2.8.1(typescript@5.4.5))':
+  '@nasa-gcn/remix-seo@2.0.1(@remix-run/react@2.8.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.4.5))(@remix-run/server-runtime@2.8.1(typescript@5.4.5))':
     dependencies:
       '@remix-run/react': 2.8.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.4.5)
       '@remix-run/server-runtime': 2.8.1(typescript@5.4.5)

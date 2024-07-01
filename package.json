@@ -43,7 +43,7 @@
     "@epic-web/invariant": "1.0.0",
     "@epic-web/remember": "1.0.2",
     "@graphql-typed-document-node/core": "3.2.0",
-    "@nasa-gcn/remix-seo": "2.0.0",
+    "@nasa-gcn/remix-seo": "2.0.1",
     "@prisma/client": "5.12.1",
     "@radix-ui/react-avatar": "1.0.4",
     "@radix-ui/react-dialog": "1.0.5",
