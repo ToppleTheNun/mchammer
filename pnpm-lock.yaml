@@ -229,8 +229,8 @@ importers:
         specifier: 0.5.1
         version: 0.5.1
       '@types/better-sqlite3':
-        specifier: 7.6.10
-        version: 7.6.10
+        specifier: 7.6.11
+        version: 7.6.11
       '@types/compression':
         specifier: 1.7.5
         version: 1.7.5
@@ -2234,8 +2234,8 @@ packages:
   '@types/babel__traverse@7.20.5':
     resolution: {integrity: sha512-WXCyOcRtH37HAUkpXhUduaxdm82b4GSlyTqajXviN4EfiuPgNYR109xMCKvpl6zPIpua0DGlMEDCq+g8EdoheQ==}
 
-  '@types/better-sqlite3@7.6.10':
-    resolution: {integrity: sha512-TZBjD+yOsyrUJGmcUj6OS3JADk3+UZcNv3NOBqGkM09bZdi28fNZw8ODqbMOLfKCu7RYCO62/ldq1iHbzxqoPw==}
+  '@types/better-sqlite3@7.6.11':
+    resolution: {integrity: sha512-i8KcD3PgGtGBLl3+mMYA8PdKkButvPyARxA7IQAd6qeslht13qxb1zzO8dRCtE7U3IoJS782zDBAeoKiM695kg==}
 
   '@types/body-parser@1.19.5':
     resolution: {integrity: sha512-fB3Zu92ucau0iQ0JMCFQE7b/dv8Ot07NI3KaZIkIUNXq82k4eBAqUaneXfleGY9JWskeS9y+u0nXMyspcuQrCg==}
@@ -8498,7 +8498,7 @@ snapshots:
     dependencies:
       '@babel/types': 7.24.0
 
-  '@types/better-sqlite3@7.6.10':
+  '@types/better-sqlite3@7.6.11':
     dependencies:
       '@types/node': 20.12.7
 
