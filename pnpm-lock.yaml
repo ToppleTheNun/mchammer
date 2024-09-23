@@ -144,8 +144,8 @@ importers:
         specifier: 2.5.0
         version: 2.5.0
       isbot:
-        specifier: 5.1.4
-        version: 5.1.4
+        specifier: 5.1.17
+        version: 5.1.17
       kleur:
         specifier: 4.1.5
         version: 4.1.5
@@ -4194,8 +4194,8 @@ packages:
   isarray@2.0.5:
     resolution: {integrity: sha512-xHjhDr3cNBK0BzdUJSPXZntQUx/mwMS5Rw4A7lPJ90XGAO6ISP/ePDNuo0vhqOZU+UD5JoodwCAAoZQd3FeAKw==}
 
-  isbot@5.1.4:
-    resolution: {integrity: sha512-KuqD/TAG/qtgCDnO8Ab1v5rGRK3jl9hb+2KfJt+roIPE7R4Hiq99VinR0qrLGFptdUNIkClYjuXEpVTGkD9V/A==}
+  isbot@5.1.17:
+    resolution: {integrity: sha512-/wch8pRKZE+aoVhRX/hYPY1C7dMCeeMyhkQLNLNlYAbGQn9bkvMB8fOUXNnk5I0m4vDYbBJ9ciVtkr9zfBJ7qA==}
     engines: {node: '>=18'}
 
   isexe@2.0.0:
@@ -10953,7 +10953,7 @@ snapshots:
 
   isarray@2.0.5: {}
 
-  isbot@5.1.4: {}
+  isbot@5.1.17: {}
 
   isexe@2.0.0: {}
 
