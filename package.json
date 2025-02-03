@@ -144,7 +144,7 @@
     "prettier-plugin-pkg": "0.18.1",
     "prettier-plugin-toml": "2.0.1",
     "prisma": "5.12.1",
-    "remix-flat-routes": "0.6.4",
+    "remix-flat-routes": "0.8.4",
     "simple-git-hooks": "2.11.1",
     "tailwindcss": "3.4.3",
     "tailwindcss-animate": "1.0.7",
