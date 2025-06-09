@@ -142,7 +142,7 @@
     "postcss": "8.4.49",
     "prettier": "3.2.5",
     "prettier-plugin-pkg": "0.18.1",
-    "prettier-plugin-toml": "2.0.1",
+    "prettier-plugin-toml": "2.0.5",
     "prisma": "5.12.1",
     "remix-flat-routes": "0.8.4",
     "simple-git-hooks": "2.11.1",
