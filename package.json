@@ -98,7 +98,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "3.0.2",
-    "@eslint/js": "8.57.0",
+    "@eslint/js": "8.57.1",
     "@flydotio/dockerfile": "0.5.9",
     "@graphql-codegen/add": "5.0.2",
     "@graphql-codegen/cli": "5.0.2",
@@ -124,7 +124,7 @@
     "@vitejs/plugin-react": "4.2.1",
     "autoprefixer": "10.4.21",
     "esbuild": "0.20.2",
-    "eslint": "8.57.0",
+    "eslint": "8.57.1",
     "eslint-plugin-eslint-comments": "3.2.0",
     "eslint-plugin-i": "2.29.1",
     "eslint-plugin-jsx-a11y": "6.8.0",
