@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@conform-to/dom':
-        specifier: 1.1.5
-        version: 1.1.5
+        specifier: 1.11.0
+        version: 1.11.0
       '@conform-to/react':
         specifier: 1.1.0
         version: 1.1.0(react@18.2.0)
@@ -712,8 +712,8 @@ packages:
   '@conform-to/dom@1.1.0':
     resolution: {integrity: sha512-KtiGwke6qeh8xDMwebbT/EanxhVX40uZtyHr8VH2V8jBHwavy94V673F4YdlhHpXoqRcZcewie/GQ7tIi2mC/A==}
 
-  '@conform-to/dom@1.1.5':
-    resolution: {integrity: sha512-tWI3YxWvDaZFSl4QN8Y0WbgBxsWEfcTrSMtKic3YTt/hGVJXjQ8qURBdsJXudzJ38zwAr5GhpLWmyI6BbG9+gA==}
+  '@conform-to/dom@1.11.0':
+    resolution: {integrity: sha512-qneM158mqhPqGlMyvTiC7T2YpuDHxtaYUl8B8kSyj75YLETaQieR5jhXPt1SfYHqyDw0mdsUc2zR6yXzt94Hgw==}
 
   '@conform-to/react@1.1.0':
     resolution: {integrity: sha512-zEgesgfllN29SdVZhlm3CGIufQm/gkFia7QMrKX/fH4L+iYgQ7n1LVgu+3Jxr4jXE8wW5YDbemwo1cqhE++xZg==}
@@ -1424,6 +1424,7 @@ packages:
   '@graphql-tools/prisma-loader@8.0.3':
     resolution: {integrity: sha512-oZhxnMr3Jw2WAW1h9FIhF27xWzIB7bXWM8olz4W12oII4NiZl7VRkFw9IT50zME2Bqi9LGh9pkmMWkjvbOpl+Q==}
     engines: {node: '>=16.0.0'}
+    deprecated: 'This package was intended to be used with an older versions of Prisma.\nThe newer versions of Prisma has a different approach to GraphQL integration.\nTherefore, this package is no longer needed and has been deprecated and removed.\nLearn more: https://www.prisma.io/graphql'
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
 
@@ -7027,7 +7028,7 @@ snapshots:
 
   '@conform-to/dom@1.1.0': {}
 
-  '@conform-to/dom@1.1.5': {}
+  '@conform-to/dom@1.11.0': {}
 
   '@conform-to/react@1.1.0(react@18.2.0)':
     dependencies:
