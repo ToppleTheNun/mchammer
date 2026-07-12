@@ -99,7 +99,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "3.0.2",
     "@eslint/js": "8.57.1",
-    "@flydotio/dockerfile": "0.5.9",
+    "@flydotio/dockerfile": "0.7.10",
     "@graphql-codegen/add": "5.0.3",
     "@graphql-codegen/cli": "5.0.7",
     "@graphql-codegen/introspection": "4.0.3",
